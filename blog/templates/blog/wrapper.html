@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+</head>
+<body>
+    <aside>
+        <img src="{% static 'blog/img/icon.png' %}" alt="Logo">
+        <span class="logo">blog</span>
+        <ul><h3>Navigation:</h3>
+            <a href="{% url 'blog_index' %}"><li><i class="fas fa-home"></i> Main</li></a>
+            <a href="{% url 'blog_add' %}"><li><button class="btn btn-info"><i class="fas fa-plus-circle"></i> Add </li></button></a>
+        </ul>
+    </aside>
+    <main>
+    {% block content %}
+    {% endblock %}
+    </main>
+</body>
+</html>

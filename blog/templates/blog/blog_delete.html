@@ -1,0 +1,11 @@
+{% extends "blog/wrapper.html" %}
+{% block title %} Delete post {% endblock %}
+{% block content %}
+    <div class="features">
+        <h1>Delete post</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-success" type="submit">Delete post</button>
+          </form>
+    </div>
+{% endblock %}

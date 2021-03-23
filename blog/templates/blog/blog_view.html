@@ -1,0 +1,11 @@
+{% extends "blog/wrapper.html" %}
+{% block title %} {{ article.title }} {% endblock %}
+{% block content %}
+    <div class="features">
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.author }}</p>
+        <p>{{ article.body }}</p>
+        <a href="{% url 'blog_delete' article.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'blog_edit' article.id %}" class="btn btn-info">Update</a>
+    </div>
+{% endblock %}

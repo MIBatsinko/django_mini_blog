@@ -1,0 +1,28 @@
+{% extends "blog/wrapper.html" %}
+{% block title %} News on site {% endblock %}
+{% block content %}
+    <div class="features">
+        <h1>News on site</h1>
+
+        {% if blog %}
+        {% for el in blog %}
+            <div class="alert alert-warning">
+                <h3>{{ el.title }}</h3>
+                <p>{{ el.description }}</p>
+                <a href="{% url 'blog_view' el.id %}" class="btn btn-warning">Detail</a>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>You have not posts</p>
+        {% endif %}
+
+        {# Comment #}
+<!--        {% for value in values %}-->
+<!--            {% if value == 'Hello' %}-->
+<!--                <p>{{ value|lower }}</p>-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+
+<!--        {{ obj.age }}-->
+    </div>
+{% endblock %}
