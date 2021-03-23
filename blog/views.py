@@ -6,7 +6,14 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 
 def news_home(request):
     blog = Article.objects.all()
-    return render(request, 'blog/blog_index.html', {"blog": blog})
+
+    num_authors = Author.objects.count()  # The 'all()' is implied by default.
+
+    # Number of visits to this view, as counted in the session variable.
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
+    return render(request, 'blog/blog_index.html', {"blog": blog, 'num_visits': num_visits})
 
 
 class NewsDetailView(DetailView):
