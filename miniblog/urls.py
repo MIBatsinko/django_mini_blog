@@ -9,6 +9,8 @@ urlpatterns = [
 
     path('', include('blog.urls')),
     path('blog/', include('blog.urls')),
+
+    path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns += doc_urls
