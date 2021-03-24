@@ -8,4 +8,13 @@
         <a href="{% url 'blog_delete' article.id %}" class="btn btn-danger">Delete</a>
         <a href="{% url 'blog_edit' article.id %}" class="btn btn-info">Update</a>
     </div>
+    <div class="features">
+        <h4>Comments:</h4>
+        {% for comment in comments %}
+            {% ifequal article.id comment.article.id %}
+                <p>{{ comment.author }}:
+                {{ comment.body }}</p>
+            {% endifequal %}
+        {% endfor %}
+    </div>
 {% endblock %}

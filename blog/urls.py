@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from comment import views as comment_views
 
 urlpatterns = [
     path('', views.news_home, name='blog_index'),

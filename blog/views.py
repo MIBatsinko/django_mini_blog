@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from article.models import Article, Author
+from comment.models import Comment
 from .forms import ArticlesForm
 from django.views.generic import DetailView, UpdateView, DeleteView
 
@@ -20,6 +21,11 @@ class NewsDetailView(DetailView):
     model = Article
     template_name = 'blog/blog_view.html'
     context_object_name = 'article'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NewsDetailView, self).get_context_data(**kwargs)
+        ctx['comments'] = Comment.objects.all()
+        return ctx
 
 
 class NewsUpdateView(UpdateView):
