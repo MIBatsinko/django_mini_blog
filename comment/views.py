@@ -13,6 +13,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
 
 
+class CommentUpdateView(UpdateView):
+    model = Comment
+    template_name = 'comment/comment_add.html'
+
+    form_class = CommentsForm
+
+
 def comment_add(request):
     error = ''
     if request.method == "POST":
@@ -29,4 +36,4 @@ def comment_add(request):
         'form': form,
         'error': error,
     }
-    return render(request, 'blog/blog_add.html', data)
+    return render(request, 'comment/comment_add.html', data)

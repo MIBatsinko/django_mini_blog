@@ -16,5 +16,6 @@
                 {{ comment.body }}</p>
             {% endifequal %}
         {% endfor %}
+        <a href="{% url 'comment_add' article.id %}" class="btn btn-info">Write comment</a>
     </div>
 {% endblock %}

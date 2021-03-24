@@ -1,16 +1,13 @@
 {% extends "blog/wrapper.html" %}
-{% block title %} Add post {% endblock %}
+{% block title %} Add comment {% endblock %}
 {% block content %}
     <div class="features">
-        <h1>Add post</h1>
+        <h1>Write comment</h1>
         <form method="post">
             {% csrf_token %}
             <span>{{ error }}</span><br>
-            {{ form.title }}<br>
-            {{ form.description }}<br>
             {{ form.body }}<br>
-            {{ form.author }}<br>
-            <button class="btn btn-success" type="submit">Add post</button>
+            <button class="btn btn-success" type="submit">Add comment</button>
           </form>
     </div>
 {% endblock %}
