@@ -18,6 +18,7 @@
                     <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
             {% endifequal %}
         {% endfor %}
-        <br><br><a href="{% url 'comments_view' article=article.id %}" class="btn btn-info">Read comments</a>
+                    <br><br><a href="{% url 'comment_add' %}" class="btn btn-info">Write comment</a>
+<!--        <br><br><a href="{% url 'comments_view' article=article.id %}" class="btn btn-info">Read comments</a>-->
     </div>
 {% endblock %}
