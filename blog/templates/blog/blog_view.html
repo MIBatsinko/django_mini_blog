@@ -13,9 +13,11 @@
         {% for comment in comments %}
             {% ifequal article.id comment.article.id %}
                 <p>{{ comment.author }}:
-                {{ comment.body }}</p>
+                {{ comment.body }}
+                    <a href="{% url 'comment_edit' comment.id %}" class="btn btn-info">Edit</a>
+                    <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
             {% endifequal %}
         {% endfor %}
-        <a href="{% url 'comment_add' article.id %}" class="btn btn-info">Write comment</a>
+        <br><br><a href="{% url 'comments_view' article=article.id %}" class="btn btn-info">Read comments</a>
     </div>
 {% endblock %}

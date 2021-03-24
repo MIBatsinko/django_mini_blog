@@ -1,0 +1,14 @@
+{% extends "blog/wrapper.html" %}
+{% block title %} {{ article.title }} {% endblock %}
+{% block content %}
+    <div class="features">
+        <h4>Comments to article {{ article.title }}:</h4>
+        {% for comment in comments %}
+            {% ifequal article.id comment.article.id %}
+                <p>{{ comment.author }}:
+                {{ comment.body }}</p>
+            {% endifequal %}
+        {% endfor %}
+        <a href="{% url 'comment_add' article.id %}" class="btn btn-info">Write comment</a>
+    </div>
+{% endblock %}

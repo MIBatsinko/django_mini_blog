@@ -6,7 +6,9 @@
         <form method="post">
             {% csrf_token %}
             <span>{{ error }}</span><br>
+            {{ form.article }}<br>
             {{ form.body }}<br>
+            {{ form.author }}<br>
             <button class="btn btn-success" type="submit">Add comment</button>
           </form>
     </div>
