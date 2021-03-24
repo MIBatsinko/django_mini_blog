@@ -35,7 +35,6 @@ class CommentUpdateView(UpdateView):
     success_url = '/blog/'
 
 
-
 class CommentDeleteView(DeleteView):
     model = Comment
     success_url = '/blog/'
