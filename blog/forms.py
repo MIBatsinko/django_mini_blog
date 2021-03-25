@@ -1,4 +1,4 @@
-from article.models import Article, Author
+from article.models import Article  # , Author
 from django.forms import ModelForm, TextInput, DateTimeInput, Textarea
 
 

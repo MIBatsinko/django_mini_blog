@@ -1,13 +1,14 @@
 from django.db import models
 from django.urls import reverse
 
-from article.models import Article, Author
+from article.models import Article
+from django.contrib.auth.models import User
 
 
 class Comment(models.Model):
     body = models.TextField()
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_absolute_url(self):  # new
         return reverse('blog_view', args=[str(self.id)])

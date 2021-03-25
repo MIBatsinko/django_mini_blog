@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from article.models import Article, Author
+from article.models import Article  # , Author
+from django.contrib.auth.models import User
 from comment.models import Comment
 from .forms import ArticlesForm
 from django.views.generic import DetailView, UpdateView, DeleteView
@@ -8,8 +9,8 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 def news_home(request):
     blog = Article.objects.all()
 
-    num_authors = Author.objects.count()  # The 'all()' is implied by default.
-
+    # num_authors = Author.objects.count()  # The 'all()' is implied by default.
+    # user = User.objects.get()
     # Number of visits to this view, as counted in the session variable.
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1

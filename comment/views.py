@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView
 from rest_framework import viewsets
-from rest_framework.generics import get_object_or_404
 
-from article.models import Article, Author
+from article.models import Article
+from django.contrib.auth.models import User
 from .models import Comment
 from .serializers import CommentSerializer
 from .forms import CommentsForm
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
 
@@ -31,9 +30,7 @@ class CommentsDetailView(DetailView):
 class CommentUpdateView(UpdateView):
     model = Comment
     template_name = 'comment/comment_add.html'
-
     form_class = CommentsForm
-
     success_url = '/blog/'
 
 
@@ -41,12 +38,6 @@ class CommentDeleteView(DeleteView):
     model = Comment
     success_url = '/blog/'
     template_name = 'comment/comment_delete.html'
-
-
-def comments_list(request):
-    comment = Comment.objects.all()
-
-    return render(request, 'comment/comment_view.html', {"comment": comment})
 
 
 # class CommentUpdateView(UpdateView):
@@ -57,14 +48,13 @@ def comments_list(request):
 #     form_class = CommentsForm
 
 
-def comment_add(request, article):
+def comment_add(request, article, author):
     error = ''
     if request.method == "POST":
         form = CommentsForm(request.POST)
-        print(form, form.is_valid())
         if form.is_valid():
             article_id = Article.objects.get(id=article)
-            author_id = Author.objects.get(id=1)
+            author_id = User.objects.get(id=author)
 
             instance = form.save(commit=False)
             instance.article = article_id

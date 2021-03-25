@@ -10,15 +10,20 @@
     </div>
     <div class="features">
         <h4>Comments:</h4>
-        {% for comment in comments %}
-            {% ifequal article.id comment.article.id %}
-                <p>{{ comment.author }}:
-                {{ comment.body }}
-                    <a href="{% url 'comment_edit' comment.id %}" class="btn btn-info">Edit</a>
-                    <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
-            {% endifequal %}
-        {% endfor %}
-                    <br><br><a href="{% url 'comment_add' article.id %}" class="btn btn-info">Write comment</a>
-<!--        <br><br><a href="{% url 'comments_view' article=article.id %}" class="btn btn-info">Read comments</a>-->
+        {% if user.is_authenticated %}
+            {% for comment in comments %}
+                {% ifequal article.id comment.article.id %}
+                    <p>{{ comment.author }}:
+                    {{ comment.body }}
+                        {% if user.id == comment.author.id %}
+                            <a href="{% url 'comment_edit' comment.id %}" class="btn btn-info">Edit</a>
+                            <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
+                        {% endif %}
+                {% endifequal %}
+            {% endfor %}
+                    <br><br><a href="{% url 'comment_add' article.id user.id %}" class="btn btn-info">Write comment</a>
+        {% else %}
+            <p>To read comments please log in</p>
+        {% endif %}
     </div>
 {% endblock %}

@@ -13,7 +13,7 @@ urlpatterns = [
     path('<slug:article>/comments', comment_views.CommentsDetailView.as_view(), name='comments_view'),
     path('comment/<int:pk>/edit', comment_views.CommentUpdateView.as_view(), name='comment_edit'),
     path('<int:pk>/comment/delete', comment_views.CommentDeleteView.as_view(), name='comment_delete'),
-    path('<slug:article>/comment_add', comment_views.comment_add, name='comment_add'),
+    path('<slug:article>/comment_add/<slug:author>/', comment_views.comment_add, name='comment_add'),
 
     # path('<int:pk>/<slug:article>/comment_add', comment_views.CommentUpdateView.as_view(), name='comment_add'),
     # path('<int:pk>/comment_add', comment_views.CommentUpdateView.as_view(), name='comment_edit'),
