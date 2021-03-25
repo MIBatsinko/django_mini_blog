@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView
 from rest_framework import viewsets
+from rest_framework.generics import get_object_or_404
 
-from article.models import Article
+from article.models import Article, Author
 from .models import Comment
 from .serializers import CommentSerializer
 from .forms import CommentsForm
@@ -32,6 +33,7 @@ class CommentUpdateView(UpdateView):
     template_name = 'comment/comment_add.html'
 
     form_class = CommentsForm
+
     success_url = '/blog/'
 
 
@@ -55,12 +57,19 @@ def comments_list(request):
 #     form_class = CommentsForm
 
 
-def comment_add(request):
+def comment_add(request, article):
     error = ''
     if request.method == "POST":
         form = CommentsForm(request.POST)
+        print(form, form.is_valid())
         if form.is_valid():
-            form.save()
+            article_id = Article.objects.get(id=article)
+            author_id = Author.objects.get(id=1)
+
+            instance = form.save(commit=False)
+            instance.article = article_id
+            instance.author = author_id
+            instance.save()
             return redirect('blog_index')
         else:
             error = "Invalid form"
