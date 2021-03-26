@@ -95,12 +95,19 @@ def profile_settings(request):
     """
     User profile settings page
     """
+    userprofile_id = UserProfile.objects.get(user=2)
     user_id = User.objects.get(username='first_user')
     form = UserProfileForm()
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_id)
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile_id)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.user = user_id
+            instance.avatar = request.FILES['avatar']
+            instance.name = request.POST['name']
+            instance.email = request.POST['email']
+            instance.save()
+            return redirect('blog_index')
     context = {'form': form}
     return render(request, 'blog/profile_settings.html', context)
 

@@ -14,8 +14,11 @@
 <!--</form>-->
 
 <p>Username: {{ request.user.username }} <br>
-Email: {{ request.user.email }}
-    {{ request.user.name }}
-{{ request.user_profile.date_created }} </p>
+Name: {{ user_profile.name }} <br>
+Email-registration: {{ request.user.email }} <br>
+Email-profile: {{ user_profile.email }} <br>
+Avatar path: {{ user_profile.avatar }} <br>
+Date of registration: {{ user_profile.date_created }} <br>
+</p>
 
 {% endblock %}
