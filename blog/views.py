@@ -48,6 +48,9 @@ class NewsDeleteView(DeleteView):
 
 
 def create(request):
+    """
+    Create a new article
+    """
     error = ''
     if request.method == "POST":
         form = ArticlesForm(request.POST)
@@ -67,15 +70,19 @@ def create(request):
 
 
 def profile(request, username, user_id):
+    """
+    User profile page
+    """
+    user = User.objects.get(username=username)
     if request.method == "GET":
-        print(username, user_id)
-        user = User.objects.get(username=username)
 
+        # Adds new UserProfile if it with the user_id does not exist
         try:
             user_profile = UserProfile.objects.get(user=user_id)
         except:
             user_profile = UserProfile.objects.create(user=user)
-    user = User.objects.get(username=username)
+
+    user_profile = UserProfile.objects.get(user=user_id)
 
     data = {
         'user': user,
@@ -91,7 +98,6 @@ def upload_pic(request):
         layout.image = "/static/images/avatar.png"
         layout.save()
         print('done')
-
 
     # form = UserProfileForm(request.POST, request.FILES, instance=request.user)
     # # Выбор картинки
