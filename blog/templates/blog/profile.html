@@ -1,0 +1,17 @@
+{% extends 'blog/wrapper.html' %}
+
+{% block content %}
+
+<h3 class="mt-3 mb-3">Profile {{ request.user.username }} </h3>
+<img src="{{request.user.userprofile.avatar.url}}" >
+<form action="{% url 'profile' user.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <p><input id="id_image" type="file" class="" name="image"></p>
+    <input type="submit" value="Upload avatar" />
+</form>
+
+<p>{{ request.user.username }}
+{{ request.user.email }}
+{{ user.first_name }}
+    {{ user.last_name }} </p>
+
+{% endblock %}

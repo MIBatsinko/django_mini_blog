@@ -17,9 +17,11 @@
             <a href="{% url 'blog_add' %}"><li><button class="btn btn-info"><i class="fas fa-plus-circle"></i> Add </li>
             </a>
             {% if user.is_authenticated %}
-                <br><p>Hello, {{ user }}!</p>
+                <br><p>Hello, <a href="{% url 'profile' user user.id %}">{{ user }}</a>!
+                <img src="{{request.user.userprofile.avatar.url}}" ></p>
+
                 <a href="{% url 'account_logout' %}"><li><i class="fas fa-home"></i> Logout</li></a>
-            {% else %}
+            {% elif not user.is_authenticated %}
                 <a href="{% url 'account_login' %}"><li><i class="fas fa-home"></i> Login</li></a>
                 <a href="{% url 'account_signup' %}"><li><i class="fas fa-home"></i> Registration</li></a>
             {% endif %}

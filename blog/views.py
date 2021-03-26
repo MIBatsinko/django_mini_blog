@@ -1,9 +1,14 @@
+from PIL import Image
+from django.core.files.base import ContentFile
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from article.models import Article  # , Author
 from django.contrib.auth.models import User
 from comment.models import Comment
-from .forms import ArticlesForm
+from .forms import ArticlesForm, UserProfileForm
 from django.views.generic import DetailView, UpdateView, DeleteView
+
+from .models import UserProfile
 
 
 def news_home(request):
@@ -59,3 +64,65 @@ def create(request):
         'error': error,
     }
     return render(request, 'blog/blog_add.html', data)
+
+
+def profile(request, username, user_id):
+    if request.method == "GET":
+        print(username, user_id)
+        user = User.objects.get(username=username)
+
+        try:
+            user_profile = UserProfile.objects.get(user=user_id)
+        except:
+            user_profile = UserProfile.objects.create(user=user)
+    user = User.objects.get(username=username)
+
+    data = {
+        'user': user,
+        'user_profile': user_profile,
+    }
+    return render(request, 'blog/profile.html', data)
+
+
+def upload_pic(request):
+    print('tut')
+    if request.method == 'POST':
+        layout = UserProfile()
+        layout.image = "/static/images/avatar.png"
+        layout.save()
+        print('done')
+
+
+    # form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+    # # Выбор картинки
+    # img = Image.open(self.avatar.path)
+    # # Условие
+    # if img.height > 300 or img.width > 300:
+    #     output_size = (300, 300)
+    #     img.thumbnail(output_size)
+    #     img.save('/WOW/img.png')
+    #     print('save')
+    # print('no')
+
+
+def useravatar(request, user_id):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            av = User.objects.get(user_id=user_id)
+            av.avatar = request.FILES['avatar']
+            # other columns if you want to save, same as above line, except request.FILES will be request.POST['input_name']
+            av.save()
+            # messages.success(request, 'Your avatar was successfully Uploaded!')
+            return redirect('', user_pk=request.user.pk)
+
+# def upload_pic(request, user_id):
+#     if request.method == 'POST':
+#         form = UserProfileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             m = UserProfile.objects.get(user=user_id)
+#             m.avatar = form.cleaned_data['image']
+#             m.save()
+#             return HttpResponse('image upload success')
+#     return HttpResponseForbidden('allowed only via POST')

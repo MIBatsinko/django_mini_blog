@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 
 class Comment(models.Model):
+    """
+
+    """
     body = models.TextField()
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
