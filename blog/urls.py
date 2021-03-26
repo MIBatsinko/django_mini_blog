@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('<slug:username>/profile/<int:user_id>/', views.profile, name='profile'),
     path('', views.upload_pic, name='upload_pic'),
+    path('profile_settings/', views.profile_settings, name="profile_settings"),
     # path('<slug:user_id>/', views.useravatar, name='user_avatar'),
     # path('user/', views.userPage, name="user-page"),
 

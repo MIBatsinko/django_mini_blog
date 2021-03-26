@@ -32,7 +32,8 @@ class ArticlesForm(ModelForm):
 class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user']
+        fields = '__all__'
+        exclude = ['user']
 
     def clean_avatar(self):
         avatar = self.cleaned_data['avatar']

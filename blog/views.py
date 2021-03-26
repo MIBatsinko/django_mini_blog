@@ -91,13 +91,25 @@ def profile(request, username, user_id):
     return render(request, 'blog/profile.html', data)
 
 
+def profile_settings(request):
+    """
+    User profile settings page
+    """
+    user_id = User.objects.get(username='first_user')
+    form = UserProfileForm()
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_id)
+        if form.is_valid():
+            form.save()
+    context = {'form': form}
+    return render(request, 'blog/profile_settings.html', context)
+
+
 def upload_pic(request):
-    print('tut')
     if request.method == 'POST':
         layout = UserProfile()
         layout.image = "/static/images/avatar.png"
         layout.save()
-        print('done')
 
     # form = UserProfileForm(request.POST, request.FILES, instance=request.user)
     # # Выбор картинки
