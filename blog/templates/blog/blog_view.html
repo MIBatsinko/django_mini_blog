@@ -14,6 +14,11 @@
                     <label for="rating{{ v }}">{{ k }}</label>
                 {% endfor %}
             </span>
+            {% if True %}
+                {% for i in rating %}
+                <span class="editContent">Mark: {{ i.id }}</span>
+                {% endfor %}
+            {% endif %}
         </form>
         <p>{{ article.author }}</p>
         <p>{{ article.body }}</p>
