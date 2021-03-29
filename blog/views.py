@@ -63,7 +63,7 @@ class AddStarRating(View):
         if form.is_valid():
             Rating.objects.update_or_create(
                 ip=self.get_client_ip(request),
-                movie_id=int(request.POST.get("article")),
+                article_id=int(request.POST.get("article")),
                 defaults={'star_id': int(request.POST.get("star"))}
             )
             return HttpResponse(status=201)

@@ -17,7 +17,7 @@ class UserProfile(models.Model):
 
 class RatingStar(models.Model):
     """Rating star"""
-    value = models.SmallIntegerField("Значение", default=0)
+    value = models.SmallIntegerField("Value", default=0)
 
     def __str__(self):
         return f'{self.value}'
@@ -28,7 +28,7 @@ class RatingStar(models.Model):
 
 class Rating(models.Model):
     """Rating"""
-    ip = models.CharField("IP адрес", max_length=15)
+    ip = models.CharField("IP address", max_length=15)
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="start")
     article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name="article", related_name="ratings")
 

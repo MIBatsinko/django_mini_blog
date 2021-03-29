@@ -1,4 +1,4 @@
-{% extends "blog/wrapper.html" %}
+{% extends "base.html" %}
 {% block title %} {{ article.title }} {% endblock %}
 {% block content %}
     <div class="features">
@@ -14,7 +14,6 @@
                     <label for="rating{{ v }}">{{ k }}</label>
                 {% endfor %}
             </span>
-            <span class="editContent">4.0</span>
         </form>
         <p>{{ article.author }}</p>
         <p>{{ article.body }}</p>
