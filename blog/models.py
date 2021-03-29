@@ -11,8 +11,6 @@ class UserProfile(models.Model):
     email = models.CharField(max_length=200, null=True)
     date_created = User.objects.get(username='first_user').date_joined
 
-    #  user = models.ForeignKey(User, unique=True)
-
     def __str__(self):
         return self.user.username
 

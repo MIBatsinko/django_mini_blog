@@ -41,7 +41,6 @@ class CommentDeleteView(DeleteView):
 
 
 def comment_add(request, article):
-    error = ''
     if request.method == "POST":
         form = CommentsForm(request.POST)
         if form.is_valid():
@@ -53,13 +52,11 @@ def comment_add(request, article):
             instance.author = author_id
             instance.save()
             return redirect('blog_index')
-        else:
-            error = "Invalid form"
-
-    form = CommentsForm()
+    else:
+        form = CommentsForm()
 
     data = {
         'form': form,
-        'error': error,
+        'error': form.errors,
     }
     return render(request, 'comment/comment_add.html', data)

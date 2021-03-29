@@ -76,7 +76,6 @@ class ArticleAdd:
         """
         Create a new article
         """
-        error = ''
         if self.method == "POST":
             form = ArticlesForm(self.POST)
             if form.is_valid():
@@ -85,14 +84,12 @@ class ArticleAdd:
                 instance.author = author_id
                 instance.save()
                 return redirect('blog_index')
-            else:
-                error = "Invalid form"
-
-        form = ArticlesForm()
+        else:
+            form = ArticlesForm()
 
         data = {
             'form': form,
-            'error': error,
+            'error': form.errors,
         }
         return render(self, 'blog/blog_add.html', data)
 
