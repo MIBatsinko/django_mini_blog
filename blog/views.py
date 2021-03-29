@@ -1,11 +1,13 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from article.models import Article  # , Author
+from django.views.generic.base import View
 from django.contrib.auth.models import User
-from comment.models import Comment
-from .forms import ArticlesForm, UserProfileForm
 from django.views.generic import DetailView, UpdateView, DeleteView
 
-from .models import UserProfile
+from article.models import Article
+from comment.models import Comment
+from .forms import ArticlesForm, UserProfileForm, RatingForm
+from .models import UserProfile, Rating
 
 
 def news_home(request):
@@ -28,6 +30,7 @@ class NewsDetailView(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super(NewsDetailView, self).get_context_data(**kwargs)
         ctx['comments'] = Comment.objects.all()
+        ctx['star_form'] = RatingForm()
         return ctx
 
 
@@ -42,6 +45,28 @@ class NewsDeleteView(DeleteView):
     model = Article
     success_url = '/blog/'
     template_name = 'blog/blog_delete.html'
+
+
+class AddStarRating(View):
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def post(self, request):
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                ip=self.get_client_ip(request),
+                movie_id=int(request.POST.get("article")),
+                defaults={'star_id': int(request.POST.get("star"))}
+            )
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
 
 
 def create(request):

@@ -1,6 +1,6 @@
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from .models import Article  # , Author
+from .models import Article
 from django.contrib.auth.models import User
 from .serializers import ArticleSerializer
 

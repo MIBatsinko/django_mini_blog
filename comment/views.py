@@ -40,14 +40,6 @@ class CommentDeleteView(DeleteView):
     template_name = 'comment/comment_delete.html'
 
 
-# class CommentUpdateView(UpdateView):
-#     model = Comment
-#     template_name = 'comment/comment_add.html'
-#     slug_field = 'article'
-#     #slug_url_kwarg = 'article'
-#     form_class = CommentsForm
-
-
 def comment_add(request, article, author):
     error = ''
     if request.method == "POST":

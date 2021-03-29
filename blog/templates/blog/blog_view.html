@@ -3,6 +3,19 @@
 {% block content %}
     <div class="features">
         <h1>{{ article.title }}</h1>
+        <form action="{% url 'add_rating' %}" method="post" name="rating">
+            <b>Rating:</b>
+            {% csrf_token %}
+            <input type="hidden" value="{{ article.id }}" name="article">
+            <span class="rating">
+                {% for k, v in star_form.fields.star.choices %}
+                    <input id="rating{{ v }}" type="radio" name="star"
+                           value="{{ k }}">
+                    <label for="rating{{ v }}">{{ k }}</label>
+                {% endfor %}
+            </span>
+            <span class="editContent">4.0</span>
+        </form>
         <p>{{ article.author }}</p>
         <p>{{ article.body }}</p>
         <a href="{% url 'blog_delete' article.id %}" class="btn btn-danger">Delete</a>

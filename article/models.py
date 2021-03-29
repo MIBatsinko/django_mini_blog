@@ -3,17 +3,6 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
-# class Author(models.Model):
-#     name = models.CharField(max_length=255)
-#     email = models.EmailField()
-#
-#     def get_absolute_url(self):  # new
-#         return reverse('blog_view', args=[str(self.id)])
-#
-#     def __str__(self):
-#         return self.name
-
-
 class Article(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField()

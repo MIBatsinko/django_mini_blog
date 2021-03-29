@@ -9,6 +9,7 @@ urlpatterns = [
     path('<int:pk>', views.NewsDetailView.as_view(), name='blog_view'),
     path('<int:pk>/update', views.NewsUpdateView.as_view(), name='blog_edit'),
     path('<int:pk>/delete', views.NewsDeleteView.as_view(), name='blog_delete'),
+    path("add-rating/", views.AddStarRating.as_view(), name='add_rating'),
 
     path('<slug:username>/profile/<int:user_id>/', views.profile, name='profile'),
     path('profile_settings/<int:pk>', views.profile_settings, name="profile_settings"),
