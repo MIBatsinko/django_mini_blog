@@ -24,26 +24,26 @@ class BlogHomePage:
         return render(self, 'blog/blog_index.html', {"blog": blog, 'num_visits': num_visits})
 
 
-class NewsDetailView(DetailView):
+class ArticleDetailView(DetailView):
     model = Article
     template_name = 'blog/blog_view.html'
     context_object_name = 'article'
 
     def get_context_data(self, **kwargs):
-        context = super(NewsDetailView, self).get_context_data(**kwargs)
+        context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.all()
         context['star_form'] = RatingForm()
         return context
 
 
-class NewsUpdateView(UpdateView):
+class ArticleUpdateView(UpdateView):
     model = Article
     template_name = 'blog/blog_add.html'
 
     form_class = ArticlesForm
 
 
-class NewsDeleteView(DeleteView):
+class ArticleDeleteView(DeleteView):
     model = Article
     success_url = '/'
     template_name = 'blog/blog_delete.html'
@@ -71,69 +71,72 @@ class AddStarRating(View):
             return HttpResponse(status=400)
 
 
-def create(request):
-    """
-    Create a new article
-    """
-    error = ''
-    if request.method == "POST":
-        form = ArticlesForm(request.POST)
-        if form.is_valid():
-            author_id = User.objects.get(id=request.user.id)
-            instance = form.save(commit=False)
-            instance.author = author_id
-            instance.save()
-            return redirect('blog_index')
-        else:
-            error = "Invalid form"
+class ArticleAdd:
+    def create(self):
+        """
+        Create a new article
+        """
+        error = ''
+        if self.method == "POST":
+            form = ArticlesForm(self.POST)
+            if form.is_valid():
+                author_id = User.objects.get(id=self.user.id)
+                instance = form.save(commit=False)
+                instance.author = author_id
+                instance.save()
+                return redirect('blog_index')
+            else:
+                error = "Invalid form"
 
-    form = ArticlesForm()
+        form = ArticlesForm()
 
-    data = {
-        'form': form,
-        'error': error,
-    }
-    return render(request, 'blog/blog_add.html', data)
-
-
-def profile(request, username, user_id):
-    """
-    User profile page
-    """
-    user = User.objects.get(username=username)
-    if request.method == "GET":
-
-        # Adds new UserProfile if it with the user_id does not exist
-        try:
-            user_profile = UserProfile.objects.get(user=user_id)
-        except:
-            user_profile = UserProfile.objects.create(user=user)
-
-    user_profile = UserProfile.objects.get(user=user_id)
-
-    data = {
-        'user': user,
-        'user_profile': user_profile,
-    }
-    return render(request, 'blog/profile.html', data)
+        data = {
+            'form': form,
+            'error': error,
+        }
+        return render(self, 'blog/blog_add.html', data)
 
 
-def profile_settings(request, pk):
-    """
-    User profile settings page
-    """
-    userprofile_id = UserProfile.objects.get(user=pk)
-    user_id = User.objects.get(username=userprofile_id)
-    form = UserProfileForm()
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=userprofile_id)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = user_id
-            instance.avatar = request.FILES['avatar']
-            instance.name = request.POST['name']
-            instance.email = request.POST['email']
-            instance.save()
-            return redirect('blog_index')
-    context = {'form': form}
-    return render(request, 'blog/profile_settings.html', context)
+class UserProfilePage:
+    def profile(self, username, user_id):
+        """
+        User profile page
+        """
+        user = User.objects.get(username=username)
+        if self.method == "GET":
+
+            # Adds new UserProfile if it with the user_id does not exist
+            try:
+                user_profile = UserProfile.objects.get(user=user_id)
+            except:
+                user_profile = UserProfile.objects.create(user=user)
+
+        user_profile = UserProfile.objects.get(user=user_id)
+
+        data = {
+            'user': user,
+            'user_profile': user_profile,
+        }
+        return render(self, 'blog/profile.html', data)
+
+
+class UserProfileSettings:
+    def profile_settings(self, pk):
+        """
+        User profile settings page
+        """
+        userprofile_id = UserProfile.objects.get(user=pk)
+        user_id = User.objects.get(username=userprofile_id)
+        form = UserProfileForm()
+        if self.method == 'POST':
+            form = UserProfileForm(self.POST, self.FILES, instance=userprofile_id)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.user = user_id
+                instance.avatar = self.FILES['avatar']
+                instance.name = self.POST['name']
+                instance.email = self.POST['email']
+                instance.save()
+                return redirect('blog_index')
+        context = {'form': form}
+        return render(self, 'blog/profile_settings.html', context)
