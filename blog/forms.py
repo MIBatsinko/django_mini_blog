@@ -7,7 +7,7 @@ from .models import UserProfile, Rating, RatingStar
 class ArticlesForm(ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'description', 'body', 'author']
+        fields = ['title', 'description', 'body']
 
         widgets = {
             'title': TextInput(attrs={
@@ -21,10 +21,6 @@ class ArticlesForm(ModelForm):
             'body': Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Post text'
-            }),
-            'author': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Post author'
             }),
         }
 

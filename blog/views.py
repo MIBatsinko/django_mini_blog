@@ -28,10 +28,10 @@ class NewsDetailView(DetailView):
     context_object_name = 'article'
 
     def get_context_data(self, **kwargs):
-        ctx = super(NewsDetailView, self).get_context_data(**kwargs)
-        ctx['comments'] = Comment.objects.all()
-        ctx['star_form'] = RatingForm()
-        return ctx
+        context = super(NewsDetailView, self).get_context_data(**kwargs)
+        context['comments'] = Comment.objects.all()
+        context['star_form'] = RatingForm()
+        return context
 
 
 class NewsUpdateView(UpdateView):
@@ -77,7 +77,10 @@ def create(request):
     if request.method == "POST":
         form = ArticlesForm(request.POST)
         if form.is_valid():
-            form.save()
+            author_id = User.objects.get(id=request.user.id)
+            instance = form.save(commit=False)
+            instance.author = author_id
+            instance.save()
             return redirect('blog_index')
         else:
             error = "Invalid form"
