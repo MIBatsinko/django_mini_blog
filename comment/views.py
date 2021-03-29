@@ -13,6 +13,11 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
 
+    def filter_queryset(self, queryset):
+        if self.request.method in ['PATCH', 'PUT', 'DELETE']:
+            queryset = queryset.filter(author=self.request.user)
+        return queryset
+
 
 class CommentsDetailView(DetailView):
     model = Comment

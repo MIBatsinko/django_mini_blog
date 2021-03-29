@@ -5,7 +5,11 @@
         <h1>Write comment</h1>
         <form method="post">
             {% csrf_token %}
-            <span>{{ error }}</span><br>
+                {% if from.errors %}
+                    {% for error in form.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                {% endif %}
             {{ form.article }}<br>
             {{ form.body }}<br>
             {{ form.author }}<br>

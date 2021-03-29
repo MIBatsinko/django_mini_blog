@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     avatar = models.ImageField(default="/profile1.png", null=True, blank=True)  # upload_to='images/',
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
-    date_created = User.objects.get(username='first_user').date_joined
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username
