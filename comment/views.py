@@ -31,12 +31,12 @@ class CommentUpdateView(UpdateView):
     model = Comment
     template_name = 'comment/comment_add.html'
     form_class = CommentsForm
-    success_url = '/blog/'
+    success_url = '/'
 
 
 class CommentDeleteView(DeleteView):
     model = Comment
-    success_url = '/blog/'
+    success_url = '/'
     template_name = 'comment/comment_delete.html'
 
 

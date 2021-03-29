@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView
+from django.views.generic.detail import BaseDetailView
 
 from article.models import Article
 from comment.models import Comment
@@ -10,16 +11,17 @@ from .forms import ArticlesForm, UserProfileForm, RatingForm
 from .models import UserProfile, Rating
 
 
-def news_home(request):
-    blog = Article.objects.all()
+class BlogHomePage:
+    def home(self):
+        blog = Article.objects.all()
 
-    # num_authors = Author.objects.count()  # The 'all()' is implied by default.
-    # user = User.objects.get()
-    # Number of visits to this view, as counted in the session variable.
-    num_visits = request.session.get('num_visits', 0)
-    request.session['num_visits'] = num_visits + 1
+        # num_authors = Author.objects.count()  # The 'all()' is implied by default.
+        # user = User.objects.get()
+        # Number of visits to this view, as counted in the session variable.
+        num_visits = self.session.get('num_visits', 0)
+        self.session['num_visits'] = num_visits + 1
 
-    return render(request, 'blog/blog_index.html', {"blog": blog, 'num_visits': num_visits})
+        return render(self, 'blog/blog_index.html', {"blog": blog, 'num_visits': num_visits})
 
 
 class NewsDetailView(DetailView):
@@ -43,7 +45,7 @@ class NewsUpdateView(UpdateView):
 
 class NewsDeleteView(DeleteView):
     model = Article
-    success_url = '/blog/'
+    success_url = '/'
     template_name = 'blog/blog_delete.html'
 
 
