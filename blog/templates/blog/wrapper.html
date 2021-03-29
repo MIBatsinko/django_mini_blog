@@ -17,7 +17,7 @@
             <a href="{% url 'blog_add' %}"><li><button class="btn btn-info"><i class="fas fa-plus-circle"></i> Add </li>
             </a>
             {% if user.is_authenticated %}
-                <br><p>Hello, <a href="{% url 'profile' user user.id %}">{{ user }}</a>!
+                <br><p>Hello, <a href="{% url 'profile' user %}">{{ user }}</a>!
                 <img src="{{request.user.userprofile.avatar.url}}" ></p>
 
                 <a href="{% url 'account_logout' %}"><li><i class="fas fa-home"></i> Logout</li></a>

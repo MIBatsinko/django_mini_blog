@@ -98,7 +98,7 @@ class ArticleAdd:
 
 
 class UserProfilePage:
-    def profile(self, username, user_id):
+    def profile(self, username):
         """
         User profile page
         """
@@ -107,11 +107,11 @@ class UserProfilePage:
 
             # Adds new UserProfile if it with the user_id does not exist
             try:
-                user_profile = UserProfile.objects.get(user=user_id)
+                user_profile = UserProfile.objects.get(user=self.user.id)
             except:
                 user_profile = UserProfile.objects.create(user=user)
 
-        user_profile = UserProfile.objects.get(user=user_id)
+        user_profile = UserProfile.objects.get(user=self.user.id)
 
         data = {
             'user': user,
@@ -121,11 +121,11 @@ class UserProfilePage:
 
 
 class UserProfileSettings:
-    def profile_settings(self, pk):
+    def profile_settings(self):
         """
         User profile settings page
         """
-        userprofile_id = UserProfile.objects.get(user=pk)
+        userprofile_id = UserProfile.objects.get(user=self.user.id)
         user_id = User.objects.get(username=userprofile_id)
         form = UserProfileForm()
         if self.method == 'POST':

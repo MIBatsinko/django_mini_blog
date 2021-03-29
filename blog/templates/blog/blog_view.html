@@ -34,7 +34,7 @@
                         {% endif %}
                 {% endifequal %}
             {% endfor %}
-                    <br><br><a href="{% url 'comment_add' article.id user.id %}" class="btn btn-info">Write comment</a>
+                    <br><br><a href="{% url 'comment_add' article.id %}" class="btn btn-info">Write comment</a>
         {% else %}
             <p>To read comments please log in</p>
         {% endif %}

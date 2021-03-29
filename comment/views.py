@@ -22,9 +22,9 @@ class CommentsDetailView(DetailView):
     slug_url_kwarg = 'article'
 
     def get_context_data(self, **kwargs):
-        ctx = super(CommentsDetailView, self).get_context_data(**kwargs)
-        ctx['article'] = Article.objects.all()
-        return ctx
+        context = super(CommentsDetailView, self).get_context_data(**kwargs)
+        context['article'] = Article.objects.all()
+        return context
 
 
 class CommentUpdateView(UpdateView):
@@ -40,13 +40,13 @@ class CommentDeleteView(DeleteView):
     template_name = 'comment/comment_delete.html'
 
 
-def comment_add(request, article, author):
+def comment_add(request, article):
     error = ''
     if request.method == "POST":
         form = CommentsForm(request.POST)
         if form.is_valid():
             article_id = Article.objects.get(id=article)
-            author_id = User.objects.get(id=author)
+            author_id = User.objects.get(id=request.user.id)
 
             instance = form.save(commit=False)
             instance.article = article_id
