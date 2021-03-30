@@ -14,10 +14,9 @@
                     <label for="rating{{ v }}">{{ k }}</label>
                 {% endfor %}
             </span>
-            {% if True %}
-                {% for i in rating %}
-                <span class="editContent">Mark: {{ i.id }}</span>
-                {% endfor %}
+                <span class="editContent">Average Mark: {{ article.middle_star }}</span>
+            {% if mark.star %}
+                <br><span class="editContent">Your mark: {{ mark.star }}</span>
             {% endif %}
         </form>
         <p>{{ article.author }}</p>

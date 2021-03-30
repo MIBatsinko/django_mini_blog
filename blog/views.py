@@ -3,20 +3,18 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView
-from django.views.generic.detail import BaseDetailView
+from django.db import models
 
 from article.models import Article
 from comment.models import Comment
 from .forms import ArticlesForm, UserProfileForm, RatingForm
 from .models import UserProfile, Rating
 
-
 class BlogHomePage:
     def home(self):
         blog = Article.objects.all()
 
         # num_authors = Author.objects.count()  # The 'all()' is implied by default.
-        # user = User.objects.get()
         # Number of visits to this view, as counted in the session variable.
         num_visits = self.session.get('num_visits', 0)
         self.session['num_visits'] = num_visits + 1
@@ -29,10 +27,31 @@ class ArticleDetailView(DetailView):
     template_name = 'blog/blog_view.html'
     context_object_name = 'article'
 
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def get_queryset(self):
+        articles = Article.objects.filter().annotate(
+            rating_user=models.Count("ratings",
+                                     filter=models.Q(ratings__ip=self.get_client_ip(self.request)))
+        ).annotate(
+            middle_star=(models.Avg("ratings__star"))
+        )
+        return articles
+
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.all()
         context['star_form'] = RatingForm()
+        try:
+            context['mark'] = Rating.objects.get(ip=self.get_client_ip(self.request), article=kwargs['object'].id)
+        except Rating.DoesNotExist:
+            context['mark'] = 0
         return context
 
 

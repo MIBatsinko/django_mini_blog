@@ -9,7 +9,7 @@ class Article(models.Model):
     body = models.TextField()
     author = models.ForeignKey(User, related_name='article', on_delete=models.CASCADE)
 
-    def get_absolute_url(self):  # new
+    def get_absolute_url(self):
         return reverse('blog_view', args=[str(self.id)])
 
     def __str__(self):
