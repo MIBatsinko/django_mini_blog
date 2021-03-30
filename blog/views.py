@@ -28,14 +28,6 @@ class ArticleDetailView(DetailView):
     template_name = 'blog/blog_view.html'
     context_object_name = 'article'
 
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-
     def get_queryset(self):
         articles = Article.objects.filter().annotate(
             rating_user=models.Count("ratings",
@@ -70,19 +62,10 @@ class ArticleDeleteView(DeleteView):
 
 
 class AddStarRating(View):
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-
     def post(self, request):
         form = RatingForm(request.POST)
         if form.is_valid():
             Rating.objects.update_or_create(
-                ip=self.get_client_ip(request),
                 article_id=int(request.POST.get("article")),
                 user=User.objects.get(id=request.user.id),
                 defaults={'star_id': int(request.POST.get("star"))}
@@ -158,3 +141,15 @@ class UserProfileSettings:
                 return redirect('blog_index')
         context = {'form': form}
         return render(self, 'blog/profile_settings.html', context)
+
+
+class RatingUserPage:
+    def show_rating(self, **kwargs):
+        users_rating = Rating.objects.raw("SELECT id, article_id, AVG(star_id) as avg, (SELECT author_id from article_article WHERE blog_rating.article_id = article_article.id) as author FROM blog_rating GROUP BY article_id")
+
+        arr = []
+        for i in users_rating:
+            print(i.article_id, i.avg, i.author)
+            arr.append(i)
+
+        return render(self, 'blog/user_rating.html', {'rating': arr})

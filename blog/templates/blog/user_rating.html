@@ -5,12 +5,7 @@
 {% load static %}
 
 <h3 class="mt-3 mb-3">TOP Users </h3>
-{% for i in user %}
-<p>Username: {{ request.user.username }} <br>
-Name: {{ user_profile.name }} <br>
-Email-profile: {{ user_profile.email }} <br>
-Avatar path: {{ user_profile.avatar }} <br>
-Date of registration: {{ user_profile.date_created }} <br>
-</p>
-
+{% for usr in all_users %}
+    <p>{{ usr.username }} : rating_user</p>
+{% endfor %}
 {% endblock %}

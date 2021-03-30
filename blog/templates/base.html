@@ -15,6 +15,7 @@
         <span class="logo">blog</span>
         <ul><h3>Navigation:</h3>
             <a href="{% url 'blog_index' %}"><li><i class="fas fa-home"></i> Main</li></a>
+            <a href="{% url 'rating_user' %}"><li><i class="fas fa-home"></i> User rating</li></a>
             <a href="{% url 'blog_add' %}"><li><button class="btn btn-info"><i class="fas fa-plus-circle"></i> Add </li>
             </a>
             {% if user.is_authenticated %}

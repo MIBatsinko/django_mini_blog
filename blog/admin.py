@@ -8,4 +8,4 @@ admin.site.register(RatingStar)
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     """Рейтинг"""
-    list_display = ("star", "article", "ip", 'user')
+    list_display = ("star", "article", 'user')
