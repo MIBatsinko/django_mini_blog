@@ -17,11 +17,7 @@ class ArticleApiView(ListCreateAPIView):
         ).annotate(
             middle_star=(models.Avg("ratings__star"))
         )
-        print(articles)
         return articles
-
-
-
 
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -50,6 +46,23 @@ class SingleArticleApiView(RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
-    def filter_queryset(self, queryset):
-        queryset = self.queryset.filter(author=self.request.user)
-        return queryset
+    # def filter_queryset(self, queryset):
+    #     queryset = self.queryset.filter(author=self.request.user)
+    #     return queryset
+
+    def get_queryset(self):
+        articles = Article.objects.filter().annotate(
+            rating_user=models.Count("ratings",
+                                     filter=models.Q(ratings__ip=self.get_client_ip(self.request)))
+        ).annotate(
+            middle_star=(models.Avg("ratings__star"))
+        )
+        return articles
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip

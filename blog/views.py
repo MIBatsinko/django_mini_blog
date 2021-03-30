@@ -10,6 +10,7 @@ from comment.models import Comment
 from .forms import ArticlesForm, UserProfileForm, RatingForm
 from .models import UserProfile, Rating
 
+
 class BlogHomePage:
     def home(self):
         blog = Article.objects.all()
@@ -38,7 +39,7 @@ class ArticleDetailView(DetailView):
     def get_queryset(self):
         articles = Article.objects.filter().annotate(
             rating_user=models.Count("ratings",
-                                     filter=models.Q(ratings__ip=self.get_client_ip(self.request)))
+                                     filter=models.Q(ratings__user=self.request.user.id))
         ).annotate(
             middle_star=(models.Avg("ratings__star"))
         )
@@ -49,7 +50,7 @@ class ArticleDetailView(DetailView):
         context['comments'] = Comment.objects.all()
         context['star_form'] = RatingForm()
         try:
-            context['mark'] = Rating.objects.get(ip=self.get_client_ip(self.request), article=kwargs['object'].id)
+            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs['object'].id)
         except Rating.DoesNotExist:
             context['mark'] = 0
         return context
@@ -83,6 +84,7 @@ class AddStarRating(View):
             Rating.objects.update_or_create(
                 ip=self.get_client_ip(request),
                 article_id=int(request.POST.get("article")),
+                user=User.objects.get(id=request.user.id),
                 defaults={'star_id': int(request.POST.get("star"))}
             )
             return HttpResponse(status=201)
