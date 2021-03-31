@@ -8,6 +8,7 @@ class Article(models.Model):
     description = models.TextField()
     body = models.TextField()
     author = models.ForeignKey(User, related_name='article', on_delete=models.CASCADE)
+    total_rating = models.FloatField(default=0)
 
     def get_absolute_url(self):
         return reverse('blog_view', args=[str(self.id)])

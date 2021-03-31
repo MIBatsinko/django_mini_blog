@@ -5,7 +5,17 @@
 {% load static %}
 
 <h3 class="mt-3 mb-3">TOP Users </h3>
-{% for usr in all_users %}
-    <p>{{ usr.username }} : rating_user</p>
-{% endfor %}
+ <table border="1" cellpadding="5">
+     <tr>
+        <th>author</th>
+        <th>avg_star</th>
+     </tr>
+    {% for usr in data_rating %}
+        <tr>
+            <td>{{ usr.user }}</td>
+            <td>{{ usr.total_rating }}</td>
+        </tr>
+    {% endfor %}
+ </table>
+
 {% endblock %}

@@ -147,12 +147,6 @@ class UserProfileSettings:
 
 class RatingUserPage:
     def show_rating(self, **kwargs):
-        users_rating = Rating.objects.raw("SELECT id, article_id, AVG(star_id) as avg, (SELECT author_id from article_article WHERE blog_rating.article_id = article_article.id) as author FROM blog_rating GROUP BY article_id")
+        data_rating = UserProfile.objects.all()
 
-        data_rating = dict()
-        for i in users_rating:
-            data_rating[i.article_id] = {'article_id': i.article_id,
-                                         'avg_star': i.avg,
-                                         'author': i.author}
-        print(data_rating)
-        return render(self, 'blog/user_rating.html', data_rating)
+        return render(self, 'blog/user_rating.html', {'data_rating': data_rating})

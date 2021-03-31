@@ -10,6 +10,7 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    total_rating = models.FloatField(default=0)
 
     def __str__(self):
         return self.user.username
