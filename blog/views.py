@@ -101,21 +101,20 @@ class ArticleAdd:
 
 
 class UserProfilePage:
-    def profile(self, username):
+    def profile(self):
         """
         User profile page
         """
-        user = User.objects.get(username=username)
+        user = User.objects.get(id=self.user.id)
         if self.method == "GET":
 
             # Adds new UserProfile if it with the user_id does not exist
             try:
-                user_profile = UserProfile.objects.get(user=self.user.id)
+                user_profile = UserProfile.objects.get(user=self.user)
             except:
                 user_profile = UserProfile.objects.create(user=user)
 
-        user_profile = UserProfile.objects.get(user=self.user.id)
-
+        user_profile = UserProfile.objects.get(user=self.user)
         data = {
             'user': user,
             'user_profile': user_profile,
