@@ -4,6 +4,8 @@ from rest_framework import viewsets
 
 from article.models import Article
 from django.contrib.auth.models import User
+
+from sendemail.views import SendingEmail
 from .models import Comment
 from .serializers import CommentSerializer
 from .forms import CommentsForm
@@ -64,4 +66,6 @@ def comment_add(request, article):
         'form': form,
         'error': form.errors,
     }
+    email = SendingEmail()
+    email.new_comment()
     return render(request, 'comment/comment_add.html', data)

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
+    'sendemail',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
@@ -63,6 +64,17 @@ SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
                            }
 
 SOCIAL_AUTH_REDIRECT = True
+
+# email
+RECIPIENTS_EMAIL = ['pochta.haha@gmail.com']
+DEFAULT_FROM_EMAIL = 'batsinko.m@gmail.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
