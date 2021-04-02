@@ -50,13 +50,19 @@ INSTALLED_APPS = [
     'allauth.account',
     # 'templates',
     'allauth.socialaccount',
-    #'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
 ]
 
-SOCIALACCOUNT_PROVIDERS = {'facebook': {},
-                           'google': {'SCOPE': ['email'], 'AUTH_PARAMS': {'access_type': 'online'}}
+SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
+                                        'SCOPE': ['email'],
+                                        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+                                        'LOCALE_FUNC': lambda request: 'en_US'},
+                           'google': {'SCOPE': ['email'],
+                                      'AUTH_PARAMS': {'access_type': 'online'}}
                            }
+
+SOCIAL_AUTH_REDIRECT = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
