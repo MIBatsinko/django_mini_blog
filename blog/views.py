@@ -2,6 +2,7 @@ from copy import deepcopy
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView
@@ -135,9 +136,12 @@ class UserProfileSettings:
             if form.is_valid():
                 instance = form.save(commit=False)
                 instance.user = user_id
-                instance.avatar = self.FILES['avatar']
-                instance.name = self.POST['name']
-                instance.email = self.POST['email']
+                if 'avatar' in self.FILES:
+                    instance.avatar = self.FILES['avatar']
+                if 'name' in self.POST:
+                    instance.name = self.POST['name']
+                if 'email' in self.POST:
+                    instance.email = self.POST['email']
                 instance.save()
                 return redirect('blog_index')
         context = {'form': form}

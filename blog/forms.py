@@ -29,7 +29,7 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
         # fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'total_rating']
 
 
 class RatingForm(ModelForm):
