@@ -47,17 +47,19 @@ class CommentDeleteView(DeleteView):
     template_name = 'comment/comment_delete.html'
 
 
-def comment_add(request, article):
+def comment_add(request, article_id):
     if request.method == "POST":
         form = CommentsForm(request.POST)
         if form.is_valid():
-            article_id = Article.objects.get(id=article)
-            author_id = User.objects.get(id=request.user.id)
-
+            author = User.objects.get(id=request.user.id)
+            article = Article.objects.get(id=article_id)
             instance = form.save(commit=False)
-            instance.article = article_id
-            instance.author = author_id
+            instance.article = article
+            instance.author = author
             instance.save()
+
+            email = SendingEmail()
+            email.new_comment(article, author, instance.body)
             return redirect('blog_index')
     else:
         form = CommentsForm()
@@ -66,6 +68,5 @@ def comment_add(request, article):
         'form': form,
         'error': form.errors,
     }
-    email = SendingEmail()
-    email.new_comment()
+
     return render(request, 'comment/comment_add.html', data)

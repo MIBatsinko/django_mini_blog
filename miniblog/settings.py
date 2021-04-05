@@ -66,12 +66,11 @@ SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
 SOCIAL_AUTH_REDIRECT = True
 
 # email
-RECIPIENTS_EMAIL = ['pochta.haha@gmail.com']
-DEFAULT_FROM_EMAIL = 'batsinko.m@gmail.com'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

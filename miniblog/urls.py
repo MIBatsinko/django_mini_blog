@@ -12,7 +12,7 @@ urlpatterns = [
     ])),
 
     path('', include('blog.urls')),
-    path('', include('sendemail.urls')),
+    # path('', include('sendemail.urls')),
     # path('blog/', include('blog.urls')),
 
     path('accounts/', include('allauth.urls')),
