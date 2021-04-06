@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput, Textarea, ModelChoiceField, RadioSelect
 
-from article.models import Article
+from article.models import Article, Category
 from .models import UserProfile, Rating, RatingStar
 
 
@@ -40,3 +40,4 @@ class RatingForm(ModelForm):
     class Meta:
         model = Rating
         fields = ("star",)
+

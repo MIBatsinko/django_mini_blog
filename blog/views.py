@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.db import models
 
-from article.models import Article
+from article.models import Article, Category
 from comment.models import Comment
 from .forms import ArticlesForm, UserProfileForm, RatingForm
 from .models import UserProfile, Rating
@@ -17,13 +17,14 @@ from .models import UserProfile, Rating
 class BlogHomePage:
     def home(self):
         blog = Article.objects.all()
+        categories = Category.objects.all()
 
         # num_authors = Author.objects.count()  # The 'all()' is implied by default.
         # Number of visits to this view, as counted in the session variable.
         num_visits = self.session.get('num_visits', 0)
         self.session['num_visits'] = num_visits + 1
 
-        return render(self, 'blog/blog_index.html', {"blog": blog, 'num_visits': num_visits})
+        return render(self, 'blog/blog_index.html', {"blog": blog, 'categories': categories, 'num_visits': num_visits})
 
 
 class ArticleDetailView(DetailView):
