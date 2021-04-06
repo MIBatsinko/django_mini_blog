@@ -16,7 +16,7 @@ from .models import UserProfile, Rating
 
 class BlogHomePage:
     def home(self):
-        blog = Article.objects.all()
+        blog = Article.objects.order_by('-date')
         categories = Category.objects.all()
 
         # num_authors = Author.objects.count()  # The 'all()' is implied by default.

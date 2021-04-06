@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils.datetime_safe import datetime
 
 
 class Category(models.Model):
@@ -21,6 +22,7 @@ class Article(models.Model):
     body = models.TextField()
     author = models.ForeignKey(User, related_name='article', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, default=4)
+    date = models.DateTimeField('Date of publication', default=datetime.now)
     total_rating = models.FloatField(default=0)
 
     def get_absolute_url(self):

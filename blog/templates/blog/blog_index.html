@@ -1,59 +1,41 @@
 {% extends "base.html" %}
 {% block title %} News on site {% endblock %}
 {% block content %}
-    <div class="features">
-        <h1>News on site</h1>
+<div class="features">
+    <h1>News on site</h1>
 
-        <form action="" method="post">
-            {% csrf_token %}
-           <p><select name="category_select">
-            <option disabled>Choose category</option>
-               <option value="all">All categories</option>
-               {% for category in categories %}
-            <option value="{{ category }}">{{ category }}</option>
-               {% endfor %}
-                   <option value="without">Without category</option>
-           </select></p>
-           <p><input type="submit" value="Select"></p>
-        </form>
+    <form action="" method="post">
+        {% csrf_token %}
+       <p><select name="category_select">
+        <option disabled>Choose category</option>
+           <option value="all">All categories</option>
+           {% for category in categories %}
+        <option value="{{ category }}">{{ category }}</option>
+           {% endfor %}
+               <option value="without">Without category</option>
+       </select></p>
+       <p><input type="submit" value="Select"></p>
+    </form>
 
-        {% if blog %}
-            {% for el in blog %}
-                    {% if request.POST.category_select == 'without' %}
-                        {% if el.category is None %}
-                            <div class="alert alert-warning">
-                            <h3>{{ el.title }}</h3>
-                            <p>< without category ></p>
-                            <p>{{ el.description }}</p>
-                            <a href="{% url 'blog_view' el.id %}" class="btn btn-warning">Detail</a>
-                            </div>
-                        {% endif %}
-                    {% elif request.POST.category_select == el.category.name and not request.POST.category_select is None %}
-                        {% if request.POST.category_select == el.category.name %}
-                            <div class="alert alert-warning">
-                            <h3>{{ el.title }}</h3>
-                            <p>< {{ el.category }} ></p>
-                            <p>{{ el.description }}</p>
-                            <a href="{% url 'blog_view' el.id %}" class="btn btn-warning">Detail</a>
-                            </div>
-                        {% endif %}
-                    {% elif request.POST.category_select == 'all' or request.POST.category_select is None %}
-                        <div class="alert alert-warning">
-                        <h3>{{ el.title }}</h3>
-                        {% if el.category is None %}
-                            <p>< without category ></p>
-                        {% else %}
-                            <p>< {{ el.category }} ></p>
-                        {% endif %}
-                        <p>{{ el.description }}</p>
-                        <a href="{% url 'blog_view' el.id %}" class="btn btn-warning">Detail</a>
-                        </div>
-                    {% endif %}
-            {% endfor %}
-        {% else %}
-            <p>You have not posts</p>
-        {% endif %}
+    {% if blog %}
+        {% for el in blog %}
+            {% if request.POST.category_select == 'without' %}
+                {% if el.category is None %}
+                    {% include 'include/show_articles.html' %}
+                {% endif %}
+            {% elif request.POST.category_select == el.category.name and not request.POST.category_select is None %}
+                {% if request.POST.category_select == el.category.name %}
+                    {% include 'include/show_articles.html' %}
+                {% endif %}
+            {% elif request.POST.category_select == 'all' or request.POST.category_select is None %}
+                {% include 'include/show_articles.html' %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>You have not posts</p>
+    {% endif %}
 
-<p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}. (Testing sessions)</p>
-    </div>
+    <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %}
+        time{% else %} times{% endif %}. (Testing sessions)</p>
+</div>
 {% endblock %}

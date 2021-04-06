@@ -1,0 +1,10 @@
+<div class="alert alert-warning">
+    <h3>{{ el.title }}</h3>
+    {% if el.category is None %}
+        <p>< without category ></p>
+    {% else %}
+        <p>< {{ el.category }} ></p>
+    {% endif %}
+    <p>{{ el.description }}</p>
+    <a href="{% url 'blog_view' el.id %}" class="btn btn-warning">View details</a>&emsp;{{ el.date }}
+</div>
