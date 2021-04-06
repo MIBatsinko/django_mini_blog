@@ -3,6 +3,11 @@
 {% block content %}
     <div class="features">
         <h1>{{ article.title }}</h1>
+        {% if article.category is None %}
+            <p>without category</p>
+        {% else %}
+            <p>{{ article.category }}</p>
+        {% endif %}
         <form action="{% url 'add_rating' %}" method="post" name="rating">
             <b>Rating:</b>
             {% csrf_token %}

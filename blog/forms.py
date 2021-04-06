@@ -7,7 +7,7 @@ from .models import UserProfile, Rating, RatingStar
 class ArticlesForm(ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'description', 'body']
+        fields = ['title', 'description', 'body', 'category']
 
         widgets = {
             'title': TextInput(attrs={
