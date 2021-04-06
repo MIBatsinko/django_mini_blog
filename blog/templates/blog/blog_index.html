@@ -28,7 +28,7 @@
                             <a href="{% url 'blog_view' el.id %}" class="btn btn-warning">Detail</a>
                             </div>
                         {% endif %}
-                    {% elif request.POST.category_select == el.category.name %}
+                    {% elif request.POST.category_select == el.category.name and not request.POST.category_select is None %}
                         {% if request.POST.category_select == el.category.name %}
                             <div class="alert alert-warning">
                             <h3>{{ el.title }}</h3>
