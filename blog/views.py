@@ -131,7 +131,11 @@ class UserProfileSettings:
         """
         userprofile_id = UserProfile.objects.get(user=self.user.id)
         user_id = User.objects.get(username=userprofile_id)
-        form = UserProfileForm()
+        form = UserProfileForm(initial={
+            'avatar': userprofile_id.avatar,
+            'name': userprofile_id.name,
+            'email': userprofile_id.email
+        })
         if self.method == 'POST':
             form = UserProfileForm(self.POST, self.FILES, instance=userprofile_id)
             if form.is_valid():
