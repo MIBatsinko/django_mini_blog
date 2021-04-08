@@ -1,0 +1,38 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Add category{% endblock %}
+
+{% block page_heading %}Add category{% endblock %}
+
+{% block page_breadcrumbs %}
+Add category
+{% endblock %}
+
+{% block content %}
+<div class="wrapper" xmlns="http://www.w3.org/1999/html">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <form method="post" action="{% url 'category_add' %}">
+      {% csrf_token %}
+      <div class="card-body">
+        <h4>{{ message }}</h4>
+        <div class="form-group">
+          <label for="name">Title</label>
+          <input name="name" type="text" class="form-control" id="name" placeholder="Write name">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input name="description" type="text" class="form-control" id="description" placeholder="Write description">
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+    <!-- /.card -->
+  </div>
+</div>
+
+{% endblock %}

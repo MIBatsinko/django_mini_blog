@@ -1,0 +1,26 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Delete category{% endblock %}
+
+{% block page_heading %}Delete category{% endblock %}
+
+{% block page_breadcrumbs %}
+Delete category
+{% endblock %}
+
+{% block content %}
+<div class="wrapper" xmlns="http://www.w3.org/1999/html">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="features">
+        <h1>Delete category</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-success" type="submit">Delete category</button>
+          </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
