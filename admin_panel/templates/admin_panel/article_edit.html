@@ -13,9 +13,10 @@ Add article
 <div class="wrapper" xmlns="http://www.w3.org/1999/html">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <form method="post" action="{% url 'user_info' %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'article_edit' article.id %}" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="card-body">
+        <h4>{{ message }}</h4>
         <div class="form-group">
           <label for="title">Title</label>
           <input name="title" type="text" class="form-control" id="title" placeholder="Write title" value="{{ article.title }}">
@@ -29,8 +30,7 @@ Add article
           <textarea name="body" class="form-control" id="body" placeholder="Write description">{{ article.body }}</textarea>
         </div>
         <div class="form-group">
-          <label for="category">Category</label>
-          <input name="category" type="text" class="form-control" id="category" placeholder="Write category" value="{{ article.category }}">
+          {{ form.category }}
         </div>
       </div>
       <!-- /.card-body -->

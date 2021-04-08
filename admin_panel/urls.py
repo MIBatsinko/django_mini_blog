@@ -8,8 +8,8 @@ urlpatterns = [
     path('articles/', include([
         path('', views.AdminArticles.show_all, name='articles'),
         path('add/', views.AdminArticles.add, name='article_add'),
-        path('edit/', views.AdminArticles.edit, name='article_edit'),
-        path('delete/', views.AdminArticles.delete, name='article_delete'),
+        path('edit/<int:pk>/', views.AdminArticleUpdateView.as_view(), name='article_edit'),
+        path('delete/<int:pk>/', views.AdminArticleDeleteView.as_view(), name='article_delete'),
     ])),
 
 ]

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.views.generic import UpdateView, DeleteView
 
-from admin_panel.forms import AdminUserInfoForm
 from article.models import Article
 from blog.forms import UserProfileForm, ArticlesForm
 from blog.models import UserProfile
@@ -9,8 +9,10 @@ from blog.models import UserProfile
 
 class AdminHome:
     def home(self):
-        user_profile = UserProfile.objects.get(user=self.user)
-        return render(self, 'admin_panel/dashboard.html', {'user_profile': user_profile})
+        context = {
+
+        }
+        return render(self, 'admin_panel/dashboard.html', context)
 
 
 class AdminUserProfile:
@@ -32,12 +34,7 @@ class AdminUserProfile:
                 instance.save()
                 return redirect('./')
         else:
-            form = UserProfileForm(initial={
-                'name': userprofile_id.name,
-                'email': userprofile_id.email,
-                'avatar': userprofile_id.avatar
-            })
-        print(form)
+            form = UserProfileForm()
         return render(self, 'admin_panel/user_info.html', {'form': form, 'user_profile': userprofile_id})
 
 
@@ -46,10 +43,8 @@ class AdminArticles:
         """
         Show all articles
         """
-        user_profile = UserProfile.objects.get(user=self.user)
         articles = Article.objects.order_by('-date')
         context = {
-            'user_profile': user_profile,
             'articles': articles
         }
         return render(self, 'admin_panel/articles.html', context)
@@ -59,7 +54,6 @@ class AdminArticles:
         Create a new article
         """
         message = 'Add new article'
-        user_profile = UserProfile.objects.get(user=self.user)
         if self.method == "POST":
             form = ArticlesForm(self.POST)
             if form.is_valid():
@@ -68,25 +62,28 @@ class AdminArticles:
                 instance.author = author_id
                 instance.save()
                 message = 'Article {} added!'.format(instance.title)
+                return redirect('articles')
         else:
             form = ArticlesForm()
 
         data = {
-            'user_profile': user_profile,
             'form': form,
             'error': form.errors,
             'message': message,
         }
         return render(self, 'admin_panel/article_add.html', data)
 
-    def edit(self):
-        """
-        Edit article
-        """
-        pass
 
-    def delete(self):
-        """
-        Delete article
-        """
-        pass
+class AdminArticleUpdateView(UpdateView):
+    model = Article
+    template_name = 'admin_panel/article_edit.html'
+
+    form_class = ArticlesForm
+    success_url = '/admin_panel/articles/'
+
+
+class AdminArticleDeleteView(DeleteView):
+    model = Article
+    success_url = '/admin_panel/articles/'
+    template_name = 'admin_panel/article_delete.html'
+

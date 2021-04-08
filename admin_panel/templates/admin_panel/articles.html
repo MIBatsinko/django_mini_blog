@@ -38,9 +38,11 @@ Articles
           <td>{{ article.date }}</td>
           <td>{{ article.total_rating }}</td>
           <td>
-            <div class="btn-group">
-              <button type="button" class="btn btn-block btn-warning btn-flat">Edit</button><br>
-              <button type="button" class="btn btn-block btn-danger btn-flat">Delete</button>
+            <div style="float: left;">
+              <a href="{% url 'article_edit' article.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
+            </div>
+            <div style="float: left;">
+              <a href="{% url 'article_delete' article.id %}" type="button" class="btn btn-block btn-danger btn-sm">Delete</a>
             </div>
           </td>
         </tr>
