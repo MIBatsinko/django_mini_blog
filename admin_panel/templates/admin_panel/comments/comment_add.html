@@ -1,0 +1,33 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Add article{% endblock %}
+
+{% block page_heading %}Add article{% endblock %}
+
+{% block page_breadcrumbs %}
+Add article
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="features">
+        <h1>Write comment</h1>
+        <form method="post">
+            {% csrf_token %}
+                {% if from.errors %}
+                    {% for error in form.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                {% endif %}
+            {{ form.article }}<br>
+            {{ form.body }}<br>
+            {{ form.author }}<br>
+            <button class="btn btn-success" type="submit">Add comment</button>
+          </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

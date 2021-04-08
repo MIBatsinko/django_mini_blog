@@ -1,0 +1,25 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Add article{% endblock %}
+
+{% block page_heading %}Add article{% endblock %}
+
+{% block page_breadcrumbs %}
+Add article
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="features">
+        <h1>Delete post</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-success" type="submit">Delete comment</button>
+          </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

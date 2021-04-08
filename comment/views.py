@@ -47,26 +47,27 @@ class CommentDeleteView(DeleteView):
     template_name = 'comment/comment_delete.html'
 
 
-def comment_add(request, article_id):
-    if request.method == "POST":
-        form = CommentsForm(request.POST)
-        if form.is_valid():
-            author = User.objects.get(id=request.user.id)
-            article = Article.objects.get(id=article_id)
-            instance = form.save(commit=False)
-            instance.article = article
-            instance.author = author
-            instance.save()
+class CommentNew:
+    def add(self, article_id):
+        if self.method == "POST":
+            form = CommentsForm(self.POST)
+            if form.is_valid():
+                author = User.objects.get(id=self.user.id)
+                article = Article.objects.get(id=article_id)
+                instance = form.save(commit=False)
+                instance.article = article
+                instance.author = author
+                instance.save()
 
-            email = SendingEmail()
-            email.new_comment(article, author, instance.body)
-            return redirect('blog_index')
-    else:
-        form = CommentsForm()
+                email = SendingEmail()
+                email.new_comment(article, author, instance.body)
+                return redirect('/{}/'.format(article.id))
+        else:
+            form = CommentsForm()
 
-    data = {
-        'form': form,
-        'error': form.errors,
-    }
+        data = {
+            'form': form,
+            'error': form.errors,
+        }
 
-    return render(request, 'comment/comment_add.html', data)
+        return render(self, 'comment/comment_add.html', data)

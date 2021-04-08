@@ -1,0 +1,50 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Articles{% endblock %}
+
+{% block page_heading %}Articles{% endblock %}
+
+{% block page_breadcrumbs %}
+Articles
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="card-body">
+      <div class="features">
+        <h1>{{ article.title }}</h1>
+        {% if article.category is None %}
+            <p>without category</p>
+        {% else %}
+        <p><b>Category:</b> {{ article.category }}</p>
+        {% endif %}
+                <span class="editContent"><b>Average Mark: </b>{{ article.middle_star }}</span>
+        <p><b>Author:</b> {{ article.author }}</p>
+        <b>Text: </b><br>
+        <p>{{ article.body }}</p>
+        <a href="{% url 'article_edit' article.id %}" class="btn btn-info">Update</a>
+        <a href="{% url 'article_delete' article.id %}" class="btn btn-danger">Delete</a>
+    </div>
+    <div class="features">
+        <br><h4>Comments:</h4>
+        {% for comment in comments %}
+            {% ifequal article.id comment.article.id %}
+                <p>{{ comment.author }}:
+                {{ comment.body }}
+                    {% if user.id == comment.author.id %}
+                        <a href="{% url 'admin_comment_edit' comment.id %}" class="btn btn-info">Edit</a>
+                        <a href="{% url 'admin_comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+            {% endifequal %}
+        {% endfor %}
+        <br><br><a href="{% url 'admin_comment_add' article.id %}" class="btn btn-info">Write comment</a>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

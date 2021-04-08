@@ -39,6 +39,9 @@ Articles
           <td>{{ article.total_rating }}</td>
           <td>
             <div style="float: left;">
+              <a href="{% url 'article_details' article.id %}" type="button" class="btn btn-block btn-info btn-sm">Details</a>
+            </div>
+            <div style="float: left;">
               <a href="{% url 'article_edit' article.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
             </div>
             <div style="float: left;">
