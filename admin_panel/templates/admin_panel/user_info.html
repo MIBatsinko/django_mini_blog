@@ -16,14 +16,17 @@ UserInfo
     <form method="post" action="{% url 'user_info' %}" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="card-body">
+<!--        Name field-->
         <div class="form-group">
           <label for="name">Name</label>
           <input name="name" type="text" class="form-control" id="name" placeholder="Enter your name" value="{{ user_profile.name }}">
         </div>
+<!--        Email field-->
         <div class="form-group">
           <label for="email">Email address</label>
           <input name="email" type="email" class="form-control" id="email" placeholder="Enter your email" value="{{ user_profile.email }}">
         </div>
+<!--        Avatar field-->
         <div class="form-group">
           <label for="avatar">Avatar</label>
           <div class="input-group">
@@ -37,15 +40,12 @@ UserInfo
           </div>
         </div>
       </div>
-                <!-- /.card-body -->
-
+      <!-- /.card-body -->
       <div class="card-footer">
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     </form>
-
-            <!-- /.card -->
-
+    <!-- /.card -->
     <p>Username: {{ request.user.username }} <br>
     Name: {{ user_profile.name }} <br>
     Email-profile: {{ user_profile.email }} <br>

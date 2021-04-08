@@ -1,0 +1,45 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Add article{% endblock %}
+
+{% block page_heading %}Add article{% endblock %}
+
+{% block page_breadcrumbs %}
+Add article
+{% endblock %}
+
+{% block content %}
+<div class="wrapper" xmlns="http://www.w3.org/1999/html">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <form method="post" action="{% url 'user_info' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="card-body">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input name="title" type="text" class="form-control" id="title" placeholder="Write title" value="{{ article.title }}">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input name="description" type="text" class="form-control" id="description" placeholder="Write description" value="{{ article.description }}">
+        </div>
+        <div class="form-group">
+          <label for="body">Body</label>
+          <textarea name="body" class="form-control" id="body" placeholder="Write description">{{ article.body }}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <input name="category" type="text" class="form-control" id="category" placeholder="Write category" value="{{ article.category }}">
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+    <!-- /.card -->
+  </div>
+</div>
+
+{% endblock %}
