@@ -23,6 +23,7 @@ Articles
           <th>Author</th>
           <th>Date of publication</th>
           <th>Total rating</th>
+          <th><button type="button" class="btn btn-block btn-outline-primary btn-flat">Add article</button></th>
         </tr>
         </thead>
         <tbody>
@@ -34,6 +35,12 @@ Articles
           <td>{{ article.author }}</td>
           <td>{{ article.date }}</td>
           <td>{{ article.total_rating }}</td>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn btn-block btn-warning btn-flat">Edit</button><br>
+              <button type="button" class="btn btn-block btn-danger btn-flat">Delete</button>
+            </div>
+          </td>
         </tr>
         {% endfor %}
         </tbody>
