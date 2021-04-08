@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 from admin_panel.forms import AdminUserInfoForm
+from article.models import Article
 from blog.forms import UserProfileForm
 from blog.models import UserProfile
 
@@ -38,3 +39,14 @@ class AdminUserProfile:
             })
         print(form)
         return render(self, 'admin_panel/user_info.html', {'form': form, 'user_profile': userprofile_id})
+
+
+class AdminArticles:
+    def show_all(self):
+        user_profile = UserProfile.objects.get(user=self.user)
+        articles = Article.objects.order_by('-date')
+        context = {
+            'user_profile': user_profile,
+            'articles': articles
+        }
+        return render(self, 'admin_panel/articles.html', context)
