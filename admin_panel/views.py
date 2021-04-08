@@ -35,7 +35,7 @@ class AdminUserProfile:
                 return redirect('./')
         else:
             form = UserProfileForm()
-        return render(self, 'admin_panel/user_info.html', {'form': form, 'user_profile': userprofile_id})
+        return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user_profile': userprofile_id})
 
 
 class AdminArticles:
@@ -47,7 +47,7 @@ class AdminArticles:
         context = {
             'articles': articles
         }
-        return render(self, 'admin_panel/articles.html', context)
+        return render(self, 'admin_panel/articles/articles.html', context)
 
     def add(self):
         """
@@ -71,13 +71,12 @@ class AdminArticles:
             'error': form.errors,
             'message': message,
         }
-        return render(self, 'admin_panel/article_add.html', data)
+        return render(self, 'admin_panel/articles/article_add.html', data)
 
 
 class AdminArticleUpdateView(UpdateView):
     model = Article
-    template_name = 'admin_panel/article_edit.html'
-
+    template_name = 'admin_panel/articles/article_edit.html'
     form_class = ArticlesForm
     success_url = '/admin_panel/articles/'
 
@@ -85,5 +84,5 @@ class AdminArticleUpdateView(UpdateView):
 class AdminArticleDeleteView(DeleteView):
     model = Article
     success_url = '/admin_panel/articles/'
-    template_name = 'admin_panel/article_delete.html'
+    template_name = 'admin_panel/articles/article_delete.html'
 

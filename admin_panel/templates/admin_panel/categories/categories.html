@@ -1,0 +1,55 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Categories{% endblock %}
+
+{% block page_heading %}Categories{% endblock %}
+
+{% block page_breadcrumbs %}
+Categories
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="card-body">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Category</th>
+          <th>Description</th>
+          <th>
+            <a href="{% url 'category_add' %}" type="button" class="btn btn-block btn-outline-primary btn-flat">Add category</a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+        <tr>
+          <td>{{ category.name }}</td>
+          <td>{{ category.description }}</td>
+          <td>
+            <div style="float: left;">
+              <a href="{% url 'category_edit' category.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
+            </div>
+            <div style="float: left;">
+              <a href="{% url 'category_delete' category.id %}" type="button" class="btn btn-block btn-danger btn-sm">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+          <th>Category</th>
+          <th>Description</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
