@@ -34,10 +34,8 @@ Articles
             {% ifequal article.id comment.article.id %}
                 <p>{{ comment.author }}:
                 {{ comment.body }}
-                    {% if user.id == comment.author.id %}
-                        <a href="{% url 'admin_comment_edit' comment.id %}" class="btn btn-info">Edit</a>
-                        <a href="{% url 'admin_comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
-                    {% endif %}
+                    <a href="{% url 'admin_comment_edit' comment.id %}" class="btn btn-info">Edit</a>
+                    <a href="{% url 'admin_comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
             {% endifequal %}
         {% endfor %}
         <br><br><a href="{% url 'admin_comment_add' article.id %}" class="btn btn-info">Write comment</a>
