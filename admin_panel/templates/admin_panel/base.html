@@ -793,5 +793,16 @@
 <!--<script src="{% static 'dist/js/demo.js' %}"></script>-->
 <!--&lt;!&ndash; AdminLTE dashboard demo (This is only for demo purposes) &ndash;&gt;-->
 <!--<script src="{% static 'dist/js/pages/dashboard.js' %}"></script>-->
+  <!-- bs-custom-file-input -->
+
+<!-- bs-custom-file-input -->
+<script src="{% static 'plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+<!-- Page specific script -->
+<script>
+$(function () {
+  bsCustomFileInput.init();
+});
+</script>
+<script src="{% static 'js/scripts.js' %}"></script>
 </body>
 </html>

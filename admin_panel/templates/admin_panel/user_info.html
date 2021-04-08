@@ -13,34 +13,38 @@ UserInfo
 <div class="wrapper">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-
-    <form>
+    <form method="post" action="{% url 'user_info' %}" enctype="multipart/form-data">
+      {% csrf_token %}
       <div class="card-body">
-          <div class="form-group">
+        <div class="form-group">
           <label for="name">Name</label>
-          <input type="name" class="form-control" id="name" placeholder="Enter your name">
+          <input name="name" type="text" class="form-control" id="name" placeholder="Enter your name" value="{{ user_profile.name }}">
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter your email">
+          <label for="email">Email address</label>
+          <input name="email" type="email" class="form-control" id="email" placeholder="Enter your email" value="{{ user_profile.email }}">
         </div>
         <div class="form-group">
-          <label for="exampleInputFile">Avatar</label>
+          <label for="avatar">Avatar</label>
           <div class="input-group">
             <div class="custom-file">
-              <input type="file" class="custom-file-input" id="exampleInputFile">
-              <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+              <input name="avatar" type="file" class="custom-file-input" id="avatar">
+              <label class="custom-file-label" for="avatar">Choose file</label>
             </div>
             <div class="input-group-append">
-              <span class="input-group-text">Upload</span>
+               <span class="input-group-text">Upload</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
 
     <p>Username: {{ request.user.username }} <br>
     Name: {{ user_profile.name }} <br>
