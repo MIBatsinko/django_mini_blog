@@ -62,7 +62,6 @@ class AdminArticles:
                 instance.author = author_id
                 instance.save()
                 message = 'Article {} added!'.format(instance.title)
-                return redirect('articles')
         else:
             form = ArticlesForm()
 
