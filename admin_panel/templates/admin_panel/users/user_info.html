@@ -13,45 +13,18 @@ UserInfo
 <div class="wrapper">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <form method="post" action="{% url 'user_info' %}" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="card-body">
-<!--        Name field-->
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input name="name" type="text" class="form-control" id="name" placeholder="Enter your name" value="{{ user_profile.name }}">
-        </div>
-<!--        Email field-->
-        <div class="form-group">
-          <label for="email">Email address</label>
-          <input name="email" type="email" class="form-control" id="email" placeholder="Enter your email" value="{{ user_profile.email }}">
-        </div>
-<!--        Avatar field-->
-        <div class="form-group">
-          <label for="avatar">Avatar</label>
-          <div class="input-group">
-            <div class="custom-file">
-              <input name="avatar" type="file" class="custom-file-input" id="avatar">
-              <label class="custom-file-label" for="avatar">Choose file</label>
-            </div>
-            <div class="input-group-append">
-               <span class="input-group-text">Upload</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /.card-body -->
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
+    <div class="features">
+        <h1>Profile <b>{{ user_profile.user.username }}</b></h1>
+        <p><b>Avatar: </b><img src="{{user_profile.avatar.url}}" width="10%" height="10%"></p>
+        <p><b>Name:</b> {{ user_profile.name }}</p>
+        <p><b>Email:</b> {{ user_profile.email }}</p>
+        <p><b>Date of registration:</b> {{ user_profile.date_created }}</p>
+        <p><b>Staff status: </b> {{ user_profile.user.is_staff }}</p>
+        <p><b>Is active: </b> {{ user_profile.user.is_active }}</p>
+        <p><b>Superuser permissions: </b> {{ user_profile.user.is_superuser}}</p>
+        <a href="{% url 'user_edit' user_profile.user.id %}" class="btn btn-info">Update</a>
+    </div>
     <!-- /.card -->
-    <p>Username: {{ request.user.username }} <br>
-    Name: {{ user_profile.name }} <br>
-    Email-profile: {{ user_profile.email }} <br>
-    Avatar path: {{ user_profile.avatar }} <br>
-    Date of registration: {{ user_profile.date_created }} <br>
-    </p>
   </div>
 </div>
 

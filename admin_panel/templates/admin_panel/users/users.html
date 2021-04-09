@@ -1,0 +1,77 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Users{% endblock %}
+
+{% block page_heading %}Users{% endblock %}
+
+{% block page_breadcrumbs %}
+Users
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="card-body">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>User</th>
+            <th>Avatar</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date created</th>
+            <th>Total rating</th>
+            <th>Staff status</th>
+            <th>Superuser</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for usr in users %}
+        <tr>
+            <td>{{ usr.user.id }}</td>
+            <td>{{ usr.user }}</td>
+            <td>{{ usr.avatar }}</td>
+            <td>{{ usr.name }}</td>
+            <td>{{ usr.email }}</td>
+            <td>{{ usr.date_created }}</td>
+            <td>{{ usr.total_rating }}</td>
+            <td>{{ usr.user.is_staff }}</td>
+            <td>{{ usr.user.is_superuser }}</td>
+          <td>
+<!--              Buttons together on one line-->
+            <div style="float: left;">
+              <a href="{% url 'user_info' usr.user.id %}" type="button" class="btn btn-block btn-info btn-sm">Details</a>
+            </div>
+            <div style="float: left;">
+              <a href="{% url 'user_edit' usr.user.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
+            </div>
+
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>id</th>
+            <th>User</th>
+            <th>Avatar</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date created</th>
+            <th>Total rating</th>
+            <th>Staff status</th>
+            <th>Superuser</th>
+            <th>Actions</th>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

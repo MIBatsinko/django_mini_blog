@@ -33,11 +33,11 @@ class AdminUsers:
 
 
 class AdminUserProfile:
-    def info(self):
+    def info(self, pk):
         """
         User profile settings page
         """
-        userprofile_id = UserProfile.objects.get(user=self.user.id)
+        userprofile_id = UserProfile.objects.get(user=pk)
         user_id = User.objects.get(username=userprofile_id)
         if self.method == 'POST':
             form = UserProfileForm(self.POST, self.FILES, instance=userprofile_id)
@@ -53,6 +53,60 @@ class AdminUserProfile:
         else:
             form = UserProfileForm()
         return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user_profile': userprofile_id})
+
+    def edit(self, pk):
+        user_profile = UserProfile.objects.get(user=pk)
+        user = User.objects.get(id=pk)
+        if self.method == "POST":
+            form = UserProfileForm(self.POST, self.FILES, instance=user_profile)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                is_staff = self.POST.get("is_staff", False)
+                is_active = self.POST.get("is_active", False)
+                is_superuser = self.POST.get("is_superuser", False)
+                user_profile.user.is_staff = is_staff
+                user_profile.user.is_active = is_active
+                user_profile.user.is_superuser = is_superuser
+                # user_profile.user.username = username
+                user_profile.user.save()
+                instance.name = self.POST['name']
+                instance.email = self.POST['email']
+                if self.FILES:
+                    instance.avatar = self.FILES['avatar']
+                instance.save()
+        else:
+            form = UserProfileForm()
+
+        check_active = ''
+        check_staff = ''
+        check_super = ''
+        if user_profile.user.is_staff:
+            check_staff = 'checked'
+        if user_profile.user.is_active:
+            check_active = 'checked'
+        if user_profile.user.is_superuser:
+            check_super = 'checked'
+
+        data = {
+            'form': form,
+            'error': form.errors,
+            'user_profile': user_profile,
+            'check_staff': check_staff,
+            'check_active': check_active,
+            'check_super': check_super
+        }
+        return render(self, 'admin_panel/users/user_edit.html', data)
+
+
+class AdminUsersDeleteView(DeleteView):
+    model = User
+    success_url = '/admin_panel/users/'
+    template_name = 'admin_panel/users/user_delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminUsersDeleteView, self).get_context_data(**kwargs)
+        context['user_profile'] = UserProfile.objects.all()
+        return context
 
 
 class AdminArticles:
