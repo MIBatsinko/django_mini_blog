@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView, DetailView
@@ -13,6 +14,7 @@ from sendemail.views import SendingEmail
 
 
 class AdminHome:
+    @login_required()
     def home(self):
         context = {
 
@@ -21,6 +23,7 @@ class AdminHome:
 
 
 class AdminUsers:
+    @login_required()
     def show_all(self):
         """
         Show all users
@@ -33,6 +36,7 @@ class AdminUsers:
 
 
 class AdminUserProfile:
+    @login_required()
     def info(self, pk):
         """
         User profile settings page
@@ -54,6 +58,7 @@ class AdminUserProfile:
             form = UserProfileForm()
         return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user_profile': userprofile_id})
 
+    @login_required()
     def edit(self, pk):
         user_profile = UserProfile.objects.get(user=pk)
         user = User.objects.get(id=pk)
@@ -110,6 +115,7 @@ class AdminUsersDeleteView(DeleteView):
 
 
 class AdminArticles:
+    @login_required()
     def show_all(self):
         """
         Show all articles
@@ -120,6 +126,7 @@ class AdminArticles:
         }
         return render(self, 'admin_panel/articles/articles.html', context)
 
+    @login_required()
     def add(self):
         """
         Create a new article
@@ -183,6 +190,7 @@ class AdminArticleDeleteView(DeleteView):
 
 
 class AdminCategories:
+    @login_required()
     def show_all(self):
         """
         Show all articles
@@ -193,6 +201,7 @@ class AdminCategories:
         }
         return render(self, 'admin_panel/categories/categories.html', context)
 
+    @login_required()
     def add(self):
         """
         Create a new category
@@ -241,6 +250,7 @@ class AdminCommentDeleteView(DeleteView):
 
 
 class AdminCommentNew:
+    @login_required()
     def add(self, article_id):
         if self.method == "POST":
             form = CommentsForm(self.POST)
