@@ -20,6 +20,18 @@ class AdminHome:
         return render(self, 'admin_panel/dashboard.html', context)
 
 
+class AdminUsers:
+    def show_all(self):
+        """
+        Show all users
+        """
+        users = UserProfile.objects.all()
+        context = {
+            'users': users
+        }
+        return render(self, 'admin_panel/users/users.html', context)
+
+
 class AdminUserProfile:
     def info(self):
         """
