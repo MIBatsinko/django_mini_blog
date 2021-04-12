@@ -26,7 +26,7 @@ class AdminUsers:
     @login_required()
     def show_all(self):
         """
-        Show all users
+        Prints on the page all users
         """
         users = UserProfile.objects.all()
         context = {
@@ -60,6 +60,9 @@ class AdminUserProfile:
 
     @login_required()
     def edit(self, pk):
+        """
+        Edit user profile
+        """
         user_profile = UserProfile.objects.get(user=pk)
         user = User.objects.get(id=pk)
         if self.method == "POST":
@@ -118,7 +121,7 @@ class AdminArticles:
     @login_required()
     def show_all(self):
         """
-        Show all articles
+        Prints on the page all articles
         """
         articles = Article.objects.order_by('-date')
         context = {
@@ -193,7 +196,7 @@ class AdminCategories:
     @login_required()
     def show_all(self):
         """
-        Show all articles
+        Prints on the page all categories
         """
         categories = Category.objects.all()
         context = {
