@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.views.generic import UpdateView, DeleteView, DetailView
+from django.urls import reverse
+from django.views.generic import UpdateView, DeleteView, DetailView, TemplateView, CreateView
 from django.db import models
+from rest_framework.reverse import reverse_lazy
 
 from article.forms import CategoriesForm
 from article.models import Article, Category
@@ -170,12 +172,9 @@ class AdminArticleDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AdminArticleDetailView, self).get_context_data(**kwargs)
-        context['comments'] = Comment.objects.all()
-        context['star_form'] = RatingForm()
-        try:
-            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs['object'].id)
-        except Rating.DoesNotExist:
-            context['mark'] = 0
+        article = kwargs.get('object', None)
+        if article:
+            context['comments'] = Comment.objects.filter(article=article)
         return context
 
 
@@ -226,6 +225,22 @@ class AdminCategories:
         return render(self, 'admin_panel/categories/category_add.html', data)
 
 
+class AdminCategoriesView(TemplateView):
+    template_name = 'admin_panel/categories/categories.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+
+class AdminCategoryCreateView(CreateView):
+    model = Category
+    template_name = 'admin_panel/categories/category_add.html'
+    form_class = CategoriesForm
+    success_url = '/admin_panel/categories/'
+
+
 class AdminCategoryUpdateView(UpdateView):
     model = Category
     template_name = 'admin_panel/categories/category_edit.html'
@@ -252,28 +267,50 @@ class AdminCommentDeleteView(DeleteView):
     template_name = 'admin_panel/comments/comment_delete.html'
 
 
-class AdminCommentNew:
-    @login_required()
-    def add(self, article_id):
-        if self.method == "POST":
-            form = CommentsForm(self.POST)
-            if form.is_valid():
-                author = User.objects.get(id=self.user.id)
-                article = Article.objects.get(id=article_id)
-                instance = form.save(commit=False)
-                instance.article = article
-                instance.author = author
-                instance.save()
+class AdminCommentCreateView(CreateView):
+    model = Comment
+    template_name = 'admin_panel/comments/comment_add.html'
+    form_class = CommentsForm
+    success_url = '/admin_panel/comments/'
 
-                email = SendingEmail()
-                email.new_comment(article, author, instance.body)
-                return redirect('/admin_panel/articles/details/{}/'.format(article.id))
-        else:
-            form = CommentsForm()
+    def form_valid(self, form):
+        author = User.objects.get(id=self.request.user.id)
+        article_id = self.kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
+        instance = form.save(commit=False)
+        instance.article = article
+        instance.author = author
+        instance.save()
 
-        data = {
-            'form': form,
-            'error': form.errors,
-        }
+        email = SendingEmail()
+        email.new_comment(article, author, instance.body)
 
-        return render(self, 'admin_panel/comments/comment_add.html', data)
+        return redirect(reverse_lazy('article_details', (article_id, )))
+        # return redirect('/admin_panel/articles/details/{}/'.format(article.id))
+
+
+# class AdminCommentNew:
+#     @login_required()
+#     def add(self, article_id):
+#         if self.method == "POST":
+#             form = CommentsForm(self.POST)
+#             if form.is_valid():
+#                 author = User.objects.get(id=self.user.id)
+#                 article = Article.objects.get(id=article_id)
+#                 instance = form.save(commit=False)
+#                 instance.article = article
+#                 instance.author = author
+#                 instance.save()
+#
+#                 email = SendingEmail()
+#                 email.new_comment(article, author, instance.body)
+#                 return redirect('/admin_panel/articles/details/{}/'.format(article.id))
+#         else:
+#             form = CommentsForm()
+#
+#         data = {
+#             'form': form,
+#             'error': form.errors,
+#         }
+#
+#         return render(self, 'admin_panel/comments/comment_add.html', data)

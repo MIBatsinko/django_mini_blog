@@ -2,6 +2,7 @@ from django.urls import path, include
 
 from . import views
 
+
 urlpatterns = [
     path('', views.AdminHome.home, name='admin_index'),
     path('users/', include([
@@ -21,13 +22,13 @@ urlpatterns = [
         path('comment/', include([
             path('<int:pk>/edit', views.AdminCommentUpdateView.as_view(), name='admin_comment_edit'),
             path('<int:pk>/delete', views.AdminCommentDeleteView.as_view(), name='admin_comment_delete'),
-            path('<int:article_id>/comment_add/', views.AdminCommentNew.add, name='admin_comment_add'),
+            path('<int:article_id>/comment_add/', views.AdminCommentCreateView.as_view(), name='admin_comment_add'),
         ]))
     ])),
 
     path('categories/', include([
-        path('', views.AdminCategories.show_all, name='categories'),
-        path('add/', views.AdminCategories.add, name='category_add'),
+        path('', views.AdminCategoriesView.as_view(), name='categories'),
+        path('add/', views.AdminCategoryCreateView.as_view(), name='category_add'),
         path('edit/<int:pk>/', views.AdminCategoryUpdateView.as_view(), name='category_edit'),
         path('delete/<int:pk>/', views.AdminCategoryDeleteView.as_view(), name='category_delete'),
     ])),
