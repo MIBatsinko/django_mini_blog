@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 .idea/
 
+miniblog/config.py
 # C extensions
 *.so
 
