@@ -19,35 +19,35 @@ Users
         <tr>
             <th>id</th>
             <th>User</th>
-            <th>Avatar</th>
             <th>Name</th>
             <th>Email</th>
             <th>Date created</th>
             <th>Total rating</th>
+            <th>Is active</th>
             <th>Staff status</th>
             <th>Superuser</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        {% for usr in users %}
+        {% for user_profile in users %}
         <tr>
-            <td>{{ usr.user.id }}</td>
-            <td>{{ usr.user }}</td>
-            <td>{{ usr.avatar }}</td>
-            <td>{{ usr.name }}</td>
-            <td>{{ usr.email }}</td>
-            <td>{{ usr.date_created }}</td>
-            <td>{{ usr.total_rating }}</td>
-            <td>{{ usr.user.is_staff }}</td>
-            <td>{{ usr.user.is_superuser }}</td>
+            <td>{{ user_profile.user.id }}</td>
+            <td>{{ user_profile.user }}</td>
+            <td>{{ user_profile.user.name }}</td>
+            <td>{{ user_profile.user.email }}</td>
+            <td>{{ user_profile.date_created }}</td>
+            <td>{{ user_profile.total_rating }}</td>
+            <td>{{ user_profile.user.is_active }}</td>
+            <td>{{ user_profile.user.is_staff }}</td>
+            <td>{{ user_profile.user.is_superuser }}</td>
           <td>
 <!--              Buttons together on one line-->
             <div style="float: left;">
-              <a href="{% url 'user_info' usr.user.id %}" type="button" class="btn btn-block btn-info btn-sm">Details</a>
+              <a href="{% url 'user_info' user_profile.user.id %}" type="button" class="btn btn-block btn-info btn-sm">Details</a>
             </div>
             <div style="float: left;">
-              <a href="{% url 'user_edit' usr.user.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
+              <a href="{% url 'user_edit' user_profile.user.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
             </div>
 
           </td>
@@ -58,11 +58,11 @@ Users
         <tr>
             <th>id</th>
             <th>User</th>
-            <th>Avatar</th>
             <th>Name</th>
             <th>Email</th>
             <th>Date created</th>
             <th>Total rating</th>
+            <th>Is active</th>
             <th>Staff status</th>
             <th>Superuser</th>
             <th>Actions</th>
