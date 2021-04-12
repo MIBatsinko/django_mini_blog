@@ -87,23 +87,10 @@ class AdminUserProfile:
         else:
             form = UserProfileForm()
 
-        check_active = ''
-        check_staff = ''
-        check_super = ''
-        if user_profile.user.is_staff:
-            check_staff = 'checked'
-        if user_profile.user.is_active:
-            check_active = 'checked'
-        if user_profile.user.is_superuser:
-            check_super = 'checked'
-
         data = {
             'form': form,
             'error': form.errors,
             'user_profile': user_profile,
-            'check_staff': check_staff,
-            'check_active': check_active,
-            'check_super': check_super
         }
         return render(self, 'admin_panel/users/user_edit.html', data)
 
