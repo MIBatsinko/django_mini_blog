@@ -14,8 +14,8 @@ urlpatterns = [
     ])),
 
     path('articles/', include([
-        path('', views.AdminArticles.show_all, name='articles'),
-        path('add/', views.AdminArticles.add, name='article_add'),
+        path('', views.AdminArticlesView.as_view(), name='articles'),
+        path('add/', views.AdminArticleCreateView.as_view(), name='article_add'),
         path('details/<int:pk>/', views.AdminArticleDetailView.as_view(), name='article_details'),
         path('edit/<int:pk>/', views.AdminArticleUpdateView.as_view(), name='article_edit'),
         path('delete/<int:pk>/', views.AdminArticleDeleteView.as_view(), name='article_delete'),

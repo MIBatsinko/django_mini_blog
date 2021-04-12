@@ -119,41 +119,62 @@ class AdminUsersDeleteView(DeleteView):
         return context
 
 
-class AdminArticles:
-    @login_required()
-    def show_all(self):
-        """
-        Prints on the page all articles
-        """
-        articles = Article.objects.order_by('-date')
-        context = {
-            'articles': articles
-        }
-        return render(self, 'admin_panel/articles/articles.html', context)
+# class AdminArticles:
+#     @login_required()
+#     def show_all(self):
+#         """
+#         Prints on the page all articles
+#         """
+#         articles = Article.objects.order_by('-date')
+#         context = {
+#             'articles': articles
+#         }
+#         return render(self, 'admin_panel/articles/articles.html', context)
+#
+#     @login_required()
+#     def add(self):
+#         """
+#         Create a new article
+#         """
+#         message = 'Add new article'
+#         if self.method == "POST":
+#             form = ArticlesForm(self.POST)
+#             if form.is_valid():
+#                 author_id = User.objects.get(id=self.user.id)
+#                 instance = form.save(commit=False)
+#                 instance.author = author_id
+#                 instance.save()
+#                 message = 'Article {} added!'.format(instance.title)
+#         else:
+#             form = ArticlesForm()
+#
+#         data = {
+#             'form': form,
+#             'error': form.errors,
+#             'message': message,
+#         }
+#         return render(self, 'admin_panel/articles/article_add.html', data)
 
-    @login_required()
-    def add(self):
-        """
-        Create a new article
-        """
-        message = 'Add new article'
-        if self.method == "POST":
-            form = ArticlesForm(self.POST)
-            if form.is_valid():
-                author_id = User.objects.get(id=self.user.id)
-                instance = form.save(commit=False)
-                instance.author = author_id
-                instance.save()
-                message = 'Article {} added!'.format(instance.title)
-        else:
-            form = ArticlesForm()
 
-        data = {
-            'form': form,
-            'error': form.errors,
-            'message': message,
-        }
-        return render(self, 'admin_panel/articles/article_add.html', data)
+class AdminArticlesView(TemplateView):
+    template_name = 'admin_panel/articles/articles.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['articles'] = Article.objects.order_by('-date')
+        return context
+
+
+class AdminArticleCreateView(CreateView):
+    model = Article
+    template_name = 'admin_panel/articles/article_add.html'
+    form_class = ArticlesForm
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.author = self.request.user
+        instance.save()
+        return redirect(reverse_lazy('articles'))
 
 
 class AdminArticleDetailView(DetailView):
@@ -191,38 +212,38 @@ class AdminArticleDeleteView(DeleteView):
     template_name = 'admin_panel/articles/article_delete.html'
 
 
-class AdminCategories:
-    @login_required()
-    def show_all(self):
-        """
-        Prints on the page all categories
-        """
-        categories = Category.objects.all()
-        context = {
-            'categories': categories
-        }
-        return render(self, 'admin_panel/categories/categories.html', context)
-
-    @login_required()
-    def add(self):
-        """
-        Create a new category
-        """
-        message = 'Add new category'
-        if self.method == "POST":
-            form = CategoriesForm(self.POST)
-            if form.is_valid():
-                form.save()
-                message = 'New category added!'
-        else:
-            form = CategoriesForm()
-
-        data = {
-            'form': form,
-            'error': form.errors,
-            'message': message,
-        }
-        return render(self, 'admin_panel/categories/category_add.html', data)
+# class AdminCategories:
+#     @login_required()
+#     def show_all(self):
+#         """
+#         Prints on the page all categories
+#         """
+#         categories = Category.objects.all()
+#         context = {
+#             'categories': categories
+#         }
+#         return render(self, 'admin_panel/categories/categories.html', context)
+#
+#     @login_required()
+#     def add(self):
+#         """
+#         Create a new category
+#         """
+#         message = 'Add new category'
+#         if self.method == "POST":
+#             form = CategoriesForm(self.POST)
+#             if form.is_valid():
+#                 form.save()
+#                 message = 'New category added!'
+#         else:
+#             form = CategoriesForm()
+#
+#         data = {
+#             'form': form,
+#             'error': form.errors,
+#             'message': message,
+#         }
+#         return render(self, 'admin_panel/categories/category_add.html', data)
 
 
 class AdminCategoriesView(TemplateView):

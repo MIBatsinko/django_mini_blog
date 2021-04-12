@@ -40,11 +40,11 @@ User edit
           </div>
         </div>
           <div class="form-group">
-              <input type="checkbox" id="is_staff" name="is_staff" value="True" {{ check_staff }}>
+              <input type="checkbox" id="is_staff" name="is_staff" value="True" {% if user_profile.user.is_staff %} checked {% endif %}>
               <label for="is_staff"> Staff status</label><br>
-              <input type="checkbox" id="is_active" name="is_active" value="True" {{ check_active }}>
+              <input type="checkbox" id="is_active" name="is_active" value="True" {% if user_profile.user.is_active %} checked {% endif %}>
               <label for="is_active"> Is active</label><br>
-              <input type="checkbox" id="is_superuser" name="is_superuser" value="True" {{ check_super }}>
+              <input type="checkbox" id="is_superuser" name="is_superuser" value="True" {% if user_profile.user.is_superuser %} checked {% endif %}>
               <label for="is_superuser"> Superuser permissions</label><br><br>
           </div>
       </div>
