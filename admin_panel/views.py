@@ -43,13 +43,13 @@ class AdminUserProfile:
         """
         User profile settings page
         """
-        userprofile_id = UserProfile.objects.get(user=pk)
-        user_id = User.objects.get(username=userprofile_id)
+        # userprofile_id = UserProfile.objects.get(user=pk)
+        user = User.objects.get(id=pk)
         if self.method == 'POST':
-            form = UserProfileForm(self.POST, self.FILES, instance=userprofile_id)
+            form = UserProfileForm(self.POST, self.FILES, instance=user)
             if form.is_valid():
                 instance = form.save(commit=False)
-                instance.user = user_id
+                instance.user = user
                 if self.FILES:
                     instance.avatar = self.FILES['avatar']
                 instance.name = self.POST['name']
@@ -58,7 +58,7 @@ class AdminUserProfile:
                 return redirect('./')
         else:
             form = UserProfileForm()
-        return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user_profile': userprofile_id})
+        return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user': user})
 
     @login_required()
     def edit(self, pk):

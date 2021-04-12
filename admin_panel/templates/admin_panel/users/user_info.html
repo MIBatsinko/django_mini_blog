@@ -14,15 +14,15 @@ UserInfo
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <div class="features">
-        <h1>Profile <b>{{ user_profile.user.username }}</b></h1>
-        <p><b>Avatar: </b><img src="{{user_profile.avatar.url}}" width="10%" height="10%"></p>
-        <p><b>Name:</b> {{ user_profile.name }}</p>
-        <p><b>Email:</b> {{ user_profile.email }}</p>
-        <p><b>Date of registration:</b> {{ user_profile.date_created }}</p>
-        <p><b>Staff status: </b> {{ user_profile.user.is_staff }}</p>
-        <p><b>Is active: </b> {{ user_profile.user.is_active }}</p>
-        <p><b>Superuser permissions: </b> {{ user_profile.user.is_superuser}}</p>
-        <a href="{% url 'user_edit' user_profile.user.id %}" class="btn btn-info">Update</a>
+        <h1>Profile <b>{{ user.username }}</b></h1>
+        <p><b>Avatar: </b><img src="{{ user.userprofile.avatar.url }}" width="10%" height="10%"></p>
+        <p><b>Name:</b> {{ user.name }}</p>
+        <p><b>Email:</b> {{ user.email }}</p>
+        <p><b>Date of registration:</b> {{ user.userprofile.date_created }}</p>
+        <p><b>Staff status: </b> {{ user.is_staff }}</p>
+        <p><b>Is active: </b> {{ user.is_active }}</p>
+        <p><b>Superuser permissions: </b> {{ user.is_superuser}}</p>
+        <a href="{% url 'user_edit' user.id %}" class="btn btn-info">Update</a>
     </div>
     <!-- /.card -->
   </div>
