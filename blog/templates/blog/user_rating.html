@@ -10,10 +10,10 @@
         <th>author</th>
         <th>avg_star</th>
      </tr>
-    {% for usr in data_rating %}
+    {% for user in users %}
         <tr>
-            <td>{{ usr.user }}</td>
-            <td>{{ usr.total_rating }}</td>
+            <td>{{ user }}</td>
+            <td>{{ user.userprofile.total_rating }}</td>
         </tr>
     {% endfor %}
  </table>

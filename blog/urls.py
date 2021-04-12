@@ -11,7 +11,7 @@ urlpatterns = [
     path('<int:pk>/delete/', views.ArticleDeleteView.as_view(), name='blog_delete'),
     path("add-rating/", views.AddStarRating.as_view(), name='add_rating'),
 
-    path("rating_user/", views.RatingUserPage.show_rating, name='rating_user'),
-    path('profile/', views.UserProfilePage.profile, name='profile'),
+    path("rating_user/", views.RatingUserPageView.as_view(), name='rating_user'),
+    path('profile/', views.UserProfilePageView.as_view(), name='profile'),
     path('profile_settings/', views.UserProfileSettings.profile_settings, name="profile_settings"),
 ]

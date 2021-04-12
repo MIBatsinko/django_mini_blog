@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.db import models
@@ -103,26 +103,27 @@ class ArticleAdd:
         return render(self, 'blog/blog_add.html', data)
 
 
-class UserProfilePage:
-    def profile(self):
-        """
-        User profile page
-        """
-        user = User.objects.get(id=self.user.id)
-        if self.method == "GET":
+# class UserProfilePage:
+#     def profile(self):
+#         """
+#         User profile page
+#         """
+#         # Adds new UserProfile if it with the user_id does not exist
+#         # try:
+#         #     user_profile = UserProfile.objects.get(user=self.user)
+#         # except:
+#         #     user_profile = UserProfile.objects.create(user=user)
+#
+#         data = {
+#             'user': self.user,
+#         }
+#         return render(self, 'blog/profile.html', data)
 
-            # Adds new UserProfile if it with the user_id does not exist
-            try:
-                user_profile = UserProfile.objects.get(user=self.user)
-            except:
-                user_profile = UserProfile.objects.create(user=user)
 
-        user_profile = UserProfile.objects.get(user=self.user)
-        data = {
-            'user': user,
-            'user_profile': user_profile,
-        }
-        return render(self, 'blog/profile.html', data)
+class UserProfilePageView(TemplateView):
+    model = UserProfile
+    template_name = 'blog/profile.html'
+    context_object_name = 'userprofile'
 
 
 class UserProfileSettings:
@@ -154,8 +155,18 @@ class UserProfileSettings:
         return render(self, 'blog/profile_settings.html', context)
 
 
-class RatingUserPage:
-    def show_rating(self, **kwargs):
-        data_rating = UserProfile.objects.all()
+# class RatingUserPage:
+#     def show_rating(self, **kwargs):
+#         data_rating = UserProfile.objects.all()
+#         return render(self, 'blog/user_rating.html', {'data_rating': data_rating})
 
-        return render(self, 'blog/user_rating.html', {'data_rating': data_rating})
+
+class RatingUserPageView(TemplateView):
+    model = User
+    template_name = 'blog/user_rating.html'
+    context_object_name = 'users'
+
+    def get_context_data(self, **kwargs):
+        context = super(RatingUserPageView, self).get_context_data(**kwargs)
+        context['users'] = User.objects.all()
+        return context
