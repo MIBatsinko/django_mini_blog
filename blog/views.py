@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from django.contrib.auth.decorators import login_required
+from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
@@ -11,7 +12,7 @@ from django.db import models
 
 from article.models import Article, Category
 from comment.models import Comment
-from .forms import ArticlesForm, UserProfileForm, RatingForm
+from .forms import ArticlesForm, UserProfileForm, RatingForm, UserForm
 from .models import UserProfile, Rating
 
 
@@ -131,27 +132,26 @@ class UserProfileSettings:
         """
         User profile settings page
         """
-        userprofile_id = UserProfile.objects.get(user=self.user.id)
-        user_id = User.objects.get(username=userprofile_id)
-        form = UserProfileForm(initial={
-            'avatar': userprofile_id.avatar,
-            'name': userprofile_id.name,
-            'email': userprofile_id.email
-        })
+        user = self.user
         if self.method == 'POST':
-            form = UserProfileForm(self.POST, self.FILES, instance=userprofile_id)
-            if form.is_valid():
-                instance = form.save(commit=False)
-                instance.user = user_id
-                if 'avatar' in self.FILES:
-                    instance.avatar = self.FILES['avatar']
-                if 'name' in self.POST:
-                    instance.name = self.POST['name']
-                if 'email' in self.POST:
-                    instance.email = self.POST['email']
-                instance.save()
-                return redirect('blog_index')
-        context = {'form': form}
+            form = UserProfileForm(self.POST, self.FILES, instance=user.userprofile)
+            formset = UserForm(self.POST, instance=user)
+            if all([form.is_valid(), formset.is_valid()]):
+                form.save()
+                formset.save()
+                return redirect('profile')
+        else:
+            form = UserProfileForm(initial={
+                'avatar': user.userprofile.avatar,
+            })
+            formset = UserForm(initial={
+                'first_name': user.first_name,
+                'email': user.email
+            })
+        context = {
+            'form': form,
+            'formset': formset
+        }
         return render(self, 'blog/profile_settings.html', context)
 
 

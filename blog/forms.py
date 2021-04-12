@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.forms import ModelForm, TextInput, Textarea, ModelChoiceField, RadioSelect
 
 from article.models import Article, Category
@@ -28,8 +29,13 @@ class ArticlesForm(ModelForm):
 class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
-        # fields = '__all__'
         exclude = ['user', 'total_rating']
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name']
 
 
 class RatingForm(ModelForm):
