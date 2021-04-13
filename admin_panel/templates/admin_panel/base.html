@@ -44,6 +44,10 @@
         <a href="/" class="nav-link">Site</a>
       </li>
     </ul>
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Logout -->
+        <a href="{% url 'account_logout' %}"><li><i class="fas fa-home"></i> Logout</li></ul>
   </nav>
   <!-- /.navbar -->
 
@@ -68,7 +72,6 @@
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Articles
-                <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
@@ -78,7 +81,6 @@
               <p>
                 Categories
                 <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">6</span>
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -182,7 +184,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/admin_panel/">Home</a></li>
               <li class="breadcrumb-item active">{% block page_breadcrumbs %}{% endblock %}</li>
             </ol>
           </div><!-- /.col -->
