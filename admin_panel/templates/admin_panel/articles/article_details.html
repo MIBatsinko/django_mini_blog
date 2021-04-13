@@ -37,6 +37,7 @@ Articles
                     <a href="{% url 'admin_comment_edit' comment.id %}" class="btn btn-info">Edit</a>
                     <a href="{% url 'admin_comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
             {% endifequal %}
+                    {{ comment.date_created }}
         {% endfor %}
         <br><br><a href="{% url 'admin_comment_add' article.id %}" class="btn btn-info">Write comment</a>
     </div>

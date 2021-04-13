@@ -40,6 +40,8 @@
                             <a href="{% url 'comment_edit' comment.id %}" class="btn btn-info">Edit</a>
                             <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
                         {% endif %}
+                        <br>{{ comment.date_created }}
+                        <br>---------------------------
                 {% endifequal %}
             {% endfor %}
                     <br><br><a href="{% url 'comment_add' article.id %}" class="btn btn-info">Write comment</a>
