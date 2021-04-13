@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.AdminHome.home, name='admin_index'),
     path('users/', include([
-        path('', views.AdminUsers.show_all, name='users'),
+        path('', views.AdminUsersView.as_view(), name='users'),
         path('user_info/<int:pk>/', views.AdminUserProfile.info, name='user_info'),
         path('edit/<int:pk>/', views.AdminUserProfile.edit, name='user_edit'),
         path('delete/<int:pk>/', views.AdminUsersDeleteView.as_view(), name='user_delete'),

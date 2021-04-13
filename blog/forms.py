@@ -32,6 +32,13 @@ class UserProfileForm(ModelForm):
         exclude = ['user', 'total_rating']
 
 
+# class UserProfileForm(ModelForm):
+#     class Meta:
+#         model = UserProfile
+#         # exclude = ['user', 'total_rating']
+#         fields = ['avatar']
+
+
 class UserForm(ModelForm):
     class Meta:
         model = User

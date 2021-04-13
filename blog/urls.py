@@ -13,5 +13,5 @@ urlpatterns = [
 
     path("rating_user/", views.RatingUserPageView.as_view(), name='rating_user'),
     path('profile/', views.UserProfilePageView.as_view(), name='profile'),
-    path('profile_settings/', views.UserProfileSettings.profile_settings, name="profile_settings"),
+    path('profile_settings/', views.UserProfileUpdateView.as_view(), name="profile_settings"),
 ]

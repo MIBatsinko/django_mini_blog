@@ -37,6 +37,15 @@ class AdminUsers:
         return render(self, 'admin_panel/users/users.html', context)
 
 
+class AdminUsersView(TemplateView):
+    template_name = 'admin_panel/users/users.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = UserProfile.objects.all()
+        return context
+
+
 class AdminUserProfile:
     @login_required()
     def info(self, pk):

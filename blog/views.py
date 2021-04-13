@@ -2,13 +2,14 @@ from copy import deepcopy
 
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
-from django.views.generic import DetailView, UpdateView, DeleteView
+from django.views.generic import DetailView, UpdateView, DeleteView, FormView
 from django.db import models
+from rest_framework.generics import get_object_or_404
 
 from article.models import Article, Category
 from comment.models import Comment
@@ -127,32 +128,82 @@ class UserProfilePageView(TemplateView):
     context_object_name = 'userprofile'
 
 
-class UserProfileSettings:
-    def profile_settings(self):
-        """
-        User profile settings page
-        """
-        user = self.user
-        if self.method == 'POST':
-            form = UserProfileForm(self.POST, self.FILES, instance=user.userprofile)
-            formset = UserForm(self.POST, instance=user)
-            if all([form.is_valid(), formset.is_valid()]):
-                form.save()
-                formset.save()
-                return redirect('profile')
-        else:
-            form = UserProfileForm(initial={
+# class UserProfileSettings:
+#     def profile_settings(self):
+#         """
+#         User profile settings page
+#         """
+#         userprofile = UserProfile.objects.get(user=self.user.id)
+#         user = User.objects.get(id=self.user.id)
+#         user_profile_form = UserProfileForm(initial={
+#             'avatar': userprofile.avatar
+#         })
+#         user_form = UserForm(initial={
+#             'name': userprofile.user.first_name,
+#             'email': userprofile.user.email
+#         })
+#         if self.method == 'POST':
+#             user_profile_form = UserProfileForm(self.POST, self.FILES, instance=userprofile)
+#             user_form = UserForm(self.POST, self.FILES, instance=user)
+#             if user_form.is_valid():
+#                 instance = user_form.save(commit=False)
+#                 instance.user = user
+#                 instance.first_name = self.POST['first_name']
+#                 instance.email = self.POST['email']
+#                 instance.save()
+#                 return redirect('profile')
+#         context = {'form': user_form}
+#         return render(self, 'blog/profile_settings.html', context)
+
+
+# дві форми. UserProfileSettings працює
+# class UserProfileUpdateView(UpdateView):
+#     model = UserProfile
+#     template_name = 'blog/profile_settings.html'
+#     context_object_name = 'userprofile'
+#
+#     form_class = UserProfileForm
+#
+#     def form_valid(self, form):
+#         form = UserForm(self.request.POST, instance=self.request.user)
+#         form.save()
+#         return render(self.request, 'discussion.html', context={
+#             'form': form,
+#             # 'formset': formset
+#         })
+#
+#     def get_object(self, **kwargs):
+#         return get_object_or_404(User, pk=self.request.user.id)
+
+
+class UserProfileUpdateView(UpdateView):
+    template_name = 'blog/profile_settings.html'
+
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(id=self.request.user.id)
+        user_profile_form = UserProfileForm(initial={
                 'avatar': user.userprofile.avatar,
             })
-            formset = UserForm(initial={
+        user_profile_form.prefix = 'user_profile_form'
+        user_form = UserForm(initial={
                 'first_name': user.first_name,
                 'email': user.email
             })
-        context = {
-            'form': form,
-            'formset': formset
-        }
-        return render(self, 'blog/profile_settings.html', context)
+        user_form.prefix = 'user_form'
+        # Use RequestContext instead of render_to_response from 3.0
+        context = {'user_profile_form': user_profile_form, 'user_form': user_form}
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(username=self.request.user.username)
+        user_profile_form = UserProfileForm(self.request.POST, self.request.FILES,
+                                            instance=user.userprofile, prefix='user_profile_form')
+        user_form = UserForm(self.request.POST, prefix='user_form', instance=user)
+        if user_profile_form.is_valid() and user_form.is_valid():
+            instance = user_form.save(commit=False)
+            instance.save()
+            user_profile_form.save()
+            return redirect('profile')
 
 
 # class RatingUserPage:
