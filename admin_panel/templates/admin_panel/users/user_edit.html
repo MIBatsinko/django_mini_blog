@@ -15,7 +15,7 @@ User edit
   <div class="content-wrapper">
     <form method="post" action="{% url 'user_edit' user_profile.user.id %}" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="card-body">
+      <div class="col-sm-6">
 <!--        Name field-->
         <div class="form-group">
           <label for="first_name">Name</label>

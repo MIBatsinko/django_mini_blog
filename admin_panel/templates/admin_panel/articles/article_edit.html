@@ -15,7 +15,7 @@ Add article
   <div class="content-wrapper">
     <form method="post" action="{% url 'article_edit' article.id %}" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="card-body">
+      <div class="col-sm-6">
         <h4>{{ message }}</h4>
         <div class="form-group">
           <label for="title">Title</label>

@@ -15,7 +15,7 @@ Add category
   <div class="content-wrapper">
     <form method="post" action="{% url 'category_add' %}">
       {% csrf_token %}
-      <div class="card-body">
+      <div class="col-sm-6">
         <h4>{{ message }}</h4>
         <div class="form-group">
           <label for="name">Title</label>
