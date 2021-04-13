@@ -7,8 +7,8 @@ urlpatterns = [
     path('', views.AdminHome.home, name='admin_index'),
     path('users/', include([
         path('', views.AdminUsersView.as_view(), name='users'),
-        path('user_info/<int:pk>/', views.AdminUserProfile.info, name='user_info'),
-        path('edit/<int:pk>/', views.AdminUserProfile.edit, name='user_edit'),
+        path('user_info/<int:pk>/', views.AdminUserProfileView.as_view(), name='user_info'),
+        path('edit/<int:pk>/', views.AdminUserProfileUpdateView.as_view(), name='user_edit'),
         path('delete/<int:pk>/', views.AdminUsersDeleteView.as_view(), name='user_delete'),
 
     ])),

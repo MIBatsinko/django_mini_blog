@@ -18,13 +18,13 @@ User edit
       <div class="card-body">
 <!--        Name field-->
         <div class="form-group">
-          <label for="name">Name</label>
-          <input name="name" type="text" class="form-control" id="name" placeholder="Enter your name" value="{{ user_profile.name }}">
+          <label for="first_name">Name</label>
+          <input name="first_name" type="text" class="form-control" id="first_name" placeholder="Enter your name" value="{{ user_profile.user.first_name }}">
         </div>
 <!--        Email field-->
         <div class="form-group">
           <label for="email">Email address</label>
-          <input name="email" type="email" class="form-control" id="email" placeholder="Enter your email" value="{{ user_profile.email }}">
+          <input name="email" type="email" class="form-control" id="email" placeholder="Enter your email" value="{{ user_profile.user.email }}">
         </div>
 <!--        Avatar field-->
         <div class="form-group">
@@ -55,8 +55,8 @@ User edit
     </form>
     <!-- /.card -->
     <p>Username: {{ user_profile.user.username }} <br>
-    Name: {{ user_profile.name }} <br>
-    Email-profile: {{ user_profile.email }} <br>
+    Name: {{ user_profile.user.first_name }} <br>
+    Email-profile: {{ user_profile.user.email }} <br>
     Avatar path: {{ user_profile.avatar }} <br>
     Date of registration: {{ user_profile.date_created }} <br>
                 <p><b>Staff status: </b> {{ user_profile.user.is_staff }}</p>

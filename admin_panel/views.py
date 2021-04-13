@@ -8,7 +8,7 @@ from rest_framework.reverse import reverse_lazy
 
 from article.forms import CategoriesForm
 from article.models import Article, Category
-from blog.forms import UserProfileForm, ArticlesForm, RatingForm
+from blog.forms import UserProfileForm, ArticlesForm, RatingForm, UserForm
 from blog.models import UserProfile, Rating
 from comment.forms import CommentsForm
 from comment.models import Comment
@@ -46,62 +46,112 @@ class AdminUsersView(TemplateView):
         return context
 
 
-class AdminUserProfile:
-    @login_required()
-    def info(self, pk):
-        """
-        User profile settings page
-        """
-        # userprofile_id = UserProfile.objects.get(user=pk)
-        user = User.objects.get(id=pk)
-        if self.method == 'POST':
-            form = UserProfileForm(self.POST, self.FILES, instance=user)
-            if form.is_valid():
-                instance = form.save(commit=False)
-                instance.user = user
-                if self.FILES:
-                    instance.avatar = self.FILES['avatar']
-                instance.name = self.POST['name']
-                instance.email = self.POST['email']
-                instance.save()
-                return redirect('./')
-        else:
-            form = UserProfileForm()
-        return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user': user})
+class AdminUserProfileView(TemplateView):
+    template_name = 'admin_panel/users/user_info.html'
 
-    @login_required()
-    def edit(self, pk):
-        """
-        Edit user profile
-        """
-        user_profile = UserProfile.objects.get(user=pk)
-        user = User.objects.get(id=pk)
-        if self.method == "POST":
-            form = UserProfileForm(self.POST, self.FILES, instance=user_profile)
-            if form.is_valid():
-                instance = form.save(commit=False)
-                is_staff = self.POST.get("is_staff", False)
-                is_active = self.POST.get("is_active", False)
-                is_superuser = self.POST.get("is_superuser", False)
-                user_profile.user.is_staff = is_staff
-                user_profile.user.is_active = is_active
-                user_profile.user.is_superuser = is_superuser
-                # user_profile.user.username = username
-                user_profile.user.save()
-                instance.name = self.POST['name']
-                instance.email = self.POST['email']
-                if self.FILES:
-                    instance.avatar = self.FILES['avatar']
-                instance.save()
-        else:
-            form = UserProfileForm()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['select_user'] = User.objects.get(id=kwargs.get('pk'))
+        return context
 
-        data = {
-            'form': form,
-            'error': form.errors,
-            'user_profile': user_profile,
+
+class AdminUserProfileUpdateView(UpdateView):
+    model = UserProfile
+    template_name = 'admin_panel/users/user_edit.html'
+    success_url = '/admin_panel/users/'
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        user = User.objects.get(id=pk)
+        user_profile_form = UserProfileForm(initial={
+                'avatar': user.userprofile.avatar,
+            })
+        user_form = UserForm(initial={
+                'first_name': user.first_name,
+                'email': user.email
+            })
+        context = {
+            'user_profile_form': user_profile_form,
+            'user_form': user_form,
+            'user_profile': user.userprofile
         }
-        return render(self, 'admin_panel/users/user_edit.html', data)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        user = User.objects.get(id=pk)
+        # user = User.objects.get(username=self.request.user.username)
+        user_profile_form = UserProfileForm(self.request.POST, self.request.FILES,
+                                            instance=user.userprofile)
+        user_form = UserForm(self.request.POST, instance=user)
+        if user_profile_form.is_valid() and user_form.is_valid():
+            user_instance = user_form.save(commit=False)
+            user_instance.first_name = user_form.cleaned_data.get('first_name')
+            user_instance.email = user_form.cleaned_data.get('email')
+            user_instance.save()
+
+            userprofile_instance = user_profile_form.save(commit=False)
+            userprofile_instance.avatar = user_profile_form.cleaned_data.get('avatar')
+            userprofile_instance.save()
+            return redirect('users')
+
+
+# class AdminUserProfile:
+    # @login_required()
+    # def info(self, pk):
+    #     """
+    #     User profile settings page
+    #     """
+    #     # userprofile_id = UserProfile.objects.get(user=pk)
+    #     user = User.objects.get(id=pk)
+    #     if self.method == 'POST':
+    #         form = UserProfileForm(self.POST, self.FILES, instance=user)
+    #         if form.is_valid():
+    #             instance = form.save(commit=False)
+    #             instance.user = user
+    #             if self.FILES:
+    #                 instance.avatar = self.FILES['avatar']
+    #             instance.name = self.POST['name']
+    #             instance.email = self.POST['email']
+    #             instance.save()
+    #             return redirect('./')
+    #     else:
+    #         form = UserProfileForm()
+    #     return render(self, 'admin_panel/users/user_info.html', {'form': form, 'user': user})
+    #
+    # @login_required()
+    # def edit(self, pk):
+    #     """
+    #     Edit user profile
+    #     """
+    #     user_profile = UserProfile.objects.get(user=pk)
+    #     user = User.objects.get(id=pk)
+    #     if self.method == "POST":
+    #         form = UserProfileForm(self.POST, self.FILES, instance=user_profile)
+    #         if form.is_valid():
+    #             instance = form.save(commit=False)
+    #             is_staff = self.POST.get("is_staff", False)
+    #             is_active = self.POST.get("is_active", False)
+    #             is_superuser = self.POST.get("is_superuser", False)
+    #             user_profile.user.is_staff = is_staff
+    #             user_profile.user.is_active = is_active
+    #             user_profile.user.is_superuser = is_superuser
+    #             # user_profile.user.username = username
+    #             user_profile.user.save()
+    #             instance.name = self.POST['name']
+    #             instance.email = self.POST['email']
+    #             if self.FILES:
+    #                 instance.avatar = self.FILES['avatar']
+    #             instance.save()
+    #     else:
+    #         form = UserProfileForm()
+    #
+    #     data = {
+    #         'form': form,
+    #         'error': form.errors,
+    #         'user_profile': user_profile,
+    #     }
+    #     return render(self, 'admin_panel/users/user_edit.html', data)
 
 
 class AdminUsersDeleteView(DeleteView):
