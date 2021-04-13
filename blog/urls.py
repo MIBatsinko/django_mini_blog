@@ -5,7 +5,7 @@ from comment import views as comment_views
 
 urlpatterns = [
     path('', views.BlogHomePage.home, name='blog_index'),
-    path('add_post/', views.ArticleAdd.create, name='blog_add'),
+    path('add_post/', views.ArticleCreateView.as_view(), name='blog_add'),
     path('<int:pk>/', views.ArticleDetailView.as_view(), name='blog_view'),
     path('<int:pk>/update/', views.ArticleUpdateView.as_view(), name='blog_edit'),
     path('<int:pk>/delete/', views.ArticleDeleteView.as_view(), name='blog_delete'),

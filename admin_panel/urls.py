@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.AdminHome.home, name='admin_index'),
+    path('', views.AdminHome.as_view(), name='admin_index'),
     path('users/', include([
         path('', views.AdminUsersView.as_view(), name='users'),
         path('user_info/<int:pk>/', views.AdminUserProfileView.as_view(), name='user_info'),

@@ -7,9 +7,10 @@ from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
-from django.views.generic import DetailView, UpdateView, DeleteView, FormView
+from django.views.generic import DetailView, UpdateView, DeleteView, FormView, CreateView
 from django.db import models
 from rest_framework.generics import get_object_or_404
+from rest_framework.reverse import reverse_lazy
 
 from article.models import Article, Category
 from comment.models import Comment
@@ -82,27 +83,39 @@ class AddStarRating(View):
             return HttpResponse(status=400)
 
 
-class ArticleAdd:
-    def create(self):
-        """
-        Create a new article
-        """
-        if self.method == "POST":
-            form = ArticlesForm(self.POST)
-            if form.is_valid():
-                author_id = User.objects.get(id=self.user.id)
-                instance = form.save(commit=False)
-                instance.author = author_id
-                instance.save()
-                return redirect('blog_index')
-        else:
-            form = ArticlesForm()
+class ArticleCreateView(CreateView):
+    model = Article
+    template_name = 'blog/blog_add.html'
+    form_class = ArticlesForm
 
-        data = {
-            'form': form,
-            'error': form.errors,
-        }
-        return render(self, 'blog/blog_add.html', data)
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.author = self.request.user
+        instance.save()
+        return redirect(reverse_lazy('blog_index'))
+
+
+# class ArticleAdd:
+#     def create(self):
+#         """
+#         Create a new article
+#         """
+#         if self.method == "POST":
+#             form = ArticlesForm(self.POST)
+#             if form.is_valid():
+#                 author_id = User.objects.get(id=self.user.id)
+#                 instance = form.save(commit=False)
+#                 instance.author = author_id
+#                 instance.save()
+#                 return redirect('blog_index')
+#         else:
+#             form = ArticlesForm()
+#
+#         data = {
+#             'form': form,
+#             'error': form.errors,
+#         }
+#         return render(self, 'blog/blog_add.html', data)
 
 
 # class UserProfilePage:
