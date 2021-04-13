@@ -50,14 +50,16 @@ INSTALLED_APPS = [
     'comment',
     'drf_yasg',
     'blog',
+    'account',
     'allauth',
-    'allauth.account',
+    # 'allauth.account',
     # 'templates',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     'sendemail',
     'admin_panel',
+
 
 ]
 
