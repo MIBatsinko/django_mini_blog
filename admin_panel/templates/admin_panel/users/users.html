@@ -49,12 +49,10 @@ Users
             <div style="float: left;">
               <a href="{% url 'user_edit' user_profile.user.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
             </div>
-              {% load sweetify %}
-              {% sweetify %}
               <div style="float: left;">
-                <button type="button" class="first btn btn-block btn-danger btn-sm">Ban/Unban</button>
+                <button id="{{ user_profile.user.id }}" onclick="isActiveStatus(this.id)" type="button"
+                        class="first btn btn-block btn-danger btn-sm">Ban/Unban</button>
               </div>
-
           </td>
         </tr>
         {% endfor %}
@@ -80,7 +78,8 @@ Users
 
 {% block extra_scripts %}
 <script>
-document.querySelector(".first").addEventListener('click', function(){
+<!--document.querySelector(".first").addEventListener('click', function(){-->
+function isActiveStatus(id_button){
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -96,9 +95,37 @@ document.querySelector(".first").addEventListener('click', function(){
           'Your file has been deleted.',
           'success'
         )
+        $.ajax({
+        url: 'deactivate/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
       }
     })
-});
+};
+</script>
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
 </script>
 
 <!--<script>-->

@@ -214,3 +214,23 @@ class AdminCommentCreateView(CreateView):
 
         return redirect(reverse_lazy('article_details', (article_id, )))
         # return redirect('/admin_panel/articles/details/{}/'.format(article.id))
+
+
+class AdminUserIsActive:
+    def deactivate(self):
+        pk = self.POST.get('pk')
+        user_id = User.objects.get(id=pk)
+        print(user_id.is_active)
+        user_id.is_active = False
+        user_id.save()
+        print(user_id.is_active)
+        return redirect('users')
+
+    def activate(self):
+        pk = self.POST.get('pk')
+        user_id = User.objects.get(id=pk)
+        print(user_id.is_active)
+        user_id.is_active = True
+        user_id.save()
+        print(user_id.is_active)
+        return redirect('users')
