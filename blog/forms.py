@@ -42,7 +42,7 @@ class UserProfileForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['email', 'first_name']
+        fields = ['email', 'first_name', 'is_active', 'is_staff', 'is_superuser']
 
 
 class RatingForm(ModelForm):

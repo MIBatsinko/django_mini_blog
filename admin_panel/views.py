@@ -63,14 +63,16 @@ class AdminUserProfileUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         user = User.objects.get(id=pk)
-        # user = User.objects.get(username=self.request.user.username)
-        user_profile_form = UserProfileForm(self.request.POST, self.request.FILES,
-                                            instance=user.userprofile)
+        user_profile_form = UserProfileForm(self.request.POST, self.request.FILES, instance=user.userprofile)
         user_form = UserForm(self.request.POST, instance=user)
         if user_profile_form.is_valid() and user_form.is_valid():
             user_instance = user_form.save(commit=False)
             user_instance.first_name = user_form.cleaned_data.get('first_name')
             user_instance.email = user_form.cleaned_data.get('email')
+            user_instance.is_staff = self.request.POST.get('is_staff', False)
+            user_instance.is_active = self.request.POST.get('is_active', False)
+            print(self.request.POST.get('is_superuser', False))
+            user_instance.is_superuser = self.request.POST.get('is_superuser', False)
             user_instance.save()
 
             userprofile_instance = user_profile_form.save(commit=False)
@@ -213,16 +215,3 @@ class AdminCommentCreateView(CreateView):
 
         return redirect(reverse_lazy('article_details', (article_id, )))
         # return redirect('/admin_panel/articles/details/{}/'.format(article.id))
-
-
-def test_view(request):
-    sweetify.success(request, 'You did it', text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
-    return redirect('../')
-
-def InsertProduct(request):
-
-    sweetify.success(request, 'You did it', text='Good job! You successfully showed a SweetAlert message',
-                     persistent='Hell yeah')
-
-
-    return redirect('/')  # <-- tabbed this line
