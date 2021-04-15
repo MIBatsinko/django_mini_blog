@@ -11,6 +11,7 @@ urlpatterns = [
         path('edit/<int:pk>/', views.AdminUserProfileUpdateView.as_view(), name='user_edit'),
         path('delete/<int:pk>/', views.AdminUsersDeleteView.as_view(), name='user_delete'),
         path('deactivate/', views.AdminUserIsActive.deactivate, name='deactivate'),
+        path('activate/', views.AdminUserIsActive.activate, name='activate'),
     ])),
 
     path('articles/', include([

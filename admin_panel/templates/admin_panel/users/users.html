@@ -80,21 +80,71 @@ Users
 <script>
 <!--document.querySelector(".first").addEventListener('click', function(){-->
 function isActiveStatus(id_button){
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Account active',
+      text: "You can ban or unban this account",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Unban!',
+      cancelButtonText: 'Ban!',
+      reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
+        swalWithBootstrapButtons.fire(
+          'Unbanned!',
+          'Now this account is active!',
           'success'
         )
+        $.ajax({
+        url: 'activate/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+            location.reload(true);
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Bunned!',
+          'Now this account is banned!',
+          'error'
+        )
+        $.ajax({
+        url: 'deactivate/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+            location.reload(true);
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      }
+    })
+};
+
+
         $.ajax({
         url: 'deactivate/',
         type: 'post',
@@ -105,9 +155,6 @@ function isActiveStatus(id_button){
             alert('Got an error');
         }
         });
-      }
-    })
-};
 </script>
 <script>
     function getCookie(name) {
