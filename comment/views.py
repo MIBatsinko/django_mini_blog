@@ -59,8 +59,8 @@ class CommentNew:
                 instance.author = author
                 instance.save()
 
-                email = SendingEmail()
-                email.new_comment(article, author, instance.body)
+                # email = SendingEmail()
+                # email.new_comment(article, author, instance.body)
                 return redirect('/{}/'.format(article.id))
         else:
             form = CommentsForm()

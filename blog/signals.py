@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 from article.models import Article
 from blog.models import Rating
+from comment.models import Comment
 
 
 @receiver(post_save, sender=Rating)
@@ -18,3 +19,13 @@ def calculate_avg_rating_author(sender, instance, **kwargs):
     rating = Article.objects.filter(author_id=instance.article.author).aggregate(models.Avg('total_rating'))
     instance.article.author.userprofile.total_rating = rating.get('total_rating__avg', 0)
     instance.article.author.userprofile.save()
+
+
+@receiver(post_save, sender=Comment)
+def comment_send_email(sender, instance, **kwargs):
+    from comment.tasks import send_email
+    # send_email.delay(instance.article.author.email, instance.id)
+    send_email.delay(instance.article.title, instance.author.username, instance.body)
+    print(1)
+    # send_mail_task.delay(('pochta.haha@gmail.com',), 'Celery cookbook test', 'test', {})
+

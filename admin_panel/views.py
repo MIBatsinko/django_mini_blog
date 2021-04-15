@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.views.generic import UpdateView, DeleteView, DetailView, TemplateView, CreateView
 from django.db import models
 from rest_framework.reverse import reverse_lazy
+import sweetify
 
 from article.forms import CategoriesForm
 from article.models import Article, Category
@@ -212,3 +213,16 @@ class AdminCommentCreateView(CreateView):
 
         return redirect(reverse_lazy('article_details', (article_id, )))
         # return redirect('/admin_panel/articles/details/{}/'.format(article.id))
+
+
+def test_view(request):
+    sweetify.success(request, 'You did it', text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
+    return redirect('../')
+
+def InsertProduct(request):
+
+    sweetify.success(request, 'You did it', text='Good job! You successfully showed a SweetAlert message',
+                     persistent='Hell yeah')
+
+
+    return redirect('/')  # <-- tabbed this line

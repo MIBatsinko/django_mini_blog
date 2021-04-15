@@ -25,7 +25,7 @@ Users
             <th>Total rating</th>
             <th>Is active</th>
             <th>Staff status</th>
-            <th>Superuser</th>
+<!--            <th>Superuser</th>-->
             <th>Actions</th>
         </tr>
         </thead>
@@ -40,7 +40,7 @@ Users
             <td>{{ user_profile.total_rating }}</td>
             <td>{{ user_profile.user.is_active }}</td>
             <td>{{ user_profile.user.is_staff }}</td>
-            <td>{{ user_profile.user.is_superuser }}</td>
+<!--            <td>{{ user_profile.user.is_superuser }}</td>-->
           <td>
 <!--              Buttons together on one line-->
             <div style="float: left;">
@@ -49,6 +49,11 @@ Users
             <div style="float: left;">
               <a href="{% url 'user_edit' user_profile.user.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
             </div>
+              {% load sweetify %}
+{% sweetify %}
+              <div style="float: left;">
+                <a href="{% url 'users_2' %}" type="button" class="btn btn-block btn-danger btn-sm">Ban/Unban</a>
+              </div>
 
           </td>
         </tr>
@@ -64,7 +69,7 @@ Users
             <th>Total rating</th>
             <th>Is active</th>
             <th>Staff status</th>
-            <th>Superuser</th>
+<!--            <th>Superuser</th>-->
             <th>Actions</th>
         </tr>
         </tfoot>
@@ -73,5 +78,26 @@ Users
   </div>
 </div>
 
+{% block extra_scripts %}
+<!--<script>-->
+<!--Swal.fire({-->
+<!--  title: 'Are you sure?',-->
+<!--  text: "You won't be able to revert this!",-->
+<!--  icon: 'warning',-->
+<!--  showCancelButton: true,-->
+<!--  confirmButtonColor: '#3085d6',-->
+<!--  cancelButtonColor: '#d33',-->
+<!--  confirmButtonText: 'Yes, delete it!'-->
+<!--}).then((result) => {-->
+<!--  if (result.isConfirmed) {-->
+<!--    Swal.fire(-->
+<!--      'Deleted!',-->
+<!--      'Your file has been deleted.',-->
+<!--      'success'-->
+<!--    )-->
+<!--  }-->
+<!--})-->
+<!--</script>-->
+{% endblock %}
 
 {% endblock %}

@@ -14,10 +14,8 @@ from pathlib import Path
 
 from .config import *
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -29,7 +27,6 @@ SECRET_KEY = SECRET_KEY
 DEBUG = DEBUG
 
 ALLOWED_HOSTS = ALLOWED_HOSTS
-
 
 # Application definition
 
@@ -59,9 +56,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'sendemail',
     'admin_panel',
-
+    'sweetify',
+    # 'celery',
 
 ]
+
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
                                         'SCOPE': ['email'],
@@ -76,6 +76,14 @@ SOCIAL_AUTH_REDIRECT = True
 # email
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL_HOST_USER
@@ -113,7 +121,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'miniblog.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -128,7 +135,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -147,7 +153,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -182,3 +187,5 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+CELERY_ALWAYS_EAGER = True
