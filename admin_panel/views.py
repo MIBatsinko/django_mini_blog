@@ -105,16 +105,22 @@ class AdminArticleCreateView(CreateView):
     template_name = 'admin_panel/articles/article_add.html'
     form_class = ArticlesForm
 
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.author = self.request.user
-        instance.save()
-        return redirect(reverse_lazy('articles'))
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         return context
+
+    def form_valid(self, form):
+        category = Category.objects.get(name=self.request.POST.get('category'))
+        instance = form.save(commit=False)
+        instance.author = self.request.user
+        instance.category = category
+        instance.save()
+        return redirect(reverse_lazy('articles'))
+
+    def form_invalid(self, form):
+        print('Error: invalid form')
+        return redirect(reverse_lazy('articles'))
 
 
 class AdminArticleDetailView(DetailView):
@@ -220,17 +226,13 @@ class AdminUserIsActive:
     def deactivate(self):
         pk = self.POST.get('pk')
         user_id = User.objects.get(id=pk)
-        print(user_id.is_active)
         user_id.is_active = False
         user_id.save()
-        print(user_id.is_active)
         return redirect('users')
 
     def activate(self):
         pk = self.POST.get('pk')
         user_id = User.objects.get(id=pk)
-        print(user_id.is_active)
         user_id.is_active = True
         user_id.save()
-        print(user_id.is_active)
         return redirect('users')
