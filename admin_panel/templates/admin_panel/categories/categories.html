@@ -34,7 +34,8 @@ Categories
               <a href="{% url 'category_edit' category.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
             </div>
             <div style="float: left;">
-              <a href="{% url 'category_delete' category.id %}" type="button" class="btn btn-block btn-danger btn-sm">Delete</a>
+              <button class="first btn btn-block btn-danger btn-sm" id="{{ category.id }}" onclick="deleteCategory(this.id)"
+                        type="button">Delete</button>
             </div>
           </td>
         </tr>
@@ -53,4 +54,60 @@ Categories
 </div>
 
 
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function deleteCategory(id_button){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+      $.ajax({
+        url: '/admin_panel/categories/delete/'+id_button+'/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+                location = '/admin_panel/categories/'
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      }
+    })
+};
+</script>
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+</script>
 {% endblock %}
