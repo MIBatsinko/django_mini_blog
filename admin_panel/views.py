@@ -71,7 +71,6 @@ class AdminUserProfileUpdateView(UpdateView):
             user_instance.email = user_form.cleaned_data.get('email')
             user_instance.is_staff = self.request.POST.get('is_staff', False)
             user_instance.is_active = self.request.POST.get('is_active', False)
-            print(self.request.POST.get('is_superuser', False))
             user_instance.is_superuser = self.request.POST.get('is_superuser', False)
             user_instance.save()
 
