@@ -143,18 +143,6 @@ function isActiveStatus(id_button){
       }
     })
 };
-
-
-        $.ajax({
-        url: 'deactivate/',
-        type: 'post',
-        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
-        success: function(data) {
-        },
-        failure: function(data) {
-            alert('Got an error');
-        }
-        });
 </script>
 <script>
     function getCookie(name) {
