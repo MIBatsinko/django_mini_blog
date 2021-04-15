@@ -4,36 +4,6 @@ from django.template.loader import get_template
 from miniblog.celery import celery_app
 from miniblog.settings import EMAIL_HOST_USER
 
-from django.conf import settings
-from django.core.mail import send_mail
-from django.template import Engine, Context
-from celery import shared_task
-
-
-@shared_task
-def adding_task(x, y):
-    return x + y
-
-
-def render_template(template, context):
-    engine = Engine.get_default()
-
-    tmpl = engine.get_template(template)
-
-    return tmpl.render(Context(context))
-
-
-@celery_app.task
-def send_mail_task(recipients, subject, template, context):
-    send_mail(
-        subject=subject,
-        message=render_template(f'{template}.txt', context),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=recipients,
-        fail_silently=False,
-        html_message=render_template(f'{template}.html', context)
-    )
-
 
 @celery_app.task()
 def send_email(article, author, comment):
@@ -51,4 +21,3 @@ def send_email(article, author, comment):
     msg.mixed_subtype = 'related'
     msg.send()
     print('Email was send to {}!'.format(to_email))
-
