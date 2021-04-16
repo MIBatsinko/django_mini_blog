@@ -50,7 +50,7 @@ class CommentDeleteView(DeleteView):
 
 class CommentCreateView(CreateView):
     model = Comment
-    template_name = 'blog/comments/comment_add.html'
+    template_name = 'comment/comment_add.html'
     form_class = CommentsForm
     success_url = '/blog/comments/'
 
