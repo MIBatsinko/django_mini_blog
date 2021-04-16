@@ -219,7 +219,6 @@ class AdminCommentCreateView(CreateView):
         email.new_comment(article, author, instance.body)
 
         return redirect(reverse_lazy('article_details', (article_id, )))
-        # return redirect('/admin_panel/articles/details/{}/'.format(article.id))
 
 
 class AdminUserIsActive:
