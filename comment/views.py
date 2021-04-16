@@ -67,29 +67,3 @@ class CommentCreateView(CreateView):
         # email.new_comment(article, author, instance.body)
 
         return redirect(reverse_lazy('blog_view', (article_id, )))
-
-
-class CommentNew:
-    def add(self, article_id):
-        if self.method == "POST":
-            form = CommentsForm(self.POST)
-            if form.is_valid():
-                author = User.objects.get(id=self.user.id)
-                article = Article.objects.get(id=article_id)
-                instance = form.save(commit=False)
-                instance.article = article
-                instance.author = author
-                instance.save()
-
-                # email = SendingEmail()
-                # email.new_comment(article, author, instance.body)
-                return redirect('/{}/'.format(article.id))
-        else:
-            form = CommentsForm()
-
-        data = {
-            'form': form,
-            'error': form.errors,
-        }
-
-        return render(self, 'comment/comment_add.html', data)
