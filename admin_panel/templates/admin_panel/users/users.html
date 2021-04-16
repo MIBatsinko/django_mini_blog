@@ -1,6 +1,8 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
+{% load replace_true_false %}
+
 {% block title %}Users{% endblock %}
 
 {% block page_heading %}Users{% endblock %}
@@ -38,8 +40,8 @@ Users
             <td>{{ user_profile.user.email }}</td>
             <td>{{ user_profile.date_created }}</td>
             <td>{{ user_profile.total_rating }}</td>
-            <td>{{ user_profile.user.is_active }}</td>
-            <td>{{ user_profile.user.is_staff }}</td>
+            <td align="center"><img src="{{ user_profile.user.is_active|replace_true_false }}" height=20px width=20px></td>
+            <td align="center"><img src="{{ user_profile.user.is_staff|replace_true_false }}" height=20px width=20px></td>
 <!--            <td>{{ user_profile.user.is_superuser }}</td>-->
           <td>
 <!--              Buttons together on one line-->
