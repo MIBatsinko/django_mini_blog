@@ -6,7 +6,6 @@ from rest_framework.reverse import reverse_lazy
 from article.models import Article
 from django.contrib.auth.models import User
 
-from sendemail.views import SendingEmail
 from .models import Comment
 from .serializers import CommentSerializer
 from .forms import CommentsForm
