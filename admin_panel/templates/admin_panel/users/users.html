@@ -113,7 +113,7 @@ function isActiveStatus(id_button){
           'success'
         )
         $.ajax({
-        url: 'activate/',
+        url: 'activate/'+id_button+'/',
         type: 'post',
         data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
         success: function(data) {
@@ -136,7 +136,7 @@ function isActiveStatus(id_button){
           'error'
         )
         $.ajax({
-        url: 'deactivate/',
+        url: 'deactivate/'+id_button+'/',
         type: 'post',
         data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
         success: function(data) {

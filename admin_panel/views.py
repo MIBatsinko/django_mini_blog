@@ -1,11 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.views.generic import UpdateView, DeleteView, DetailView, TemplateView, CreateView
 from django.db import models
 from rest_framework.reverse import reverse_lazy
-import sweetify
 
 from article.forms import CategoriesForm
 from article.models import Article, Category
@@ -222,16 +219,31 @@ class AdminCommentCreateView(CreateView):
 
 
 class AdminUserIsActive:
-    def deactivate(self):
-        pk = self.POST.get('pk')
+    def deactivate(self, pk):
         user_id = User.objects.get(id=pk)
         user_id.is_active = False
         user_id.save()
         return redirect('users')
 
-    def activate(self):
-        pk = self.POST.get('pk')
+    def activate(self, pk):
         user_id = User.objects.get(id=pk)
         user_id.is_active = True
         user_id.save()
         return redirect('users')
+
+
+# Як краще отримати рк?
+# class AdminUserIsActive:
+#     def deactivate(self):
+#         pk = self.POST.get('pk')
+#         user_id = User.objects.get(id=pk)
+#         user_id.is_active = False
+#         user_id.save()
+#         return redirect('users')
+#
+#     def activate(self):
+#         pk = self.POST.get('pk')
+#         user_id = User.objects.get(id=pk)
+#         user_id.is_active = True
+#         user_id.save()
+#         return redirect('users')
