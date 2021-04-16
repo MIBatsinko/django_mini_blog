@@ -212,8 +212,8 @@ class AdminCommentCreateView(CreateView):
         instance.author = author
         instance.save()
 
-        email = SendingEmail()
-        email.new_comment(article, author, instance.body)
+        # email = SendingEmail()
+        # email.new_comment(article, author, instance.body)
 
         return redirect(reverse_lazy('article_details', (article_id, )))
 

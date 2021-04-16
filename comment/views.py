@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView, UpdateView, DeleteView
+from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import viewsets
+from rest_framework.reverse import reverse_lazy
 
 from article.models import Article
 from django.contrib.auth.models import User
@@ -45,6 +46,27 @@ class CommentDeleteView(DeleteView):
     model = Comment
     success_url = '/'
     template_name = 'comment/comment_delete.html'
+
+
+class CommentCreateView(CreateView):
+    model = Comment
+    template_name = 'blog/comments/comment_add.html'
+    form_class = CommentsForm
+    success_url = '/blog/comments/'
+
+    def form_valid(self, form):
+        author = User.objects.get(id=self.request.user.id)
+        article_id = self.kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
+        instance = form.save(commit=False)
+        instance.article = article
+        instance.author = author
+        instance.save()
+
+        # email = SendingEmail()
+        # email.new_comment(article, author, instance.body)
+
+        return redirect(reverse_lazy('blog_view', (article_id, )))
 
 
 class CommentNew:

@@ -1,10 +1,5 @@
-from copy import deepcopy
-
-from django.contrib.auth.decorators import login_required
-from django.forms import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView, FormView, CreateView
@@ -95,81 +90,12 @@ class ArticleCreateView(CreateView):
         return redirect(reverse_lazy('blog_index'))
 
 
-# class ArticleAdd:
-#     def create(self):
-#         """
-#         Create a new article
-#         """
-#         if self.method == "POST":
-#             form = ArticlesForm(self.POST)
-#             if form.is_valid():
-#                 author_id = User.objects.get(id=self.user.id)
-#                 instance = form.save(commit=False)
-#                 instance.author = author_id
-#                 instance.save()
-#                 return redirect('blog_index')
-#         else:
-#             form = ArticlesForm()
-#
-#         data = {
-#             'form': form,
-#             'error': form.errors,
-#         }
-#         return render(self, 'blog/blog_add.html', data)
-
-
-# class UserProfilePage:
-#     def profile(self):
-#         """
-#         User profile page
-#         """
-#         # Adds new UserProfile if it with the user_id does not exist
-#         # try:
-#         #     user_profile = UserProfile.objects.get(user=self.user)
-#         # except:
-#         #     user_profile = UserProfile.objects.create(user=user)
-#
-#         data = {
-#             'user': self.user,
-#         }
-#         return render(self, 'blog/profile.html', data)
-
-
 class UserProfilePageView(TemplateView):
     model = UserProfile
     template_name = 'blog/profile.html'
     context_object_name = 'userprofile'
 
 
-# class UserProfileSettings:
-#     def profile_settings(self):
-#         """
-#         User profile settings page
-#         """
-#         userprofile = UserProfile.objects.get(user=self.user.id)
-#         user = User.objects.get(id=self.user.id)
-#         user_profile_form = UserProfileForm(initial={
-#             'avatar': userprofile.avatar
-#         })
-#         user_form = UserForm(initial={
-#             'name': userprofile.user.first_name,
-#             'email': userprofile.user.email
-#         })
-#         if self.method == 'POST':
-#             user_profile_form = UserProfileForm(self.POST, self.FILES, instance=userprofile)
-#             user_form = UserForm(self.POST, self.FILES, instance=user)
-#             if user_form.is_valid():
-#                 instance = user_form.save(commit=False)
-#                 instance.user = user
-#                 instance.first_name = self.POST['first_name']
-#                 instance.email = self.POST['email']
-#                 instance.save()
-#                 return redirect('profile')
-#         context = {'form': user_form}
-#         return render(self, 'blog/profile_settings.html', context)
-
-
-# дві форми. UserProfileSettings працює
 # class UserProfileUpdateView(UpdateView):
 #     model = UserProfile
 #     template_name = 'blog/profile_settings.html'
@@ -203,7 +129,6 @@ class UserProfileUpdateView(UpdateView):
                 'email': user.email
             })
         user_form.prefix = 'user_form'
-        # Use RequestContext instead of render_to_response from 3.0
         context = {'user_profile_form': user_profile_form, 'user_form': user_form}
         return self.render_to_response(context)
 
@@ -217,12 +142,6 @@ class UserProfileUpdateView(UpdateView):
             instance.save()
             user_profile_form.save()
             return redirect('profile')
-
-
-# class RatingUserPage:
-#     def show_rating(self, **kwargs):
-#         data_rating = UserProfile.objects.all()
-#         return render(self, 'blog/user_rating.html', {'data_rating': data_rating})
 
 
 class RatingUserPageView(TemplateView):
