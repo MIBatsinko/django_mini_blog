@@ -1,5 +1,9 @@
+from allauth.account import app_settings
+from allauth.account.adapter import get_adapter
+from allauth.account.views import _ajax_response
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from blog.models import UserProfile
 from .forms import UserRegistrationForm
@@ -8,7 +12,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.http import HttpResponseRedirect
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django.contrib.auth import logout
 
 
@@ -23,12 +27,12 @@ def user_login(request):
                     login(request, user)
                     return redirect('/')
                 else:
-                    return HttpResponse('Disabled account')
+                    return HttpResponse('Disabled my_account')
             else:
-                return render(request, 'account/invalid_login.html')
+                return render(request, 'my_account/invalid_login.html')
     else:
         form = LoginForm()
-    return render(request, 'account/login.html', {'form': form})
+    return render(request, 'my_account/login.html', {'form': form})
 
 
 def register(request):
@@ -44,10 +48,10 @@ def register(request):
             # Create a new profile
             user_profile = UserProfile.objects.create(user=new_user)
 
-            return render(request, 'account/register_done.html', {'new_user': new_user})
+            return render(request, 'my_account/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
-    return render(request, 'account/register.html', {'user_form': user_form})
+    return render(request, 'my_account/register.html', {'user_form': user_form})
 
 
 class LogoutView(View):

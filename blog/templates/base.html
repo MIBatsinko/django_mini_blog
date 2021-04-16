@@ -25,10 +25,10 @@
                 <br><p>Hello, <a href="{% url 'profile' %}">{{ user }}</a>!
                 <img src="{{request.user.userprofile.avatar.url}}" ></p>
 
-                <a href="{% url 'account_logout' %}"><li><i class="fas fa-home"></i> Logout</li></a>
+                <a href="{% url 'my_account_logout' %}"><li><i class="fas fa-home"></i> Logout</li></a>
             {% elif not user.is_authenticated %}
-                <a href="{% url 'account_login' %}"><li><i class="fas fa-home"></i> Login</li></a>
-                <a href="{% url 'account_signup' %}"><li><i class="fas fa-home"></i> Registration</li></a>
+                <a href="{% url 'my_account_login' %}"><li><i class="fas fa-home"></i> Login</li></a>
+                <a href="{% url 'my_account_signup' %}"><li><i class="fas fa-home"></i> Registration</li></a>
             {% endif %}
         </ul>
     </aside>

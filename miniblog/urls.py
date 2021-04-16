@@ -15,8 +15,8 @@ urlpatterns = [
     # path('', include('sendemail.urls')),
     # path('blog/', include('blog.urls')),
 
-    path('account/', include('account.urls')),
-    # path('accounts/', include('allauth.urls')),
+    path('my_account/', include('my_account.urls')),
+    path('accounts/', include('allauth.urls')),
     path('admin_panel/', include('admin_panel.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
