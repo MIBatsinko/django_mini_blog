@@ -46,7 +46,9 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Logout -->
-        <a href="{% url 'account_logout' %}"><li> Logout</li>
+      {% if user.is_authenticated %}
+        <a href="{% url 'my_account_logout' %}"><li> Logout</li>
+      {% endif %}
   </nav>
   <!-- /.navbar -->
 
@@ -151,8 +153,8 @@ $(function () {
 <script src="{% static 'js/sweetalert2.min.js' %}"></script>
 <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
 <script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
-  {% load sweetify %}
-  {% sweetify %}
+{% load sweetify %}
+{% sweetify %}
 {% block extra_scripts %}{% endblock %}
 
 
