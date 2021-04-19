@@ -87,18 +87,6 @@ class AdminUserProfileUpdateView(UpdateView):
 
 
 @method_decorator(decorators, name='dispatch')
-class AdminUsersDeleteView(DeleteView):
-    model = User
-    success_url = '/admin_panel/users/'
-    template_name = 'admin_panel/users/user_delete.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(AdminUsersDeleteView, self).get_context_data(**kwargs)
-        context['user_profile'] = UserProfile.objects.all()
-        return context
-
-
-@method_decorator(decorators, name='dispatch')
 class AdminArticlesView(TemplateView):
     template_name = 'admin_panel/articles/articles.html'
 
@@ -252,12 +240,14 @@ class AdminCommentCreateView(CreateView):
 
 
 class AdminUserIsActive:
+    @staff_member_required
     def deactivate(self, pk):
         user_id = User.objects.get(id=pk)
         user_id.is_active = False
         user_id.save()
         return redirect('users')
 
+    @staff_member_required
     def activate(self, pk):
         user_id = User.objects.get(id=pk)
         user_id.is_active = True
