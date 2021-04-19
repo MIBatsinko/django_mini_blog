@@ -115,8 +115,9 @@ class AdminArticleCreateView(CreateView):
         return redirect(reverse_lazy('articles'))
 
     def form_invalid(self, form):
-        print('Error: invalid form')
-        return redirect(reverse_lazy('articles'))
+        response = super().form_invalid(form)
+        if self.request.accepts('text/html'):
+            return response
 
 
 @method_decorator(settings.DECORATORS, name='dispatch')
