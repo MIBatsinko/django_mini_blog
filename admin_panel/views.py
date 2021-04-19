@@ -202,6 +202,11 @@ class AdminCommentUpdateView(UpdateView):
         instance.save()
         return redirect(reverse_lazy('article_details', (instance.article.id,)))
 
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.accepts('text/html'):
+            return response
+
 
 @method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCommentDeleteView(DeleteView):
@@ -233,10 +238,12 @@ class AdminCommentCreateView(CreateView):
         instance.author = author
         instance.save()
 
-        # email = SendingEmail()
-        # email.new_comment(article, author, instance.body)
-
         return redirect(reverse_lazy('article_details', (article_id, )))
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.accepts('text/html'):
+            return response
 
 
 class AdminUserIsActive:
