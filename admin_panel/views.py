@@ -208,7 +208,11 @@ class AdminCommentUpdateView(UpdateView):
     model = Comment
     template_name = 'admin_panel/comments/comment_add.html'
     form_class = CommentsForm
-    success_url = '/admin_panel/articles/'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.save()
+        return redirect(reverse_lazy('article_details', (instance.article.id,)))
 
 
 @method_decorator(decorators, name='dispatch')
@@ -226,9 +230,10 @@ class AdminCommentCreateView(CreateView):
     success_url = '/admin_panel/comments/'
 
     def form_valid(self, form):
-        author = self.request.user.id
+        author = self.request.user
         article_id = self.kwargs.get('article_id')
-        article = Article.objects.get_object_or_404(id=article_id)
+        article = Article.objects.get(id=article_id)  # get_404: AttributeError: 'Manager' object has no attribute 'get_object_or_404'
+
         instance = form.save(commit=False)
         instance.article = article
         instance.author = author
