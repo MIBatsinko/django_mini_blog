@@ -72,8 +72,8 @@ function editUser(id_button, user_profile){
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire(
-        user_profile,
-        user_profile,
+        'Changed!',
+        'Account settings will changed.',
         'success'
       )
       $.ajax({
