@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+
 from .config import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -189,3 +192,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CELERY_ALWAYS_EAGER = True
+
+DECORATORS = [staff_member_required, login_required(login_url='my_account_login')]

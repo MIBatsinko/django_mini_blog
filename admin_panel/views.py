@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, DeleteView, DetailView, TemplateVie
 from django.db import models
 from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
+from django.conf import settings
 
 from article.forms import CategoriesForm
 from article.models import Article, Category
@@ -16,15 +17,12 @@ from comment.forms import CommentsForm
 from comment.models import Comment
 
 
-decorators = [staff_member_required, login_required(login_url='my_account_login')]
-
-
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminHome(TemplateView):
     template_name = 'admin_panel/dashboard.html'
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminUsersView(TemplateView):
     template_name = 'admin_panel/users/users.html'
 
@@ -34,7 +32,7 @@ class AdminUsersView(TemplateView):
         return context
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminUserProfileView(TemplateView):
     template_name = 'admin_panel/users/user_info.html'
 
@@ -44,7 +42,7 @@ class AdminUserProfileView(TemplateView):
         return context
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminUserProfileUpdateView(UpdateView):
     model = UserProfile
     template_name = 'admin_panel/users/user_edit.html'
@@ -87,7 +85,7 @@ class AdminUserProfileUpdateView(UpdateView):
             return redirect('users')
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminArticlesView(TemplateView):
     template_name = 'admin_panel/articles/articles.html'
 
@@ -97,7 +95,7 @@ class AdminArticlesView(TemplateView):
         return context
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminArticleCreateView(CreateView):
     model = Article
     template_name = 'admin_panel/articles/article_add.html'
@@ -121,7 +119,7 @@ class AdminArticleCreateView(CreateView):
         return redirect(reverse_lazy('articles'))
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminArticleDetailView(DetailView):
     model = Article
     template_name = 'admin_panel/articles/article_details.html'
@@ -144,7 +142,7 @@ class AdminArticleDetailView(DetailView):
         return context
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminArticleUpdateView(UpdateView):
     model = Article
     template_name = 'admin_panel/articles/article_edit.html'
@@ -152,14 +150,14 @@ class AdminArticleUpdateView(UpdateView):
     success_url = '/admin_panel/articles/'
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminArticleDeleteView(DeleteView):
     model = Article
     success_url = '/admin_panel/articles/'
     template_name = 'admin_panel/articles/article_delete.html'
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCategoriesView(TemplateView):
     template_name = 'admin_panel/categories/categories.html'
 
@@ -169,7 +167,7 @@ class AdminCategoriesView(TemplateView):
         return context
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCategoryCreateView(CreateView):
     model = Category
     template_name = 'admin_panel/categories/category_add.html'
@@ -177,7 +175,7 @@ class AdminCategoryCreateView(CreateView):
     success_url = '/admin_panel/categories/'
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCategoryUpdateView(UpdateView):
     model = Category
     template_name = 'admin_panel/categories/category_edit.html'
@@ -185,14 +183,14 @@ class AdminCategoryUpdateView(UpdateView):
     success_url = '/admin_panel/categories/'
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCategoryDeleteView(DeleteView):
     model = Category
     success_url = '/admin_panel/categories/'
     template_name = 'admin_panel/categories/category_delete.html'
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCommentUpdateView(UpdateView):
     model = Comment
     template_name = 'admin_panel/comments/comment_add.html'
@@ -204,7 +202,7 @@ class AdminCommentUpdateView(UpdateView):
         return redirect(reverse_lazy('article_details', (instance.article.id,)))
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCommentDeleteView(DeleteView):
     model = Comment
     success_url = '/admin_panel/articles/'
@@ -217,7 +215,7 @@ class AdminCommentDeleteView(DeleteView):
         return redirect(reverse_lazy('article_details', (article_id,)))
 
 
-@method_decorator(decorators, name='dispatch')
+@method_decorator(settings.DECORATORS, name='dispatch')
 class AdminCommentCreateView(CreateView):
     model = Comment
     template_name = 'admin_panel/comments/comment_add.html'
