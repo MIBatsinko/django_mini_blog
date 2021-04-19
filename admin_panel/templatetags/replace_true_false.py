@@ -1,5 +1,5 @@
 from django import template
-
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -7,6 +7,7 @@ register = template.Library()
 @register.filter
 def replace_true_false(value):
     if value:
-        return '/static/images/true.png'
+        value = "<i class='fas fa-check' style='margin-right: 5px; color: green;'</i>"
     else:
-        return '/static/images/false.png'
+        value = "<i class='fas fa-times' style='margin-right: 5px; color: red;'</i>"
+    return mark_safe(value)

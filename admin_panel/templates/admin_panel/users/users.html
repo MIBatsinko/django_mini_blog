@@ -16,6 +16,7 @@ Users
   <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
   <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
   <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+  <link href="{% static 'css/all.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -47,8 +48,8 @@ Users
             <td>{{ user_profile.user.email }}</td>
             <td>{{ user_profile.date_created }}</td>
             <td>{{ user_profile.total_rating }}</td>
-            <td align="center"><img src="{{ user_profile.user.is_active|replace_true_false }}" height=20px width=20px></td>
-            <td align="center"><img src="{{ user_profile.user.is_staff|replace_true_false }}" height=20px width=20px></td>
+            <td align="center">{{ user_profile.user.is_active|replace_true_false }}</td>
+            <td align="center">{{ user_profile.user.is_staff|replace_true_false }}</td>
 <!--            <td>{{ user_profile.user.is_superuser }}</td>-->
           <td>
 <!--              Buttons together on one line-->
