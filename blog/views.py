@@ -36,7 +36,7 @@ class ArticleDetailView(DetailView):
         context['comments'] = Comment.objects.all()
         context['star_form'] = RatingForm()
         try:
-            context['mark'] = get_object_or_404(Rating, user=self.request.user.id, article=kwargs['object'].id)
+            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs['object'].id)
         except Rating.DoesNotExist:
             context['mark'] = 0
         return context
