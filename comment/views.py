@@ -54,9 +54,9 @@ class CommentCreateView(CreateView):
     success_url = '/blog/comments/'
 
     def form_valid(self, form):
-        author = User.objects.get(id=self.request.user.id)
+        author = User.objects.get_object_or_404(id=self.request.user.id)
         article_id = self.kwargs.get('article_id')
-        article = Article.objects.get(id=article_id)
+        article = Article.objects.get_object_or_404(id=article_id)
         instance = form.save(commit=False)
         instance.article = article
         instance.author = author
