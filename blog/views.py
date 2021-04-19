@@ -45,7 +45,7 @@ class ArticleDetailView(DetailView):
         context['comments'] = Comment.objects.all()
         context['star_form'] = RatingForm()
         try:
-            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs['object'].id)
+            context['mark'] = Rating.objects.get_object_or_404(user=self.request.user.id, article=kwargs['object'].id)
         except Rating.DoesNotExist:
             context['mark'] = 0
         return context
@@ -70,7 +70,7 @@ class AddStarRating(View):
         if form.is_valid():
             Rating.objects.update_or_create(
                 article_id=int(request.POST.get("article")),
-                user=User.objects.get(id=request.user.id),
+                user=User.objects.get_object_or_404(id=request.user.id),
                 defaults={'star_id': int(request.POST.get("star"))}
             )
             return HttpResponse(status=201)
@@ -119,7 +119,7 @@ class UserProfileUpdateView(UpdateView):
     template_name = 'blog/profile_settings.html'
 
     def get(self, request, *args, **kwargs):
-        user = User.objects.get(id=self.request.user.id)
+        user = User.objects.get_object_or_404(id=self.request.user.id)
         user_profile_form = UserProfileForm(initial={
                 'avatar': user.userprofile.avatar,
             })
@@ -133,7 +133,7 @@ class UserProfileUpdateView(UpdateView):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        user = User.objects.get(username=self.request.user.username)
+        user = User.objects.get_object_or_404(username=self.request.user.username)
         user_profile_form = UserProfileForm(self.request.POST, self.request.FILES,
                                             instance=user.userprofile, prefix='user_profile_form')
         user_form = UserForm(self.request.POST, prefix='user_form', instance=user)

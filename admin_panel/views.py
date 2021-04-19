@@ -39,7 +39,7 @@ class AdminUserProfileView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['select_user'] = User.objects.get(id=kwargs.get('pk'))
+        context['select_user'] = User.objects.get_object_or_404(id=kwargs.get('pk'))
         return context
 
 
@@ -51,7 +51,7 @@ class AdminUserProfileUpdateView(UpdateView):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        user = User.objects.get(id=pk)
+        user = User.objects.get_object_or_404(id=pk)
         user_profile_form = UserProfileForm(initial={
                 'avatar': user.userprofile.avatar,
             })
@@ -68,7 +68,7 @@ class AdminUserProfileUpdateView(UpdateView):
 
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        user = User.objects.get(id=pk)
+        user = User.objects.get_object_or_404(id=pk)
         user_profile_form = UserProfileForm(self.request.POST, self.request.FILES, instance=user.userprofile)
         user_form = UserForm(self.request.POST, instance=user)
         if user_profile_form.is_valid() and user_form.is_valid():
@@ -120,7 +120,7 @@ class AdminArticleCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        category = Category.objects.get(name=self.request.POST.get('category'))
+        category = Category.objects.get_object_or_404(name=self.request.POST.get('category'))
         instance = form.save(commit=False)
         instance.author = self.request.user
         instance.category = category
@@ -226,9 +226,9 @@ class AdminCommentCreateView(CreateView):
     success_url = '/admin_panel/comments/'
 
     def form_valid(self, form):
-        author = User.objects.get(id=self.request.user.id)
+        author = self.request.user.id
         article_id = self.kwargs.get('article_id')
-        article = Article.objects.get(id=article_id)
+        article = Article.objects.get_object_or_404(id=article_id)
         instance = form.save(commit=False)
         instance.article = article
         instance.author = author
@@ -242,30 +242,13 @@ class AdminCommentCreateView(CreateView):
 
 class AdminUserIsActive:
     def deactivate(self, pk):
-        user_id = User.objects.get(id=pk)
+        user_id = User.objects.get_object_or_404(id=pk)
         user_id.is_active = False
         user_id.save()
         return redirect('users')
 
     def activate(self, pk):
-        user_id = User.objects.get(id=pk)
+        user_id = User.objects.get_object_or_404(id=pk)
         user_id.is_active = True
         user_id.save()
         return redirect('users')
-
-
-# Як краще отримати рк?
-# class AdminUserIsActive:
-#     def deactivate(self):
-#         pk = self.POST.get('pk')
-#         user_id = User.objects.get(id=pk)
-#         user_id.is_active = False
-#         user_id.save()
-#         return redirect('users')
-#
-#     def activate(self):
-#         pk = self.POST.get('pk')
-#         user_id = User.objects.get(id=pk)
-#         user_id.is_active = True
-#         user_id.save()
-#         return redirect('users')
