@@ -11,13 +11,19 @@ class ArticleApiView(ListCreateAPIView):
     serializer_class = ArticleSerializer
 
     def get_queryset(self):
-        articles = Article.objects.filter().annotate(
-            rating_user=models.Count("ratings",
-                                     filter=models.Q(ratings__user=self.request.user.id))
-        ).annotate(
-            middle_star=(models.Avg("ratings__star"))
-        )
-        return articles
+        queryset = Article.objects.all()
+        title = self.request.query_params.get('title')
+        author = self.request.query_params.get('author')
+        category = self.request.query_params.get('category')
+
+        if title:
+            queryset = queryset.filter(title=title)
+        elif author:
+            queryset = queryset.filter(author__username=author)
+        elif category:
+            queryset = queryset.filter(category__name=category)
+
+        return queryset
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user)
@@ -26,16 +32,3 @@ class ArticleApiView(ListCreateAPIView):
 class SingleArticleApiView(RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-
-    def get_queryset(self):
-        articles = Article.objects.filter().annotate(
-            rating_user=models.Count("ratings",
-                                     filter=models.Q(ratings__user=self.request.user.id))
-        ).annotate(
-            middle_star=(models.Avg("ratings__star"))
-        )
-        return articles
-
-    # def filter_queryset(self, queryset):
-    #     queryset = self.queryset.filter(author=self.request.user)
-    #     return queryset
