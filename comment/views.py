@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import viewsets
+from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from article.models import Article
@@ -54,9 +55,9 @@ class CommentCreateView(CreateView):
     success_url = '/blog/comments/'
 
     def form_valid(self, form):
-        author = User.objects.get(id=self.request.user.id)
-        article_id = self.kwargs.get('article_id')
-        article = Article.objects.get(id=article_id)
+        author = get_object_or_404(User, id=self.request.user.id)
+        article_id = get_object_or_404(self.kwargs, 'article_id')
+        article = get_object_or_404(Article, id=article_id)
         instance = form.save(commit=False)
         instance.article = article
         instance.author = author

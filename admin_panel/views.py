@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, DeleteView, DetailView, TemplateView, CreateView
 from django.db import models
+from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from article.forms import CategoriesForm
@@ -67,21 +68,21 @@ class AdminUserProfileUpdateView(UpdateView):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        user = User.objects.get(id=pk)
+        pk = get_object_or_404(kwargs, 'pk')
+        user = get_object_or_404(User, id=pk)
         user_profile_form = UserProfileForm(self.request.POST, self.request.FILES, instance=user.userprofile)
         user_form = UserForm(self.request.POST, instance=user)
         if user_profile_form.is_valid() and user_form.is_valid():
             user_instance = user_form.save(commit=False)
-            user_instance.first_name = user_form.cleaned_data.get('first_name')
-            user_instance.email = user_form.cleaned_data.get('email')
-            user_instance.is_staff = self.request.POST.get('is_staff', False)
-            user_instance.is_active = self.request.POST.get('is_active', False)
-            user_instance.is_superuser = self.request.POST.get('is_superuser', False)
+            user_instance.first_name = get_object_or_404(user_form.cleaned_data, 'first_name')
+            user_instance.email = get_object_or_404(user_form.cleaned_data, 'email')
+            user_instance.is_staff = get_object_or_404(self.request.POST, 'is_staff', False)
+            user_instance.is_active = get_object_or_404(self.request.POST, 'is_active', False)
+            user_instance.is_superuser = get_object_or_404(self.request.POST, 'is_superuser', False)
             user_instance.save()
 
             userprofile_instance = user_profile_form.save(commit=False)
-            userprofile_instance.avatar = user_profile_form.cleaned_data.get('avatar')
+            userprofile_instance.avatar = get_object_or_404(user_profile_form.cleaned_data, 'avatar')
             userprofile_instance.save()
             return redirect('users')
 
@@ -108,7 +109,7 @@ class AdminArticleCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        category = Category.objects.get(name=self.request.POST.get('category'))
+        category = get_object_or_404(Category, name=get_object_or_404(self.request.POST, 'category'))
         instance = form.save(commit=False)
         instance.author = self.request.user
         instance.category = category
@@ -225,8 +226,8 @@ class AdminCommentCreateView(CreateView):
 
     def form_valid(self, form):
         author = self.request.user
-        article_id = self.kwargs.get('article_id')
-        article = Article.objects.get(id=article_id)  # get_404: AttributeError: 'Manager' object has no attribute 'get_object_or_404'
+        article_id = get_object_or_404(self.kwargs, 'article_id')
+        article = get_object_or_404(Article, id=article_id)  # get_404: AttributeError: 'Manager' object has no attribute 'get_object_or_404'
 
         instance = form.save(commit=False)
         instance.article = article
@@ -242,14 +243,14 @@ class AdminCommentCreateView(CreateView):
 class AdminUserIsActive:
     @staff_member_required
     def deactivate(self, pk):
-        user_id = User.objects.get(id=pk)
+        user_id = get_object_or_404(User, id=pk)
         user_id.is_active = False
         user_id.save()
         return redirect('users')
 
     @staff_member_required
     def activate(self, pk):
-        user_id = User.objects.get(id=pk)
+        user_id = get_object_or_404(User, id=pk)
         user_id.is_active = True
         user_id.save()
         return redirect('users')
