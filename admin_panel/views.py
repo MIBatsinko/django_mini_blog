@@ -126,15 +126,6 @@ class AdminArticleDetailView(DetailView):
     template_name = 'admin_panel/articles/article_details.html'
     context_object_name = 'article'
 
-    def get_queryset(self):
-        articles = Article.objects.filter().annotate(
-            rating_user=models.Count("ratings",
-                                     filter=models.Q(ratings__user=self.request.user.id))
-        ).annotate(
-            middle_star=(models.Avg("ratings__star"))
-        )
-        return articles
-
     def get_context_data(self, **kwargs):
         context = super(AdminArticleDetailView, self).get_context_data(**kwargs)
         article = kwargs.get('object', None)

@@ -31,15 +31,6 @@ class ArticleDetailView(DetailView):
     template_name = 'blog/blog_view.html'
     context_object_name = 'article'
 
-    def get_queryset(self):
-        articles = Article.objects.filter().annotate(
-            rating_user=models.Count("ratings",
-                                     filter=models.Q(ratings__user=self.request.user.id))
-        ).annotate(
-            middle_star=(models.Avg("ratings__star"))
-        )
-        return articles
-
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.all()
