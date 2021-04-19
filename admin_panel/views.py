@@ -40,7 +40,7 @@ class AdminUserProfileView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['select_user'] = User.objects.get(id=kwargs.get('pk'))
+        context['select_user'] = get_object_or_404(User, id=kwargs.get('pk'))
         return context
 
 
@@ -51,8 +51,8 @@ class AdminUserProfileUpdateView(UpdateView):
     success_url = '/admin_panel/users/'
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        user = User.objects.get(id=pk)
+        pk = get_object_or_404(kwargs, 'pk')
+        user = get_object_or_404(User, id=pk)
         user_profile_form = UserProfileForm(initial={
                 'avatar': user.userprofile.avatar,
             })
@@ -227,7 +227,7 @@ class AdminCommentCreateView(CreateView):
     def form_valid(self, form):
         author = self.request.user
         article_id = get_object_or_404(self.kwargs, 'article_id')
-        article = get_object_or_404(Article, id=article_id)  # get_404: AttributeError: 'Manager' object has no attribute 'get_object_or_404'
+        article = get_object_or_404(Article, id=article_id)
 
         instance = form.save(commit=False)
         instance.article = article
