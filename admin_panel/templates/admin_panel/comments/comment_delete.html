@@ -1,12 +1,12 @@
 {% extends 'admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}Add article{% endblock %}
+{% block title %}Delete comment{% endblock %}
 
-{% block page_heading %}Add article{% endblock %}
+{% block page_heading %}Delete comment{% endblock %}
 
 {% block page_breadcrumbs %}
-Add article
+<a href="{% url 'articles' %}">Comments</a> / Delete comment
 {% endblock %}
 
 {% block content %}
