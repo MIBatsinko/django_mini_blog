@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'admin_panel',
     'sweetify',
     # 'celery',
+    'django_filters',
 
 ]
 
@@ -194,3 +195,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 CELERY_ALWAYS_EAGER = True
 
 DECORATORS = [staff_member_required, login_required(login_url='my_account_login')]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
