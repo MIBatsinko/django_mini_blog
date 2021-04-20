@@ -21,7 +21,7 @@ class Article(models.Model):
     description = models.TextField()
     body = models.TextField()
     author = models.ForeignKey(User, related_name='article', on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, default=4)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, default=1)
     date = models.DateTimeField('Date of publication', default=datetime.now)
     total_rating = models.FloatField(default=0)
 

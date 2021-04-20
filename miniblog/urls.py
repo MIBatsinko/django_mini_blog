@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/', include([
         path('articles/', include('article.urls')),
         path('comments/', include('comment.urls')),
+        path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     ])),
 
     path('', include('blog.urls')),
