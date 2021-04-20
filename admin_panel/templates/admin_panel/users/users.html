@@ -46,7 +46,7 @@ Users
             <td>{{ user_profile.user }}</td>
             <td>{{ user_profile.user.first_name }}</td>
             <td>{{ user_profile.user.email }}</td>
-            <td>{{ user_profile.date_created }}</td>
+            <td>{{ user_profile.user.date_joined }}</td>
             <td>{{ user_profile.total_rating }}</td>
             <td align="center">{{ user_profile.user.is_active|replace_true_false }}</td>
             <td align="center">{{ user_profile.user.is_staff|replace_true_false }}</td>

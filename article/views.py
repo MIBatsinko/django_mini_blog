@@ -33,7 +33,7 @@ class ArticleApiView(ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     # filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
-    filterset_fields = ['title', 'author__username', 'category']  # ?author__username=admin
+    filterset_fields = ['title', 'author__username', 'category__name']  # ?author__username=admin
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user)
