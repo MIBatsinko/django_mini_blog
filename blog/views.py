@@ -8,6 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from article.models import Article, Category
+from article.serializers import ArticleSerializer
 from comment.models import Comment
 from .forms import ArticlesForm, UserProfileForm, RatingForm, UserForm
 from .models import UserProfile, Rating
@@ -48,6 +49,7 @@ class ArticleUpdateView(UpdateView):
     model = Article
     template_name = 'blog/blog_add.html'
     context_object_name = 'article'
+    # serializer_class = ArticleSerializer
 
     form_class = ArticlesForm
 
