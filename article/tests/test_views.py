@@ -3,6 +3,7 @@ from django.test import Client
 from django.urls import reverse, path, include
 from rest_framework import status
 from rest_framework.test import APITestCase, URLPatternsTestCase, APIRequestFactory, APIClient
+from rest_framework.utils import json
 
 from article.models import Article, Category
 from blog import views as blog_views
@@ -121,7 +122,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         content = encode_multipart('BoUnDaRyStRiNg', data)
         content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
         view = ArticleUpdateView.as_view()
-        request = factory.put(f'{1}/update/', content, content_type=content_type)
+        request = factory.put('blog_edit', content, content_type=content_type)
         response = view(request, pk='1')
         response.render()
         print(response.context_data)
@@ -130,7 +131,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         # print("DATA: ", self.add_article.context.keys())
         url = reverse('blog_edit', kwargs={'pk': 1})
         # url = f'{1}/update/'
-        response = self.client.put(url, data)
+        response = self.client.put(url, data=data)
 
         # client = APIClient()
         # client.post(url, data, format='json')
