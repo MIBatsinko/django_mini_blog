@@ -125,10 +125,8 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         request = factory.put('blog_edit', content, content_type=content_type)
         response = view(request, pk='1')
         response.render()
-        print(response.context_data)
         print(response.context_data['form'].errors)
 
-        # print("DATA: ", self.add_article.context.keys())
         url = reverse('blog_edit', kwargs={'pk': 1})
         # url = f'{1}/update/'
         response = self.client.put(url, data=data)
