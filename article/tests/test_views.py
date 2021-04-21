@@ -6,14 +6,12 @@ from rest_framework.test import APITestCase, URLPatternsTestCase, APIRequestFact
 
 from article.models import Article, Category
 from blog import views as blog_views
-from blog.views import ArticleDetailView
+from blog.views import ArticleDetailView, ArticleUpdateView, ArticleDeleteView
 from my_account import views as account_views
 from comment import views as comment_views
 
 
 class ArticleTests(APITestCase, URLPatternsTestCase):
-    # user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-    category = Category.objects.create(name='test_cat', description='test123')
     from allauth.account import views as allauth_views
     urlpatterns = [
         path('', blog_views.BlogHomePage.home, name='blog_index'),
@@ -29,14 +27,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         path('login/', account_views.user_login, name='my_account_login'),
         path('register/', account_views.register, name='my_account_signup'),
         path('logout/', account_views.LogoutView.as_view(), name='my_account_logout'),
-        path('password_reset/', allauth_views.PasswordResetView.as_view(), name='my_account_reset_password'),
-        path('password_reset_done/', allauth_views.PasswordResetDoneView.as_view(),
-             name='my_account_password_reset_done'),
-        path('password_reset_from_key/', allauth_views.PasswordResetFromKeyView.as_view(),
-             name='my_account_password_reset_from_key'),
-        path('password_reset_from_key_done/', allauth_views.PasswordResetFromKeyDoneView.as_view(),
-             name='my_account_password_reset_from_key_done'),
-        path('password_set/', allauth_views.PasswordSetView.as_view(), name='my_account_password_set'),
+
         path('<int:article>/', comment_views.CommentsDetailView.as_view(), name='comments_view'),
         path('<int:pk>/edit', comment_views.CommentUpdateView.as_view(), name='comment_edit'),
         path('<int:pk>/delete', comment_views.CommentDeleteView.as_view(), name='comment_delete'),
@@ -44,9 +35,6 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
     ]
 
     def test_create_article(self):
-        """
-        Ensure we can create a new account object.
-        """
         self.client = Client()
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         self.category = Category.objects.create(name='test_cat', description='test123')
@@ -65,23 +53,10 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.assertEqual(Article.objects.get().title, 'test title')
 
     def test_view_articles(self):
-        """
-        Ensure we can create a new account object.
-        """
         self.client = Client()
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         self.client.login(username='john', password='johnpassword')
-        url = reverse('blog_index')
-        response = self.client.get(url, format='json', follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # self.assertEqual(len(response.data), 1)  # AttributeError: 'HttpResponse' object has no attribute 'data'
-
-    def test_check_response_data(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         self.category = Category.objects.create(name='test_cat', description='test123')
-        self.client.login(username='john', password='johnpassword')
-        # print(User.objects.all())
         url = reverse('blog_add')
         data = {
             'title': 'test title',
@@ -90,16 +65,37 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
             'author': self.user.id,
             'category': self.category.id,
         }
-        response = self.client.post(url, data, format='json', follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.client.post(url, data, format='json', follow=True)
+
+        # main test
+        url = reverse('blog_index')
+        response = self.client.get(url, format='json', follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.context['blog']
+        self.assertEqual(len(data), 1)  # AttributeError: 'HttpResponse' object has no attribute 'data'
+
+    def test_check_response_data(self):
+        self.client = Client()
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.category = Category.objects.create(name='test_cat', description='test123')
+        self.client.login(username='john', password='johnpassword')
+        url = reverse('blog_add')
+        data = {
+            'title': 'test title',
+            'description': 'desc',
+            'body': 'some body',
+            'author': self.user.id,
+            'category': self.category.id,
+        }
+        self.client.post(url, data, format='json', follow=True)
         # print('Article: ', Article.objects.get(id=1))
+
+        # main test
         response = self.client.get('/1/')
         data = {
             'id': response.context_data['view'].request.user.id,
             'username': response.context_data['view'].request.user.username,
         }
-        # data = response.context_data
-        # print(data)
         self.assertEqual(data, {'id': 1, 'username': 'john'})
 
     def test_rendering_responses(self):
@@ -116,8 +112,9 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
             'author': self.user.id,
             'category': self.category.id,
         }
-        response = self.client.post(url, data, format='json', follow=True)
+        self.client.post(url, data, format='json', follow=True)
 
+        # main test
         factory = APIRequestFactory(enforce_csrf_checks=True)
         view = ArticleDetailView.as_view()
         request = factory.get('/1/')
@@ -129,3 +126,75 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         }
         # print(response.context_data['view'].request.GET)
         self.assertEqual(data, {"id": 1, "title": "test title"})
+
+    def test_delete_article(self):
+        self.client = Client()
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.category = Category.objects.create(name='test_cat', description='test123')
+        self.client.login(username='john', password='johnpassword')
+        # print(User.objects.all())
+        url = reverse('blog_add')
+        data = {
+            'title': 'test title',
+            'description': 'desc',
+            'body': 'some body',
+            'author': self.user.id,
+            'category': self.category.id,
+        }
+        self.client.post(url, data, format='json', follow=True)
+
+        # main test
+        response_data = Article.objects.all()
+        print("Created: ", response_data)
+        self.assertEqual(len(response_data), 1)
+        factory = APIRequestFactory(enforce_csrf_checks=True)
+        view = ArticleDeleteView.as_view()
+        request = factory.delete('/1/')
+        view(request, pk='1')
+        response_data = Article.objects.all()
+        print("Deleted: ", response_data)
+        self.assertEqual(len(response_data), 0)
+
+    # def test_update_article(self):
+    #     """
+    #     Ensure we can create a new account object.
+    #     """
+    #     self.client = Client()
+    #     self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+    #     self.category = Category.objects.create(name='test_cat', description='test123')
+    #     self.client.login(username='john', password='johnpassword')
+    #     url = reverse('blog_add')
+    #     data = {
+    #         'title': 'test title',
+    #         'description': 'desc',
+    #         'body': 'some body',
+    #         'author': self.user.id,
+    #         'category': self.category.id,
+    #     }
+    #     self.client.post(url, data, format='json', follow=True)
+    #
+    #     data = {
+    #         'title': 'remember to email dave',
+    #         'description': 'desc',
+    #         'body': 'some body',
+    #
+    #     }
+    #     print(Article.objects.all())
+    #     from django.test.client import encode_multipart
+    #     factory = APIRequestFactory(enforce_csrf_checks=True)
+    #     content = encode_multipart('BoUnDaRyStRiNg', data)
+    #     content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
+    #
+    #     view = ArticleUpdateView.as_view()
+    #     request = factory.put('/1/', content, content_type=content_type)
+    #     response = view(request, pk='1')
+    #     response.render()
+    #     print(response.context_data)
+    #     print(response.context_data['form'].errors)
+    #
+    #     # url = reverse('/1/')
+    #     # response = self.client.put(url, data, format='json', follow=True)
+    #     print(Article.objects.all())
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(Article.objects.count(), 1)
+    #     self.assertEqual(Article.objects.get().title, 'test title')
