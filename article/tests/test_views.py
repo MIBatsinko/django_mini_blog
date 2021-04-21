@@ -12,7 +12,6 @@ from comment import views as comment_views
 
 
 class ArticleTests(APITestCase, URLPatternsTestCase):
-    from allauth.account import views as allauth_views
     urlpatterns = [
         path('', blog_views.BlogHomePage.home, name='blog_index'),
         path('add_post/', blog_views.ArticleCreateView.as_view(), name='blog_add'),
@@ -34,40 +33,42 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         path('<int:article_id>/comment_add/', comment_views.CommentCreateView.as_view(), name='comment_add'),
     ]
 
-    def test_create_article(self):
+    def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         self.category = Category.objects.create(name='test_cat', description='test123')
         self.client.login(username='john', password='johnpassword')
-        url = reverse('blog_add')
-        data = {
+        self.url = reverse('blog_add')
+        self.data = {
             'title': 'test title',
             'description': 'desc',
             'body': 'some body',
             'author': self.user.id,
             'category': self.category.id,
         }
-        response = self.client.post(url, data, format='json', follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
+
+    def test_valid_create_article(self):
+        # response = self.client.post(self.url, self.data, format='json', follow=True)
+        self.assertEqual(self.add_article.status_code, 200)
         self.assertEqual(Article.objects.count(), 1)
         self.assertEqual(Article.objects.get().title, 'test title')
 
-    def test_view_articles(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        self.client.login(username='john', password='johnpassword')
-        self.category = Category.objects.create(name='test_cat', description='test123')
-        url = reverse('blog_add')
+    def test_invalid_create_article(self):
         data = {
-            'title': 'test title',
-            'description': 'desc',
+            'title': 'invalid article',
+            'description': '',
             'body': 'some body',
             'author': self.user.id,
             'category': self.category.id,
         }
-        self.client.post(url, data, format='json', follow=True)
 
-        # main test
+        self.client.post(self.url, data, format='json', follow=True)
+        print(Article.objects.all())
+        self.assertEqual(Article.objects.count(), 1)
+        self.assertEqual(Article.objects.get(id=1).title, 'test title')
+
+    def test_view_articles(self):
         url = reverse('blog_index')
         response = self.client.get(url, format='json', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -75,22 +76,6 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.assertEqual(len(data), 1)  # AttributeError: 'HttpResponse' object has no attribute 'data'
 
     def test_check_response_data(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        self.category = Category.objects.create(name='test_cat', description='test123')
-        self.client.login(username='john', password='johnpassword')
-        url = reverse('blog_add')
-        data = {
-            'title': 'test title',
-            'description': 'desc',
-            'body': 'some body',
-            'author': self.user.id,
-            'category': self.category.id,
-        }
-        self.client.post(url, data, format='json', follow=True)
-        # print('Article: ', Article.objects.get(id=1))
-
-        # main test
         response = self.client.get('/1/')
         data = {
             'id': response.context_data['view'].request.user.id,
@@ -99,22 +84,6 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.assertEqual(data, {'id': 1, 'username': 'john'})
 
     def test_rendering_responses(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        self.category = Category.objects.create(name='test_cat', description='test123')
-        self.client.login(username='john', password='johnpassword')
-        # print(User.objects.all())
-        url = reverse('blog_add')
-        data = {
-            'title': 'test title',
-            'description': 'desc',
-            'body': 'some body',
-            'author': self.user.id,
-            'category': self.category.id,
-        }
-        self.client.post(url, data, format='json', follow=True)
-
-        # main test
         factory = APIRequestFactory(enforce_csrf_checks=True)
         view = ArticleDetailView.as_view()
         request = factory.get('/1/')
@@ -128,22 +97,6 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.assertEqual(data, {"id": 1, "title": "test title"})
 
     def test_delete_article(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        self.category = Category.objects.create(name='test_cat', description='test123')
-        self.client.login(username='john', password='johnpassword')
-        # print(User.objects.all())
-        url = reverse('blog_add')
-        data = {
-            'title': 'test title',
-            'description': 'desc',
-            'body': 'some body',
-            'author': self.user.id,
-            'category': self.category.id,
-        }
-        self.client.post(url, data, format='json', follow=True)
-
-        # main test
         response_data = Article.objects.all()
         print("Created: ", response_data)
         self.assertEqual(len(response_data), 1)
@@ -156,45 +109,30 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.assertEqual(len(response_data), 0)
 
     # def test_update_article(self):
-    #     """
-    #     Ensure we can create a new account object.
-    #     """
-    #     self.client = Client()
-    #     self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-    #     self.category = Category.objects.create(name='test_cat', description='test123')
-    #     self.client.login(username='john', password='johnpassword')
-    #     url = reverse('blog_add')
-    #     data = {
-    #         'title': 'test title',
-    #         'description': 'desc',
-    #         'body': 'some body',
-    #         'author': self.user.id,
-    #         'category': self.category.id,
-    #     }
-    #     self.client.post(url, data, format='json', follow=True)
-    #
     #     data = {
     #         'title': 'remember to email dave',
     #         'description': 'desc',
     #         'body': 'some body',
     #
     #     }
-    #     print(Article.objects.all())
+    #     print("Articles: ", Article.objects.all())
     #     from django.test.client import encode_multipart
     #     factory = APIRequestFactory(enforce_csrf_checks=True)
     #     content = encode_multipart('BoUnDaRyStRiNg', data)
     #     content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
     #
     #     view = ArticleUpdateView.as_view()
-    #     request = factory.put('/1/', content, content_type=content_type)
+    #     request = factory.put('blog_edit', content, content_type=content_type)
     #     response = view(request, pk='1')
     #     response.render()
     #     print(response.context_data)
     #     print(response.context_data['form'].errors)
     #
-    #     # url = reverse('/1/')
-    #     # response = self.client.put(url, data, format='json', follow=True)
-    #     print(Article.objects.all())
+    #     # print("DATA: ", self.add_article.context.keys())
+    #     # #url = reverse('blog_edit', 1)
+    #     # url = '1/update/'
+    #     # response = self.client.put(url, data)
+    #     print("After update: ", Article.objects.all())
     #     self.assertEqual(response.status_code, 200)
     #     self.assertEqual(Article.objects.count(), 1)
     #     self.assertEqual(Article.objects.get().title, 'test title')

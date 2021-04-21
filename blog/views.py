@@ -47,6 +47,7 @@ class ArticleDetailView(DetailView):
 class ArticleUpdateView(UpdateView):
     model = Article
     template_name = 'blog/blog_add.html'
+    context_object_name = 'article'
 
     form_class = ArticlesForm
 
