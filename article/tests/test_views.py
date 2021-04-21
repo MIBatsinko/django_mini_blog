@@ -41,9 +41,9 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.client.login(username='john', password='johnpassword')
         self.url = reverse('blog_add')
         self.data = {
-            'title': 'test title',
+            'title': 'test_title',
             'description': 'desc',
-            'body': 'some body',
+            'body': 'some_body',
             'author': self.user.id,
             'category': self.category.id,
         }
@@ -53,7 +53,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         # response = self.client.post(self.url, self.data, format='json', follow=True)
         self.assertEqual(self.add_article.status_code, 200)
         self.assertEqual(Article.objects.count(), 1)
-        self.assertEqual(Article.objects.get().title, 'test title')
+        self.assertEqual(Article.objects.get().title, 'test_title')
 
     def test_invalid_create_article(self):
         data = {
@@ -66,7 +66,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
 
         self.client.post(self.url, data, format='json', follow=True)
         self.assertEqual(Article.objects.count(), 1)
-        self.assertEqual(Article.objects.get(id=1).title, 'test title')
+        self.assertEqual(Article.objects.get(id=1).title, 'test_title')
 
     def test_view_articles(self):
         url = reverse('blog_index')
@@ -94,7 +94,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
             'title': response.context_data['article'].title,
         }
         # print(response.context_data['view'].request.GET)
-        self.assertEqual(data, {"id": 1, "title": "test title"})
+        self.assertEqual(data, {"id": 1, "title": "test_title"})
 
     def test_delete_article(self):
         response_data = Article.objects.all()
@@ -109,46 +109,14 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         print("Deleted: ", response_data)
         self.assertEqual(len(response_data), 0)
 
-    # def test_update_article(self):
-    #     data = {
-    #         'title': 'remember to email dave',
-    #         'description': 'desc',
-    #         'body': 'some body',
-    #     }
-    #     print("Articles: ", Article.objects.get(id=1))
-    #
-    #     from django.test.client import encode_multipart
-    #     factory = APIRequestFactory(enforce_csrf_checks=True)
-    #     content = encode_multipart('BoUnDaRyStRiNg', data)
-    #     content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
-    #     view = ArticleUpdateView.as_view()
-    #     request = factory.put('blog_edit', content, content_type=content_type)
-    #     response = view(request, pk='1')
-    #     response.render()
-    #     print(response.context_data['form'].errors)
-    #     # response.context_data['form']['title'].data = 's'
-    #     # response.context_data['form']['title'].field.prepare_value('s')
-    #     # print("FORM: ", response.context_data['form']['title'].data)
-    #     url = reverse('blog_edit', kwargs={'pk': 1})
-    #     # url = f'{1}/update/'
-    #     response = self.client.put(url, data=data, format='json')
-    #
-    #     # client = APIClient()
-    #     # client.post(url, data, format='json')
-    #
-    #     print("After update: ", Article.objects.all())
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(Article.objects.count(), 1)
-    #     self.assertEqual(Article.objects.get().title, 'test title')
-
     def test_update_article(self):
-        update_url = reverse('blog_edit', args=(1,))
+        update_url = reverse('blog_edit', kwargs={'pk': 1})
 
         # GET the form
-        r = self.client.get(update_url)
+        response = self.client.get(update_url)
 
         # retrieve form data as dict
-        form = r.context['form']
+        form = response.context['form']
         data = form.initial  # form is unbound but contains data
         print("Before update: ", Article.objects.get(id=1).title, Article.objects.get(id=1).description, Article.objects.get(id=1).body)
         # manipulate some data
@@ -159,7 +127,11 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
 
         # retrieve again
         response = self.client.get(update_url)
-        print("After update: ", Article.objects.get(id=1).title, Article.objects.get(id=1).description, Article.objects.get(id=1).body)
+        print("After update: ",
+              Article.objects.get(id=1).title,
+              Article.objects.get(id=1).description,
+              Article.objects.get(id=1).body)
+
         self.assertContains(response, 'updated_value')  # or
         self.assertEqual(response.context['form'].initial['title'], 'updated_value')
         self.assertEqual(response.status_code, 200)
