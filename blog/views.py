@@ -39,6 +39,8 @@ class ArticleDetailView(DetailView):
             context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs['object'].id)
         except Rating.DoesNotExist:
             context['mark'] = 0
+        except AttributeError:
+            context['mark'] = 0
         return context
 
 
@@ -110,7 +112,7 @@ class UserProfileUpdateView(UpdateView):
     template_name = 'blog/profile_settings.html'
 
     def get(self, request, *args, **kwargs):
-        user = get_object_or_404(User, id=self.request.user.id)
+        user = self.request.user
         user_profile_form = UserProfileForm(initial={
                 'avatar': user.userprofile.avatar,
             })
