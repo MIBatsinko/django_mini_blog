@@ -5,7 +5,7 @@
         <h1>Add post</h1>
         <form method="post">
             {% csrf_token %}
-            <span>{{ error }}</span><br>
+            <span>{{ form.errors }}</span><br>
             {{ form.title }}<br>
             {{ form.category }} <br>
             {{ form.description }}<br>
