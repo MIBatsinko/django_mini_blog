@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse, path, include
 from rest_framework import status
-from rest_framework.test import APITestCase, URLPatternsTestCase, APIRequestFactory
+from rest_framework.test import APITestCase, URLPatternsTestCase, APIRequestFactory, APIClient
 
 from article.models import Article, Category
 from blog import views as blog_views
@@ -57,14 +57,13 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
     def test_invalid_create_article(self):
         data = {
             'title': 'invalid article',
-            'description': '',
+            'description': '',  # empty
             'body': 'some body',
             'author': self.user.id,
             'category': self.category.id,
         }
 
         self.client.post(self.url, data, format='json', follow=True)
-        print(Article.objects.all())
         self.assertEqual(Article.objects.count(), 1)
         self.assertEqual(Article.objects.get(id=1).title, 'test title')
 
@@ -100,6 +99,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         response_data = Article.objects.all()
         print("Created: ", response_data)
         self.assertEqual(len(response_data), 1)
+
         factory = APIRequestFactory(enforce_csrf_checks=True)
         view = ArticleDeleteView.as_view()
         request = factory.delete('/1/')
@@ -108,31 +108,34 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         print("Deleted: ", response_data)
         self.assertEqual(len(response_data), 0)
 
-    # def test_update_article(self):
-    #     data = {
-    #         'title': 'remember to email dave',
-    #         'description': 'desc',
-    #         'body': 'some body',
-    #
-    #     }
-    #     print("Articles: ", Article.objects.all())
-    #     from django.test.client import encode_multipart
-    #     factory = APIRequestFactory(enforce_csrf_checks=True)
-    #     content = encode_multipart('BoUnDaRyStRiNg', data)
-    #     content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
-    #
-    #     view = ArticleUpdateView.as_view()
-    #     request = factory.put('blog_edit', content, content_type=content_type)
-    #     response = view(request, pk='1')
-    #     response.render()
-    #     print(response.context_data)
-    #     print(response.context_data['form'].errors)
-    #
-    #     # print("DATA: ", self.add_article.context.keys())
-    #     # #url = reverse('blog_edit', 1)
-    #     # url = '1/update/'
-    #     # response = self.client.put(url, data)
-    #     print("After update: ", Article.objects.all())
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(Article.objects.count(), 1)
-    #     self.assertEqual(Article.objects.get().title, 'test title')
+    def test_update_article(self):
+        data = {
+            'title': 'remember to email dave',
+            'description': 'desc',
+            'body': 'some body',
+        }
+        print("Articles: ", Article.objects.get(id=1))
+
+        from django.test.client import encode_multipart
+        factory = APIRequestFactory(enforce_csrf_checks=True)
+        content = encode_multipart('BoUnDaRyStRiNg', data)
+        content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
+        view = ArticleUpdateView.as_view()
+        request = factory.put(f'{1}/update/', content, content_type=content_type)
+        response = view(request, pk='1')
+        response.render()
+        print(response.context_data)
+        print(response.context_data['form'].errors)
+
+        # print("DATA: ", self.add_article.context.keys())
+        url = reverse('blog_edit', kwargs={'pk': 1})
+        # url = f'{1}/update/'
+        response = self.client.put(url, data)
+
+        # client = APIClient()
+        # client.post(url, data, format='json')
+
+        print("After update: ", Article.objects.all())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Article.objects.count(), 1)
+        self.assertEqual(Article.objects.get().title, 'test title')
