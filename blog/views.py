@@ -79,9 +79,16 @@ class ArticleCreateView(CreateView):
     template_name = 'blog/blog_add.html'
     form_class = ArticlesForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
     def form_valid(self, form):
+        category = get_object_or_404(Category, name=get_object_or_404(self.request.POST, 'category'))
         instance = form.save(commit=False)
         instance.author = self.request.user
+        instance.category = category
         instance.save()
         return redirect(reverse_lazy('blog_index'))
 
