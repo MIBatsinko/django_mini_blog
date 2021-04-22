@@ -8,7 +8,6 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from article.models import Article, Category
-from article.serializers import ArticleSerializer
 from comment.models import Comment
 from .forms import ArticlesForm, UserProfileForm, RatingForm, UserForm
 from .models import UserProfile, Rating
@@ -97,25 +96,6 @@ class UserProfilePageView(TemplateView):
     model = UserProfile
     template_name = 'blog/profile.html'
     context_object_name = 'userprofile'
-
-
-# class UserProfileUpdateView(UpdateView):
-#     model = UserProfile
-#     template_name = 'blog/profile_settings.html'
-#     context_object_name = 'userprofile'
-#
-#     form_class = UserProfileForm
-#
-#     def form_valid(self, form):
-#         form = UserForm(self.request.POST, instance=self.request.user)
-#         form.save()
-#         return render(self.request, 'discussion.html', context={
-#             'form': form,
-#             # 'formset': formset
-#         })
-#
-#     def get_object(self, **kwargs):
-#         return get_object_or_404(User, pk=self.request.user.id)
 
 
 class UserProfileUpdateView(UpdateView):
