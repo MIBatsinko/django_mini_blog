@@ -45,7 +45,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
             'description': 'desc',
             'body': 'some_body',
             'author': self.user.id,
-            'category': self.category.id,
+            'category': self.category.name,
         }
         self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
 
