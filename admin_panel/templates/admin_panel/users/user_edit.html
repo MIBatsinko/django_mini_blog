@@ -38,7 +38,7 @@
         </div>
           {% if user_profile.user.id != user.id %}
           <div class="form-group">
-              <input onclick="editUser(this.id, {{ user_profile }})" type="checkbox" id="is_staff" name="is_staff" value="True" {% if user_profile.user.is_staff %} checked {% endif %}>
+              <input onclick="editUser(this.id, {{ user.id }})" type="checkbox" id="is_staff" name="is_staff" value="True" {% if user_profile.user.is_staff %} checked {% endif %}>
               <label for="is_staff"> Staff status</label><br>
               <input onclick="editUser(this.id, {{ user.id }})" type="checkbox" id="is_active" name="is_active" value="True" {% if user_profile.user.is_active %} checked {% endif %}>
               <label for="is_active"> Is active</label><br>
