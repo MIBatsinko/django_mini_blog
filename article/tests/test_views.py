@@ -50,7 +50,6 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
 
     def test_valid_create_article(self):
-        # response = self.client.post(self.url, self.data, format='json', follow=True)
         self.assertEqual(self.add_article.status_code, 200)
         self.assertEqual(Article.objects.count(), 1)
         self.assertEqual(Article.objects.get().title, 'test_title')
@@ -73,7 +72,7 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
         response = self.client.get(url, format='json', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.context['blog']
-        self.assertEqual(len(data), 1)  # AttributeError: 'HttpResponse' object has no attribute 'data'
+        self.assertEqual(len(data), 1)
 
     def test_check_response_data(self):
         response = self.client.get('/1/')
