@@ -23,15 +23,20 @@ class ArticleTests(APITestCase):
             'title': 'test_title',
             'description': 'desc',
             'body': 'some_body',
-            'author': self.user.id,
             'category': self.category.name,
         }
         self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
 
     def test_valid_create_article(self):
+        data = {
+            'title': 'new_valid_title',
+            'description': 'new_valid_desc',
+            'body': 'new_valid_body',
+            'category': self.category.name,
+        }
+        self.add_article = self.client.post(self.url, data, format='json', follow=True)
         self.assertEqual(self.add_article.status_code, 200)
-        self.assertEqual(Article.objects.count(), 1)
-        self.assertEqual(Article.objects.get().title, 'test_title')
+        self.assertEqual(Article.objects.count(), 2)
 
     def test_invalid_create_article(self):
         data = {
