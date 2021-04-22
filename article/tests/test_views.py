@@ -65,7 +65,6 @@ class ArticleTests(APITestCase, URLPatternsTestCase):
 
         self.client.post(self.url, data, format='json', follow=True)
         self.assertEqual(Article.objects.count(), 1)
-        self.assertEqual(Article.objects.get(id=1).title, 'test_title')
 
     def test_view_articles(self):
         url = reverse('blog_index')
