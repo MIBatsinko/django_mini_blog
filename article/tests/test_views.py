@@ -12,28 +12,7 @@ from my_account import views as account_views
 from comment import views as comment_views
 
 
-class ArticleTests(APITestCase, URLPatternsTestCase):
-    urlpatterns = [
-        path('', blog_views.BlogHomePage.home, name='blog_index'),
-        path('add_post/', blog_views.ArticleCreateView.as_view(), name='blog_add'),
-        path('<int:pk>/', blog_views.ArticleDetailView.as_view(), name='blog_view'),
-        path('<int:pk>/update/', blog_views.ArticleUpdateView.as_view(), name='blog_edit'),
-        path('<int:pk>/delete/', blog_views.ArticleDeleteView.as_view(), name='blog_delete'),
-        path("add-rating/", blog_views.AddStarRating.as_view(), name='add_rating'),
-
-        path("rating_user/", blog_views.RatingUserPageView.as_view(), name='rating_user'),
-        path('profile/', blog_views.UserProfilePageView.as_view(), name='profile'),
-        path('profile_settings/', blog_views.UserProfileUpdateView.as_view(), name="profile_settings"),
-        path('login/', account_views.user_login, name='my_account_login'),
-        path('register/', account_views.register, name='my_account_signup'),
-        path('logout/', account_views.LogoutView.as_view(), name='my_account_logout'),
-
-        path('<int:article>/', comment_views.CommentsDetailView.as_view(), name='comments_view'),
-        path('<int:pk>/edit', comment_views.CommentUpdateView.as_view(), name='comment_edit'),
-        path('<int:pk>/delete', comment_views.CommentDeleteView.as_view(), name='comment_delete'),
-        path('<int:article_id>/comment_add/', comment_views.CommentCreateView.as_view(), name='comment_add'),
-    ]
-
+class ArticleTests(APITestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
