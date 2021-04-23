@@ -1,5 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView, FormView, CreateView
@@ -44,21 +46,27 @@ class ArticleDetailView(DetailView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class ArticleUpdateView(UpdateView):
     model = Article
     template_name = 'blog/blog_add.html'
     context_object_name = 'article'
-    # serializer_class = ArticleSerializer
-
     form_class = ArticlesForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
+
+@method_decorator(login_required, name='dispatch')
 class ArticleDeleteView(DeleteView):
     model = Article
     success_url = '/'
     template_name = 'blog/blog_delete.html'
 
 
+@method_decorator(login_required, name='dispatch')
 class AddStarRating(View):
     def post(self, request):
         form = RatingForm(request.POST)

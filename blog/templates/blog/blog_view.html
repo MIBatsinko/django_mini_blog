@@ -19,7 +19,7 @@
                     <label for="rating{{ v }}">{{ k }}</label>
                 {% endfor %}
             </span>
-                <span class="editContent">Average Mark: {{ article.middle_star }}</span>
+                <span class="editContent">Average Mark: {{ article.total_rating }}</span>
             {% if mark.star %}
                 <br><span class="editContent">Your mark: {{ mark.star }}</span>
             {% endif %}
