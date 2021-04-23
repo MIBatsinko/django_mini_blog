@@ -7,14 +7,16 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
-        path('articles/', include('article.urls')),
+        path('articles/', include([
+            path('', include('article.urls')),
+            path('categories/', include('article.urls')),
+        ])),
         path('comments/', include('comment.urls')),
+        path('articles/', include('article.urls')),
         path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     ])),
 
     path('', include('blog.urls')),
-    # path('', include('sendemail.urls')),
-    # path('blog/', include('blog.urls')),
 
     path('my_account/', include('my_account.urls')),
     path('accounts/', include('allauth.urls')),

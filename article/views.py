@@ -4,8 +4,8 @@ from rest_framework import filters
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from django.db import models
 
-from .models import Article
-from .serializers import ArticleSerializer
+from .models import Article, Category
+from .serializers import ArticleSerializer, CategorySerializer
 
 
 class ArticleApiView(ListCreateAPIView):
@@ -21,3 +21,16 @@ class ArticleApiView(ListCreateAPIView):
 class SingleArticleApiView(RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+
+
+class CategoryApiView(ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(author=self.request.user)
+
+
+class SingleCategoryApiView(RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
