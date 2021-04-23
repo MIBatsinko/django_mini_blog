@@ -1,11 +1,12 @@
 # from django_filters import rest_framework as filters
-from rest_framework import permissions
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import permissions, status
 from rest_framework import filters
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from django.db import models
 
 from .models import Article, Category
-from .serializers import ArticleSerializer, CategorySerializer
+from .serializers import ArticleSerializer, CategorySerializer, ArticleResponseSerializer
 
 
 class ArticleApiView(ListCreateAPIView):
@@ -16,6 +17,14 @@ class ArticleApiView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user)
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
+    def get(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class SingleArticleApiView(RetrieveUpdateDestroyAPIView):
