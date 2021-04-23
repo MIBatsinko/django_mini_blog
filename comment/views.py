@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
-from rest_framework import viewsets
-from rest_framework.generics import get_object_or_404
+from rest_framework import viewsets, filters
+from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.reverse import reverse_lazy
 
 from article.models import Article
@@ -67,3 +67,16 @@ class CommentCreateView(CreateView):
         # email.new_comment(article, author, instance.body)
 
         return redirect(reverse_lazy('blog_view', (article_id, )))
+
+
+class CommentApiView(ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description']
+
+
+class SingleCommentApiView(RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+

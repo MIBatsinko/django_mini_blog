@@ -24,7 +24,7 @@ class ArticleApiView(ListCreateAPIView):
 
     @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
     def get(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
 
 
 class SingleArticleApiView(RetrieveUpdateDestroyAPIView):
@@ -37,9 +37,6 @@ class CategoryApiView(ListCreateAPIView):
     serializer_class = CategorySerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'description']
-
-    def perform_create(self, serializer):
-        return serializer.save(author=self.request.user)
 
 
 class SingleCategoryApiView(RetrieveUpdateDestroyAPIView):
