@@ -35,6 +35,8 @@ class SingleArticleApiView(RetrieveUpdateDestroyAPIView):
 class CategoryApiView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description']
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user)
