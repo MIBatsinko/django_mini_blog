@@ -23,6 +23,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         rep['category'] = {
             'id': instance.category.id,
             'name': instance.category.name,
+            'description': instance.category.description,
         }
         return rep
 

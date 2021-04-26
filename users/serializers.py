@@ -32,12 +32,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserResponseSerializer(UserSerializer):
     userprofile = UserProfileSerializer()
-    comments = CommentSerializer()
+    # comments = CommentSerializer()
 
 
 class SingleUserSerializer(serializers.ModelSerializer):
-    # userprofile_id = serializers.IntegerField(source='UserProfile.id', read_only=True)
-    # avatar = serializers.ImageField(source='UserProfile.avatar', read_only=True)
     comments = UserCommentSerializer(many=True, read_only=True)
 
     class Meta:
@@ -51,5 +49,4 @@ class SingleUserSerializer(serializers.ModelSerializer):
             'avatar': instance.userprofile.avatar.url,
             'total rating': instance.userprofile.total_rating
         }
-        # rep['comments'] = instance.comments.all()
         return rep
