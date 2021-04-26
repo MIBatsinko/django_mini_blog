@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from comment import views as comment_views
+
 
 urlpatterns = [
     path('', views.BlogHomePage.home, name='blog_index'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path("rating_user/", views.RatingUserPageView.as_view(), name='rating_user'),
     path('profile/', views.UserProfilePageView.as_view(), name='profile'),
     path('profile_settings/', views.UserProfileUpdateView.as_view(), name="profile_settings"),
+
 ]

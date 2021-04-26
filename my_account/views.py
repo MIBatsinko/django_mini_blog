@@ -2,8 +2,11 @@ from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
 from allauth.account.views import _ajax_response
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from rest_framework import filters
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from blog.models import UserProfile
 from .forms import UserRegistrationForm
@@ -58,3 +61,4 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return HttpResponseRedirect("/")
+

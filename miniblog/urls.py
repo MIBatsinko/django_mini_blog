@@ -12,7 +12,8 @@ urlpatterns = [
             path('categories/', include('article.urls')),
         ])),
         path('comments/', include('comment.urls')),
-        path('articles/', include('article.urls')),
+        path('users/', include('users.urls')),
+        # path('articles/', include('article.urls')),
         path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     ])),
 

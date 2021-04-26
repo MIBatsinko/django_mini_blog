@@ -2,6 +2,7 @@ from django.urls import path, re_path, include
 from . import views
 from allauth.account import views as allauth_views
 
+
 urlpatterns = [
     path('login/', views.user_login, name='my_account_login'),
     path('register/', views.register, name='my_account_signup'),
