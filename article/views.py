@@ -6,7 +6,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from django.db import models
 
 from .models import Article, Category
-from .serializers import ArticleSerializer, CategorySerializer#, ArticleResponseSerializer
+from .serializers import ArticleSerializer, CategorySerializer, ArticleResponseSerializer
 
 
 class ArticleApiView(ListCreateAPIView):
@@ -18,13 +18,13 @@ class ArticleApiView(ListCreateAPIView):
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user)
 
-    # @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
-    # def post(self, request, *args, **kwargs):
-    #     return self.create(request, *args, **kwargs)
-    #
-    # @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
-    # def get(self, request, *args, **kwargs):
-    #     return self.list(request, *args, **kwargs)
+    @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: ArticleResponseSerializer()})
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class SingleArticleApiView(RetrieveUpdateDestroyAPIView):

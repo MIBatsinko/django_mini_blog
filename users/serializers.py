@@ -10,16 +10,16 @@ from comment.serializers import CommentSerializer, UserCommentSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
-    userprofile_id = serializers.IntegerField(source='UserProfile.id', read_only=True)
+    # userprofile_id = serializers.IntegerField(source='UserProfile.id', read_only=True)
     avatar = serializers.ImageField(source='User.userprofile.avatar', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'avatar', 'userprofile_id']
+        fields = ['id', 'username', 'first_name', 'last_name', 'avatar', 'userprofile']
 
     def to_representation(self, instance):
         rep = super(UserSerializer, self).to_representation(instance)
-        rep['userprofile_id'] = instance.userprofile.id
+        # rep['userprofile_id'] = instance.userprofile.id
         rep['avatar'] = instance.userprofile.avatar.url
         return rep
 
