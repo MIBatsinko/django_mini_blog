@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import Comment
@@ -10,7 +9,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = "__all__"
-        read_only_fields = ['author_id']
+        read_only_fields = ['article', 'author']
 
     def to_representation(self, instance):
         rep = super(CommentSerializer, self).to_representation(instance)
@@ -30,12 +29,27 @@ class CommentSerializer(serializers.ModelSerializer):
         }
         return rep
 
-        # def create(self, validated_data):
-        #
-        #     return Comment.objects.create(**validated_data)
-        #
-        # def update(self, instance, validated_data):
-        #     instance.text = validated_data.get('text', instance.text)
-        #     instance.location = validated_data.get('location', instance.location)
-        #     instance.save()
-        #     return instance
+
+class LimitedCommentlistSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        comments_limit = 10
+        data = data.all().order_by('-id')[:comments_limit]
+        return super(LimitedCommentlistSerializer, self).to_representation(data)
+
+
+class UserCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        list_serializer_class = LimitedCommentlistSerializer
+        model = Comment
+        fields = ['id', 'body', 'date_created']
+        read_only_fields = ['article', 'author']
+
+    def to_representation(self, instance):
+        rep = super(UserCommentSerializer, self).to_representation(instance)
+        rep['article'] = {
+            'id': instance.article.id,
+            'title': instance.article.title,
+            'description': instance.article.description,
+            'body': instance.article.body,
+        }
+        return rep
