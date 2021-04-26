@@ -15,7 +15,9 @@ class ArticleSerializer(serializers.ModelSerializer):
         rep['author'] = {
             'id': instance.author.id,
             'username': instance.author.username,
-            'name': instance.author.first_name,
+            'first name': instance.author.first_name,
+            'last name': instance.author.last_name,
+            'rating': instance.author.userprofile.total_rating,
             'email': instance.author.email,
             'date of register': instance.author.date_joined,
             'avatar': instance.author.userprofile.avatar.url,
@@ -37,3 +39,6 @@ class CategorySerializer(serializers.ModelSerializer):
 class ArticleResponseSerializer(ArticleSerializer):
     author = UserSerializer()
     category = CategorySerializer()
+
+
+
