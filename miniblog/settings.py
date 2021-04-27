@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     # 'celery',
     'django_filters',
     'users',
+    # 'rest_framework.authtoken',
 
 ]
 

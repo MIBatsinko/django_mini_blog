@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse, path, include
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase, URLPatternsTestCase, APIRequestFactory, APIClient, force_authenticate
 from rest_framework.utils import json
 
@@ -124,12 +125,14 @@ class ArticleWebTests(APITestCase):
 
 class ArticleApiTests(APITestCase):
     def setUp(self):
-        self.client = APIClient(enforce_csrf_checks=True)
+        self.client = APIClient()
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        # token = Token.objects.get(user__username='john')
+        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         self.category = Category.objects.create(name='test_cat', description='test123')
-        self.client.force_authenticate(user=self.user)
-        # self.userprofile = UserProfile.objects.create(user=self.user)
-        # self.client.login(username='john', password='johnpassword')
+        self.client.force_authenticate(user=self.user)  # b'{"name":["This field is required."]}'
+
+        self.client.login(username='john', password='johnpassword')
         self.url = reverse('view_articles')
         self.data = {
             'title': 'test_title',
@@ -138,6 +141,18 @@ class ArticleApiTests(APITestCase):
             'category': self.category.id,
         }
         self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
+        self.add_article.render()
+        # print(self.add_article.content)
+        #
+        # factory = APIRequestFactory(enforce_csrf_checks=True)
+        # view = ArticleApiView.as_view()
+        # request = factory.post(reverse('view_articles'), self.data)
+        # force_authenticate(request, user=self.user)
+        # response = view(request)
+        # response.render()
+        #
+        # print(response.content)
+        # print(Article.objects.all())
 
     def test_valid_create_article(self):
         valid_data = {
@@ -148,6 +163,14 @@ class ArticleApiTests(APITestCase):
         }
 
         response = self.client.post(self.url, valid_data, format='json', follow=True)
+
+        # factory = APIRequestFactory(enforce_csrf_checks=True)
+        # view = ArticleApiView.as_view()
+        # request = factory.post(reverse('view_articles'), valid_data)
+        # force_authenticate(request, user=self.user)
+        # response = view(request)
+        # response.render()
+
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Article.objects.count(), 2)
         self.assertEqual(Article.objects.get(id=2).author, self.user)
@@ -300,6 +323,7 @@ class CommentsApiTests(APITestCase):
             'category': self.category.id,
         }
         self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
+        self.add_article.render()
 
     def test_valid_create_comment(self):
         response = self.client.get(self.url, format='json', follow=True)
