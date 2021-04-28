@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     # 'celery',
     'django_filters',
     'users',
+    'payments',
 
 ]
 
@@ -190,3 +191,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.TemplateHTMLRenderer'
     ]
 }
+
+STRIPE_PUBLISHABLE_KEY = STRIPE_PUBLISHABLE_KEY
+STRIPE_SECRET_KEY = STRIPE_SECRET_KEY
+STRIPE_ENDPOINT_SECRET = STRIPE_ENDPOINT_SECRET

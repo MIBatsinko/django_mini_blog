@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('', include('blog.urls')),
 
+    path('payments/', include('payments.urls')),
     path('my_account/', include('my_account.urls')),
     path('accounts/', include('allauth.urls')),
     path('admin_panel/', include('admin_panel.urls'))
