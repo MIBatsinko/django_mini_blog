@@ -34,10 +34,6 @@ ALLOWED_HOSTS = ALLOWED_HOSTS
 # Application definition
 
 INSTALLED_APPS = [
-    # General use templates & template tags (should appear first)
-    # 'adminlte3',
-    # Optional: Django admin theme (must be before django.contrib.admin)
-    # 'adminlte3_theme',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,7 +59,6 @@ INSTALLED_APPS = [
     # 'celery',
     'django_filters',
     'users',
-    # 'rest_framework.authtoken',
 
 ]
 
@@ -79,12 +74,6 @@ SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
 
 SOCIAL_AUTH_REDIRECT = True
 
-# email
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
