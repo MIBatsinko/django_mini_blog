@@ -23,7 +23,7 @@ def calculate_avg_rating_author(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=User)
-def calculate_avg_rating_author(sender, instance, **kwargs):
+def create_userprofile(sender, instance, **kwargs):
     try:
         # Fixed: django.db.transaction.TransactionManagementError:
         # An error occurred in the current transaction.
