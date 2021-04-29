@@ -5,11 +5,23 @@
 {% block title %}Payment{% endblock %}
 
 {% block content %}
-
 <div class="container">
-  <h3>Premium account will give you more opportunities</h3>
-  <h3>It's cost 20$ per month</h3>
-  <button class="btn btn-warning" id="submitBtn">Buy premium!</button>
+  {% if subscription.status == "active" %}
+    <h4>Your subscription:</h4>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text">
+          {{ product.description }}
+        </p>
+        <p>Subscription ends: {{sub_end}}</p>
+      </div>
+    </div>
+  {% else %}
+    <h3>Premium account will give you more opportunities</h3>
+    <h3>It's cost 20$ per month</h3>
+    <button class="btn btn-warning" id="submitBtn">Buy premium!</button>
+  {% endif %}
 </div>
 
 {% endblock %}
