@@ -28,7 +28,7 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'https://ee5e5be1a4b9.ngrok.io/payments/'
+        domain_url = 'https://43a322e2de5f.ngrok.io/payments/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -38,9 +38,10 @@ def create_checkout_session(request):
             # [payment_intent_data] - capture the payment later
             # [customer_email] - prefill the email input in the form
             # For full details see https://stripe.com/docs/api/checkout/sessions/create
-
+            print(request.user.memberaccount.customer_id)
             # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
             checkout_session = stripe.checkout.Session.create(
+                client_reference_id=request.user.id if request.user.is_authenticated else None,
                 success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=domain_url + 'cancelled/',
                 payment_method_types=['card'],
@@ -52,7 +53,8 @@ def create_checkout_session(request):
                         'currency': 'usd',
                         'amount': '2000',
                     }
-                ]
+                ],
+                customer=request.user.memberaccount.customer_id
             )
             return JsonResponse({'sessionId': checkout_session['id']})
         except Exception as e:
@@ -87,25 +89,8 @@ def stripe_webhook(request):
     # ... handle other event types
     elif event.type == 'payment_intent.created':
         payment_intent = event.data.object
+        print(payment_intent)
     else:
         print('Unhandled event type {}'.format(event.type))
 
     return HttpResponse(status=200)
-
-    # try:
-    #     event = stripe.Webhook.construct_event(
-    #         payload, sig_header, endpoint_secret
-    #     )
-    # except ValueError as e:
-    #     # Invalid payload
-    #     return HttpResponse(status=400)
-    # except stripe.error.SignatureVerificationError as e:
-    #     # Invalid signature
-    #     return HttpResponse(status=400)
-    #
-    # # Handle the checkout.session.completed event
-    # if event['type'] == 'checkout.session.completed':
-    #     print("Payment was successful.")
-    #     # TODO: run some custom code here
-    #
-    # return HttpResponse(status=200)
