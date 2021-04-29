@@ -20,16 +20,3 @@ def calculate_avg_rating_author(sender, instance, **kwargs):
     rating = Article.objects.filter(author_id=instance.article.author).aggregate(models.Avg('total_rating'))
     instance.article.author.userprofile.total_rating = rating.get('total_rating__avg', 0)
     instance.article.author.userprofile.save()
-
-
-@receiver(post_save, sender=User)
-def create_userprofile(sender, instance, **kwargs):
-    try:
-        # Fixed: django.db.transaction.TransactionManagementError:
-        # An error occurred in the current transaction.
-        # You can't execute queries until the end of the 'atomic' block.
-        with transaction.atomic():
-            userprofile = UserProfile.objects.create(user=instance, avatar='/avatar.png')
-            userprofile.save()
-    except IntegrityError:
-        pass

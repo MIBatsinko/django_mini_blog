@@ -1,8 +1,9 @@
 import stripe
-from django.conf import settings # new
-from django.http.response import JsonResponse, HttpResponse  # new
-from django.views.decorators.csrf import csrf_exempt # new
+from django.conf import settings
+from django.http.response import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
+from rest_framework.utils import json
 
 
 class HomePageView(TemplateView):
@@ -27,7 +28,7 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'http://localhost:8000/payments/'
+        domain_url = 'https://ee5e5be1a4b9.ngrok.io/payments/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             # Create new Checkout Session for the order
@@ -67,19 +68,44 @@ def stripe_webhook(request):
     event = None
 
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
+        event = stripe.Event.construct_from(
+            json.loads(payload), stripe.api_key
         )
     except ValueError as e:
         # Invalid payload
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        return HttpResponse(status=400)
 
-    # Handle the checkout.session.completed event
-    if event['type'] == 'checkout.session.completed':
-        print("Payment was successful.")
-        # TODO: run some custom code here
+    # Handle the event
+    if event.type == 'payment_intent.succeeded':
+        payment_intent = event.data.object  # contains a stripe.PaymentIntent
+        # Then define and call a method to handle the successful payment intent.
+        # handle_payment_intent_succeeded(payment_intent)
+    elif event.type == 'payment_method.attached':
+        payment_method = event.data.object  # contains a stripe.PaymentMethod
+        # Then define and call a method to handle the successful attachment of a PaymentMethod.
+        # handle_payment_method_attached(payment_method)
+    # ... handle other event types
+    elif event.type == 'payment_intent.created':
+        payment_intent = event.data.object
+    else:
+        print('Unhandled event type {}'.format(event.type))
 
     return HttpResponse(status=200)
+
+    # try:
+    #     event = stripe.Webhook.construct_event(
+    #         payload, sig_header, endpoint_secret
+    #     )
+    # except ValueError as e:
+    #     # Invalid payload
+    #     return HttpResponse(status=400)
+    # except stripe.error.SignatureVerificationError as e:
+    #     # Invalid signature
+    #     return HttpResponse(status=400)
+    #
+    # # Handle the checkout.session.completed event
+    # if event['type'] == 'checkout.session.completed':
+    #     print("Payment was successful.")
+    #     # TODO: run some custom code here
+    #
+    # return HttpResponse(status=200)
