@@ -37,7 +37,7 @@
       fetch("{% url 'create_session' %}")
       .then((result) => { return result.json(); })
       .then((data) => {
-        console.log(data);
+        console.log(data.session_id);
         // Redirect to Stripe Checkout
         return stripe.redirectToCheckout({sessionId: data.session_id})
       })
