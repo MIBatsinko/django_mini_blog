@@ -63,6 +63,6 @@ class SingleUserSerializer(serializers.ModelSerializer):
         rep['userprofile'] = {
             'id': instance.userprofile.id,
             'avatar': instance.userprofile.avatar.url,
-            'total rating': instance.userprofile.total_rating
+            'total_rating': instance.userprofile.total_rating
         }
         return rep

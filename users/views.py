@@ -1,8 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters, status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveUpdateAPIView
 
+from miniblog import settings
 from .serializers import UserSerializer, UserResponseSerializer, SingleUserSerializer
 
 
@@ -17,6 +20,7 @@ class UserApiView(ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class SingleUserApiView(RetrieveUpdateDestroyAPIView):
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
+class SingleUserApiView(RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = SingleUserSerializer
