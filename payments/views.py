@@ -48,7 +48,7 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'https://c0cc685d4ac6.ngrok.io/payments/'
+        domain_url = 'https://32ef36472ed7.ngrok.io/payments/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(
@@ -101,7 +101,10 @@ def stripe_webhook(request):
             subscription_end_date=datetime.fromtimestamp(sub_created.current_period_end).strftime('%Y-%m-%d %H:%M:%S'),
             active_subscription=True
         )
-        member_account.save()
+        # member_account.save()
+    elif event.type == 'customer.subscription.updated':
+        sub_updated = event.data.object
+
     else:
         print('Unhandled event type {}'.format(event.type))
 
