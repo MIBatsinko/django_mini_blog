@@ -6,15 +6,14 @@
 
 {% block content %}
 <div class="container">
-  {% if subscription.status == "active" %}
+  {% if stripe_customer.active_subscription == True %}
     <h4>Your subscription:</h4>
     <div class="card" style="width: 18rem;">
       <div class="card-body">
-        <h5 class="card-title">{{ product.name }}</h5>
+        <h5 class="card-title">{{ stripe_customer.account_type }}</h5>
         <p class="card-text">
-          {{ product.description }}
+          {{ stripe_customer.subscription_end_date }}
         </p>
-        <p>Subscription ends: {{sub_end}}</p>
       </div>
     </div>
   {% else %}

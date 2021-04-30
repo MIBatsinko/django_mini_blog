@@ -18,12 +18,7 @@ class HomePageView(TemplateView):
         context = super(HomePageView, self).get_context_data(**kwargs)
         try:
             stripe_customer = MemberAccount.objects.get(user=self.request.user)
-            stripe.api_key = settings.STRIPE_SECRET_KEY
-            subscription = stripe.Subscription.retrieve(stripe_customer.sub_id)
-            product = stripe.Product.retrieve(subscription.plan.product)
-            context['subscription'] = subscription
-            context['product'] = product
-            context['sub_end'] = datetime.fromtimestamp(subscription.current_period_end).strftime('%Y-%m-%d %H:%M:%S')
+            context['stripe_customer'] = stripe_customer
             return context
 
         except MemberAccount.DoesNotExist:
