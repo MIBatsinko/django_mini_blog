@@ -15,7 +15,7 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
         try:
-            stripe_customer = MemberAccount.objects.get(user_id=self.request.user)
+            stripe_customer = MemberAccount.objects.get(user=self.request.user)
             stripe.api_key = settings.STRIPE_SECRET_KEY
             subscription = stripe.Subscription.retrieve(stripe_customer.sub_id)
             product = stripe.Product.retrieve(subscription.plan.product)

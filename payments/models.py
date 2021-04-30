@@ -3,7 +3,7 @@ from django.db import models
 
 
 class MemberAccount(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     customer_id = models.CharField(null=True, max_length=255)
     sub_id = models.CharField(null=True, max_length=255)
     account_type = models.CharField(default="Standard", max_length=255)  # or Premium

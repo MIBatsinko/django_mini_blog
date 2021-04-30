@@ -22,5 +22,5 @@ def create_account(sender, instance, created, **kwargs):
         )
         stripe_customer.save()
 
-        member_account = MemberAccount.objects.create(user_id=instance, customer_id=stripe_customer.id)
+        member_account = MemberAccount.objects.create(user=instance, customer_id=stripe_customer.id)
         member_account.save()
