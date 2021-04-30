@@ -3,7 +3,9 @@ from datetime import datetime
 from django.conf import settings
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.views.generic.base import TemplateView
+from rest_framework import status
 from rest_framework.utils import json
 
 from payments.models import MemberAccount
@@ -72,6 +74,7 @@ def create_checkout_session(request):
 
 
 @csrf_exempt
+@require_POST
 def stripe_webhook(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
@@ -85,27 +88,30 @@ def stripe_webhook(request):
         )
     except ValueError as e:
         # Invalid payload
-        return HttpResponse(status=400)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+    event_data = event.data
+    event_object = event.data.object
+    try:
+        member_account = MemberAccount.objects.get(customer_id=event_object.customer)
+    except MemberAccount.DoesNotExist:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
     # Handle the event
-    if event.type == 'subscription_intent.created':
-        payment_intent = event.data.object
-    elif event.type == 'charge.succeeded':
-        charge = event.data.object
-    elif event.type == 'customer.subscription.created':
-        sub_created = event.data.object
-        print(sub_created.current_period_end)
-        member_account = MemberAccount.objects.filter(customer_id=sub_created.customer).update(
-            sub_id=sub_created.id,
+    if event.type == 'customer.subscription.created':
+        member_account.update(
+            sub_id=event_object.id,
             account_type="Premium",
-            subscription_end_date=datetime.fromtimestamp(sub_created.current_period_end).strftime('%Y-%m-%d %H:%M:%S'),
+            subscription_end_date=datetime.fromtimestamp(event_object.current_period_end).strftime('%Y-%m-%d %H:%M:%S'),
             active_subscription=True
         )
-        # member_account.save()
+    elif event.type == 'customer.subscription.deleted':
+        sub_created = event_object
+
     elif event.type == 'customer.subscription.updated':
-        sub_updated = event.data.object
+        sub_updated = event_object
 
     else:
-        print('Unhandled event type {}'.format(event.type))
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
     return HttpResponse(status=200)
