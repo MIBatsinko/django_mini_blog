@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
-from pathlib import Path
+from datetime import timedelta
+from celery.schedules import crontab
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -80,6 +81,14 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_IMPORTS = ("payments.tasks", )
+# CELERY_BEAT_SCHEDULE = {
+#     'test': {
+#         'task': 'payments.tasks.show',
+#         'schedule': timedelta(seconds=1),
+#     },
+# }
+
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL_HOST_USER
