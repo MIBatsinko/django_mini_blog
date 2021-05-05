@@ -1,6 +1,7 @@
 from django.urls import path
 
-from payments.views import HomePageView, CancelSubscription, CancelledView, SuccessView, stripe_config, create_checkout_session
+from payments.views import HomePageView, CancelSubscription, CancelledView, SuccessView, stripe_config, \
+    create_checkout_session
 from payments.webhooks import stripe_webhook
 
 urlpatterns = [

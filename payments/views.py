@@ -4,6 +4,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 
+from miniblog.settings import STRIPE_PRICE_ID
 from payments.models import MemberAccount
 
 
@@ -43,8 +44,13 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'https://987b48351186.ngrok.io/payments/'
+        domain_url = 'https://5ed641b762ed.ngrok.io/payments/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
+        subscription_data = {
+            'items': [{
+                'plan': STRIPE_PRICE_ID
+            }]
+        }
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
@@ -53,12 +59,7 @@ def create_checkout_session(request):
                 payment_method_types=['card'],
                 mode='subscription',
                 customer=request.user.memberaccount.customer_id,
-                line_items=[
-                    {
-                        'quantity': 1,
-                        'price': settings.STRIPE_PRICE_ID,
-                    }
-                ],
+                subscription_data=subscription_data,
 
             )
             return JsonResponse({'session_id': checkout_session['id']})
