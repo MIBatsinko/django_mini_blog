@@ -7,8 +7,8 @@ class MemberAccount(models.Model):
     customer_id = models.CharField(null=True, max_length=255)
     sub_id = models.CharField(null=True, max_length=255)
     account_type = models.CharField(default="Standard", max_length=255)  # or Premium
-    subscription_end_date = models.DateTimeField(null=True)
+    subscription_end_date = models.DateTimeField(null=True, blank=True)
     active_subscription = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user_id.username + " (Premium: " + str(self.active_subscription) + ")"
+        return self.user.username

@@ -45,7 +45,7 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'https://726038576ff9.ngrok.io/payments/'
+        domain_url = 'https://438ed0d73364.ngrok.io/payments/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(
@@ -88,7 +88,7 @@ def stripe_webhook(request):
     event_data = event.data
     event_object = event.data.object
     try:
-        member_account = MemberAccount.objects.get(customer_id=event_object.customer)
+        member_account = MemberAccount.objects.filter(customer_id=event_object.customer)
     except MemberAccount.DoesNotExist:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,7 +106,7 @@ def stripe_webhook(request):
     elif event.type == 'customer.subscription.updated':
         sub_updated = event_object
 
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+    # else:
+    #     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
     return HttpResponse(status=200)
