@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h4>Your subscription cancelled</h4>
+
+      <br><a href="{% url 'premium' %}" class="btn btn-info">Back</a>
+
+</div>
+
+{% endblock %}

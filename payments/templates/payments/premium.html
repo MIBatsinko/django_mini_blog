@@ -15,6 +15,7 @@
           {{ stripe_customer.subscription_end_date }}
         </p>
       </div>
+      <br><a href="{% url 'cancel_sub' %}" class="btn btn-danger">Cancel subscription</a>
     </div>
   {% else %}
     <h3>Premium account will give you more opportunities</h3>
