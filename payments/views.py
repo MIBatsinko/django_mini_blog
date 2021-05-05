@@ -103,14 +103,6 @@ def stripe_webhook(request):
             active_subscription=True if event_object.status == 'active' else False
         )
 
-    elif event.type == 'customer.subscription.deleted':
-        member_account.update(
-            sub_id=event_object.id,
-            account_type="Standard",
-            subscription_end_date=None,
-            active_subscription=False
-        )
-
     elif event.type == 'customer.subscription.updated':
         member_account.update(
             sub_id=event_object.id,
@@ -127,8 +119,19 @@ def stripe_webhook(request):
             active_subscription=True if event_object.status == 'active' else False
         )
 
-    # else:
-    #     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+    elif event.type == 'customer.subscription.pending_update_expired':
+        member_account.update(
+            sub_id=event_object.id,
+            active_subscription=False
+        )
+
+    elif event.type == 'customer.subscription.deleted':
+        member_account.update(
+            sub_id=event_object.id,
+            account_type="Standard",
+            subscription_end_date=None,
+            active_subscription=False
+        )
 
     print(event.type)
     return HttpResponse(status=200)
