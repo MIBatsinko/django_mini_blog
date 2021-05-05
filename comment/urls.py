@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import CommentViewSet, SingleCommentApiView, CommentApiView
-from . import views
+import comment.views as views
 
 
 router = DefaultRouter()

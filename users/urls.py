@@ -1,8 +1,6 @@
-from django.urls import path, re_path, include
-from . import views
-from allauth.account import views as allauth_views
+from django.urls import path
 
-from .views import UserApiView, SingleUserApiView
+from users.views import UserApiView, SingleUserApiView
 
 urlpatterns = [
     path('', UserApiView.as_view(), name='view_users'),

@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from . import views
+import admin_panel.views as views
 
 
 urlpatterns = [

@@ -1,13 +1,14 @@
 from django.urls import path
 
-from . import views
+from payments.views import HomePageView, CancelSubscription, CancelledView, SuccessView, stripe_config, create_checkout_session
+from payments.webhooks import stripe_webhook
 
 urlpatterns = [
-    path('', views.HomePageView.as_view(), name='premium'),
-    path('config/', views.stripe_config),
-    path('create-checkout-session/', views.create_checkout_session, name='create_session'),
-    path('success/', views.SuccessView.as_view()),
-    path('cancelled/', views.CancelledView.as_view()),
-    path('webhook/', views.stripe_webhook),
-    path('cancel/', views.CancelSubscription.as_view(), name='cancel_sub')
+    path('', HomePageView.as_view(), name='premium'),
+    path('config/', stripe_config),
+    path('create-checkout-session/', create_checkout_session, name='create_session'),
+    path('success/', SuccessView.as_view()),
+    path('cancelled/', CancelledView.as_view()),
+    path('webhook/', stripe_webhook),
+    path('cancel/', CancelSubscription.as_view(), name='cancel_sub')
 ]
