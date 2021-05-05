@@ -25,6 +25,8 @@ class HomePageView(TemplateView):
             return context
         except stripe.error.InvalidRequestError:
             return context
+        except TypeError:
+            return context
 
 
 class SuccessView(TemplateView):
@@ -98,13 +100,19 @@ def stripe_webhook(request):
             sub_id=event_object.id,
             account_type="Premium",
             subscription_end_date=datetime.fromtimestamp(event_object.current_period_end).strftime('%Y-%m-%d %H:%M:%S'),
-            active_subscription=True
+            active_subscription=True if event_object.status == 'active' else False
         )
+
     elif event.type == 'customer.subscription.deleted':
         sub_created = event_object
 
     elif event.type == 'customer.subscription.updated':
-        sub_updated = event_object
+        member_account.update(
+            sub_id=event_object.id,
+            account_type="Premium",
+            subscription_end_date=datetime.fromtimestamp(event_object.current_period_end).strftime('%Y-%m-%d %H:%M:%S'),
+            active_subscription=True if event_object.status == 'active' else False
+        )
 
     # else:
     #     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
