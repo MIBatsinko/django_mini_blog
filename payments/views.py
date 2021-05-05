@@ -1,11 +1,11 @@
 import stripe
-from django.conf import settings
-from django.http.response import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 
-from miniblog.settings import STRIPE_PRICE_ID
 from payments.models import MemberAccount
+from payments.stripe_service import Stripe
 
 
 class HomePageView(TemplateView):
@@ -34,37 +34,23 @@ class CancelledView(TemplateView):
     template_name = 'payments/cancelled.html'
 
 
-@csrf_exempt
-def stripe_config(request):
-    if request.method == 'GET':
-        stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
-        return JsonResponse(stripe_config, safe=False)
+# @csrf_exempt
+# def stripe_config(request):
+#     if request.method == 'GET':
+#         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
+#         return JsonResponse(stripe_config, safe=False)
+#
 
-
 @csrf_exempt
+@login_required
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'https://5ed641b762ed.ngrok.io/payments/'
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        subscription_data = {
-            'items': [{
-                'plan': STRIPE_PRICE_ID
-            }]
-        }
-        try:
-            checkout_session = stripe.checkout.Session.create(
-                client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'cancelled/',
-                payment_method_types=['card'],
-                mode='subscription',
-                customer=request.user.memberaccount.customer_id,
-                subscription_data=subscription_data,
-
-            )
-            return JsonResponse({'session_id': checkout_session['id']})
-        except Exception as e:
-            return JsonResponse({'error': str(e)})
+        stripe_service = Stripe(user=request.user)
+        session_id = stripe_service.create_session()
+        if session_id:
+            return JsonResponse({'session_id': session_id})
+        else:
+            return HttpResponse(400)
 
 
 class CancelSubscription(HomePageView):
