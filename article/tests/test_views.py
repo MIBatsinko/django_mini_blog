@@ -422,7 +422,7 @@ class ArticleApiTests(APITestCase):
 #         self.user2 = User.objects.create_user('john2', 'lennon2@thebeatles.com', 'johnpassword')
 #         self.user3 = User.objects.create_user('john3', 'lennon3@thebeatles.com', 'johnpassword')
 #         self.users_url = reverse('view_users')
-#         self.user_url = reverse('change_users', kwargs={'pk': 2})
+#         self.user_url = reverse('view_user', kwargs={'pk': 2})
 #
 #     def test_view_users(self):
 #         response = self.client.get(self.users_url)

@@ -5,7 +5,7 @@ from miniblog.settings import STRIPE_PRICE_ID
 
 
 class Stripe:
-    domain_url = 'https://5ed641b762ed.ngrok.io/payments/'
+    domain_url = 'https://6cfad717e462.ngrok.io/payments/'
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     def __init__(self, user=None):

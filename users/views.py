@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, UpdateView
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters, status
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, get_object_or_404
+from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, get_object_or_404, RetrieveAPIView
 
 from .forms import UserProfileForm, UserForm
 from .models import UserProfile
@@ -24,17 +24,28 @@ class UserApiView(ListAPIView):
 
 
 @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
-class SingleUserApiView(RetrieveUpdateAPIView):
+class SingleUserApiView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = SingleUserSerializer
 
 
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
+class SingleUserUpdateApiView(RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = SingleUserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class UserProfilePageView(TemplateView):
     model = UserProfile
     template_name = 'blog/profile.html'
     context_object_name = 'userprofile'
 
 
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class UserProfileUpdateView(UpdateView):
     template_name = 'blog/profile_settings.html'
 

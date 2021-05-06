@@ -23,6 +23,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(source='userprofile.avatar')
+
     class Meta:
         model = UserProfile
         fields = ['id', 'avatar']
@@ -50,16 +52,32 @@ class UserArticleSerializer(serializers.ModelSerializer):
 class SingleUserSerializer(serializers.ModelSerializer):
     comments = UserCommentSerializer(many=True, read_only=True)
     articles = UserArticleSerializer(many=True, read_only=True)
+    avatar = serializers.ImageField(source='userprofile.avatar')
+    userprofile_id = serializers.IntegerField(source='userprofile.id', read_only=True)
+    total_rating = serializers.FloatField(source='userprofile.total_rating', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'comments', 'articles']  # , 'userprofile']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'comments', 'articles', 'userprofile_id',
+                  'total_rating', 'avatar']
 
-    def to_representation(self, instance):
-        rep = super(SingleUserSerializer, self).to_representation(instance)
-        rep['userprofile'] = {
-            'id': instance.userprofile.id,
-            'avatar': instance.userprofile.avatar.url,
-            'total_rating': instance.userprofile.total_rating
-        }
-        return rep
+    def update(self, instance, validated_data):
+        userprofile_data = validated_data.pop('userprofile')
+        profile = instance.userprofile
+
+        instance.id = validated_data.get(
+            'id', instance.id)
+        instance.username = validated_data.get(
+            'username', instance.username)
+        instance.first_name = validated_data.get(
+            'first_name', instance.first_name)
+        instance.last_name = validated_data.get(
+            'last_name', instance.last_name)
+        instance.email = validated_data.get(
+            'email', instance.email)
+        instance.save()
+
+        profile.avatar = userprofile_data.get(
+            'avatar', profile.avatar)
+        profile.save()
+        return instance
