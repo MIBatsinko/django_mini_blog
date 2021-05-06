@@ -1,12 +1,14 @@
 import stripe
 from datetime import datetime
-from django.conf import settings
+
+
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from rest_framework import status
 from rest_framework.utils import json
 
+from miniblog import settings
 from payments.models import MemberAccount
 
 
@@ -20,11 +22,15 @@ def stripe_webhook(request):
     event = None
 
     try:
-        event = stripe.Event.construct_from(
-            json.loads(payload), stripe.api_key
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
         )
     except ValueError as e:
         # Invalid payload
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        print(e)
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
     event_data = event.data
