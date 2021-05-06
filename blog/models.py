@@ -4,16 +4,6 @@ from django.contrib.auth.models import User
 from article.models import Article
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default="/profile1.png", null=True, blank=True)  # upload_to='images/',
-    date_created = models.DateTimeField(auto_now_add=True)
-    total_rating = models.FloatField(default=0)
-
-    def __str__(self):
-        return self.user.username
-
-
 class RatingStar(models.Model):
     """Rating star"""
     value = models.SmallIntegerField("Value", default=0)

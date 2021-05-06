@@ -63,9 +63,6 @@ class CommentCreateView(CreateView):
         instance.author = author
         instance.save()
 
-        # email = SendingEmail()
-        # email.new_comment(article, author, instance.body)
-
         return redirect(reverse_lazy('blog_view', (article_id, )))
 
 

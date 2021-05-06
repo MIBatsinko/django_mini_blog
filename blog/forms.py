@@ -1,8 +1,7 @@
-from django.contrib.auth.models import User
 from django.forms import ModelForm, TextInput, Textarea, ModelChoiceField, RadioSelect
 
-from article.models import Article, Category
-from .models import UserProfile, Rating, RatingStar
+from article.models import Article
+from .models import Rating, RatingStar
 
 
 class ArticlesForm(ModelForm):
@@ -24,25 +23,6 @@ class ArticlesForm(ModelForm):
                 'placeholder': 'Post text'
             }),
         }
-
-
-class UserProfileForm(ModelForm):
-    class Meta:
-        model = UserProfile
-        exclude = ['user', 'total_rating']
-
-
-# class UserProfileForm(ModelForm):
-#     class Meta:
-#         model = UserProfile
-#         # exclude = ['user', 'total_rating']
-#         fields = ['avatar']
-
-
-class UserForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ['email', 'first_name']  # , 'is_active', 'is_staff', 'is_superuser']
 
 
 class RatingForm(ModelForm):

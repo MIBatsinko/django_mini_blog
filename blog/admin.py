@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import UserProfile, RatingStar, Rating
+from .models import RatingStar, Rating
 
-admin.site.register(UserProfile)
 admin.site.register(RatingStar)
 
 

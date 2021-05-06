@@ -1,11 +1,9 @@
-from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from django.db import models, IntegrityError, transaction
+from django.db import models
 from django.dispatch import receiver
 
 from article.models import Article
-from blog.models import Rating, UserProfile
-from comment.models import Comment
+from blog.models import Rating
 
 
 @receiver(post_save, sender=Rating)

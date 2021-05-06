@@ -1,20 +1,19 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, DeleteView, DetailView, TemplateView, CreateView
-from django.db import models
 from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 from django.conf import settings
 
 from article.forms import CategoriesForm
 from article.models import Article, Category
-from blog.forms import UserProfileForm, ArticlesForm, RatingForm, UserForm
-from blog.models import UserProfile, Rating
+from blog.forms import ArticlesForm
+from users.forms import UserProfileForm, UserForm
 from comment.forms import CommentsForm
 from comment.models import Comment
+from users.models import UserProfile
 
 
 @method_decorator(settings.DECORATORS, name='dispatch')

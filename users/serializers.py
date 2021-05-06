@@ -1,12 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework.relations import PrimaryKeyRelatedField
 
-# from article.serializers import UserArticleSerializer
 from article.models import Article
-from blog.models import UserProfile
-from comment.models import Comment
-from comment.serializers import CommentSerializer, UserCommentSerializer
+from users.models import UserProfile
+from comment.serializers import UserCommentSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):

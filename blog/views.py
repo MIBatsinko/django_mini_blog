@@ -1,19 +1,16 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.decorators import method_decorator
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import View
 from django.contrib.auth.models import User
-from django.views.generic import DetailView, UpdateView, DeleteView, FormView, CreateView
-from django.db import models
-from rest_framework import filters
-from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
+
+from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
 
 from article.models import Article, Category
 from comment.models import Comment
-from .forms import ArticlesForm, UserProfileForm, RatingForm, UserForm
-from .models import UserProfile, Rating
+from .forms import ArticlesForm, RatingForm
+from .models import Rating
 
 
 class BlogHomePage:
@@ -99,49 +96,3 @@ class ArticleCreateView(CreateView):
         instance.category = category
         instance.save()
         return redirect(reverse_lazy('blog_index'))
-
-
-class UserProfilePageView(TemplateView):
-    model = UserProfile
-    template_name = 'blog/profile.html'
-    context_object_name = 'userprofile'
-
-
-class UserProfileUpdateView(UpdateView):
-    template_name = 'blog/profile_settings.html'
-
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
-        user_profile_form = UserProfileForm(initial={
-                'avatar': user.userprofile.avatar,
-            })
-        user_profile_form.prefix = 'user_profile_form'
-        user_form = UserForm(initial={
-                'first_name': user.first_name,
-                'email': user.email
-            })
-        user_form.prefix = 'user_form'
-        context = {'user_profile_form': user_profile_form, 'user_form': user_form}
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-        user = get_object_or_404(User, username=self.request.user.username)
-        user_profile_form = UserProfileForm(self.request.POST, self.request.FILES,
-                                            instance=user.userprofile, prefix='user_profile_form')
-        user_form = UserForm(self.request.POST, prefix='user_form', instance=user)
-        if user_profile_form.is_valid() and user_form.is_valid():
-            instance = user_form.save(commit=False)
-            instance.save()
-            user_profile_form.save()
-            return redirect('profile')
-
-
-class RatingUserPageView(TemplateView):
-    model = User
-    template_name = 'blog/user_rating.html'
-    context_object_name = 'users'
-
-    def get_context_data(self, **kwargs):
-        context = super(RatingUserPageView, self).get_context_data(**kwargs)
-        context['users'] = User.objects.all()
-        return context
