@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters, status
@@ -29,7 +30,7 @@ class SingleUserApiView(RetrieveAPIView):
     serializer_class = SingleUserSerializer
 
 
-@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class SingleUserUpdateApiView(RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = SingleUserSerializer

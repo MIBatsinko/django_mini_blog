@@ -1,5 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
@@ -44,7 +46,7 @@ class ArticleDetailView(DetailView):
         return context
 
 
-# @method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class ArticleUpdateView(UpdateView):
     model = Article
     template_name = 'blog/blog_add.html'
@@ -57,14 +59,14 @@ class ArticleUpdateView(UpdateView):
         return context
 
 
-# @method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class ArticleDeleteView(DeleteView):
     model = Article
     success_url = '/'
     template_name = 'blog/blog_delete.html'
 
 
-# @method_decorator(login_required, name='dispatch')
+# @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class AddStarRating(View):
     def post(self, request):
         form = RatingForm(request.POST)
@@ -79,6 +81,7 @@ class AddStarRating(View):
             return HttpResponse(status=400)
 
 
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class ArticleCreateView(CreateView):
     model = Article
     template_name = 'blog/blog_add.html'
