@@ -8,7 +8,7 @@ from rest_framework.utils import json
 
 from article.models import Article, Category
 from article.views import ArticleApiView, SingleArticleApiView, SingleCategoryApiView
-from blog.models import UserProfile
+from users.models import UserProfile
 from blog.views import ArticleDetailView, ArticleUpdateView, ArticleDeleteView
 from comment.models import Comment
 from comment.views import SingleCommentApiView
@@ -122,196 +122,194 @@ from comment.views import SingleCommentApiView
 #         self.assertEqual(Article.objects.count(), 1)
 #         self.assertEqual(Article.objects.get().title, 'updated_value')
 
-
-class ArticleApiTests(APITestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        # token = Token.objects.get(user__username='john')
-        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        self.category = Category.objects.create(name='test_cat', description='test123')
-        self.client.force_authenticate(user=self.user)  # b'{"name":["This field is required."]}'
-
-        self.client.login(username='john', password='johnpassword')
-        self.url = reverse('view_articles')
-        self.data = {
-            'title': 'test_title',
-            'description': 'desc',
-            'body': 'some_body',
-            'category': self.category.id,
-        }
-        self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
-        self.add_article.render()
-        # print(self.add_article.content)
-        #
-        # factory = APIRequestFactory(enforce_csrf_checks=True)
-        # view = ArticleApiView.as_view()
-        # request = factory.post(reverse('view_articles'), self.data)
-        # force_authenticate(request, user=self.user)
-        # response = view(request)
-        # response.render()
-        #
-        # print(response.content)
-        # print(Article.objects.all())
-
-    def test_valid_create_article(self):
-        valid_data = {
-            'title': 'new_valid_title',
-            'description': 'new_valid_desc',
-            'body': 'new_valid_body',
-            'category': self.category.id,
-        }
-
-        response = self.client.post(self.url, valid_data, format='json', follow=True)
-
-        # factory = APIRequestFactory(enforce_csrf_checks=True)
-        # view = ArticleApiView.as_view()
-        # request = factory.post(reverse('view_articles'), valid_data)
-        # force_authenticate(request, user=self.user)
-        # response = view(request)
-        # response.render()
-        for i in Article.objects.all():
-            print("!", i.id)
-
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(Article.objects.count(), 2)
-        self.assertEqual(Article.objects.all()[1].author, self.user)
-
-    def test_invalid_create_article(self):
-        invalid_data = {
-            'title': 'invalid article',
-            'description': '',  # empty
-            'body': 'some body',
-            'author': self.user.id,
-            'category': self.category.id,
-        }
-
-        self.client.post(self.url, invalid_data, format='json', follow=True)
-        self.assertEqual(Article.objects.count(), 1)
-
-    def test_view_articles(self):
-        url = reverse('view_articles')
-        response = self.client.get(url, format='json', follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Article.objects.count(), 1)
-
-    def test_check_response_data(self):
-        response = self.client.get(reverse('change_articles', kwargs={'pk': 1}), format='json')
-        response.render()
-        data = {
-            'id': json.loads(response.content)['id'],
-            'title': json.loads(response.content)['title']
-        }
-        self.assertEqual(data, {'id': 1, 'title': 'test_title'})
-
-    def test_rendering_responses(self):
-        print(Article.objects.all())
-        factory = APIRequestFactory(enforce_csrf_checks=True)
-        view = ArticleDetailView.as_view()
-        request = factory.get(reverse('change_articles', kwargs={'pk': 1}))
-        response = view(request, pk='1')
-        response.render()
-        data = {
-            'id': response.context_data['article'].id,
-            'title': response.context_data['article'].title,
-        }
-        self.assertEqual(data, {"id": 1, "title": "test_title"})
-    #
-    # def test_delete_article(self):
-    #     response_data = Article.objects.all()
-    #     print("Created: ", response_data)
-    #     self.assertEqual(len(response_data), 1)
-    #
-    #     factory = APIRequestFactory(enforce_csrf_checks=True)
-    #     view = SingleArticleApiView.as_view()
-    #     request = factory.delete(reverse('change_articles', kwargs={'pk': 1}))
-    #     view(request, pk='1')
-    #     response_data = Article.objects.all()
-    #     print("Deleted: ", response_data)
-    #     self.assertEqual(len(response_data), 0)
-    #
-    # def test_update_article(self):
-    #     update_url = reverse('change_articles', kwargs={'pk': 1})
-    #
-    #     valid_data = {
-    #         'title': 'update_title',
-    #         'description': 'new_update_valid_desc',
-    #         'body': 'new_valupdate_id_body',
-    #         'category': self.category.id,
-    #     }
-    #     print(Article.objects.all())
-    #     response = self.client.put(update_url, valid_data, format='json', follow=True)
-    #     print(Article.objects.all())
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(Article.objects.count(), 1)
-    #     self.assertEqual(Article.objects.get().title, 'update_title')
 #
-#
-# class CategoryApiTests(APITestCase):
+# class ArticleApiTests(APITestCase):
 #     def setUp(self):
-#         self.client = APIClient(enforce_csrf_checks=True)
+#         self.client = APIClient()
 #         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-#         self.client.force_authenticate(user=self.user)
-#         self.url = reverse('view_categories')
-#         self.data = {
-#             'name': 'test_category',
-#             'description': 'desc_category',
-#         }
-#         self.add_category = self.client.post(self.url, self.data, format='json', follow=True)
+#         # token = Token.objects.get(user__username='john')
+#         # self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+#         self.category = Category.objects.create(name='test_cat', description='test123')
+#         self.client.force_authenticate(user=self.user)  # b'{"name":["This field is required."]}'
 #
-#     def test_valid_create_category(self):
+#         self.client.login(username='john', password='johnpassword')
+#         self.url = reverse('view_articles')
+#         self.data = {
+#             'title': 'test_title',
+#             'description': 'desc',
+#             'body': 'some_body',
+#             'category': self.category.id,
+#         }
+#         self.add_article = self.client.post(self.url, self.data, format='json', follow=True)
+#         self.add_article.render()
+#
+#         self.articles_url = reverse('view_articles')
+#         # print(self.add_article.content)
+#         #
+#         # factory = APIRequestFactory(enforce_csrf_checks=True)
+#         # view = ArticleApiView.as_view()
+#         # request = factory.post(reverse('view_articles'), self.data)
+#         # force_authenticate(request, user=self.user)
+#         # response = view(request)
+#         # response.render()
+#         #
+#         # print(response.content)
+#         # print(Article.objects.all())
+#
+#     def test_valid_create_article(self):
 #         valid_data = {
-#             'name': 'valid_test_category',
-#             'description': 'valid_desc_category',
+#             'title': 'new_valid_title',
+#             'description': 'new_valid_desc',
+#             'body': 'new_valid_body',
+#             'category': self.category.id,
 #         }
 #
 #         response = self.client.post(self.url, valid_data, format='json', follow=True)
-#         self.assertEqual(response.status_code, 201)
-#         self.assertEqual(Category.objects.count(), 2)
 #
-#     def test_invalid_create_category(self):
+#         # factory = APIRequestFactory(enforce_csrf_checks=True)
+#         # view = ArticleApiView.as_view()
+#         # request = factory.post(reverse('view_articles'), valid_data)
+#         # force_authenticate(request, user=self.user)
+#         # response = view(request)
+#         # response.render()
+#
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
+#
+#         self.assertEqual(response.status_code, 201)
+#         self.assertEqual(len(articles), 2)
+#         self.assertEqual(articles[1].get('author').get('username'), self.user.username)
+#
+#     def test_invalid_create_article(self):
 #         invalid_data = {
-#             'name': 'invalid_cat',
+#             'title': 'invalid article',
 #             'description': '',  # empty
+#             'body': 'some body',
+#             'author': self.user.id,
+#             'category': self.category.id,
 #         }
 #
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
 #         self.client.post(self.url, invalid_data, format='json', follow=True)
-#         self.assertEqual(Category.objects.count(), 1)
+#         self.assertEqual(len(articles), 1)
 #
-#     def test_view_categories(self):
-#         url = reverse('view_categories')
+#     def test_view_articles(self):
+#         url = reverse('view_articles')
 #         response = self.client.get(url, format='json', follow=True)
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
 #         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(Category.objects.count(), 1)
+#         self.assertEqual(len(articles), 1)
 #
-#     def test_delete_category(self):
-#         response_data = Category.objects.all()
-#         print("Created: ", response_data)
-#         self.assertEqual(len(response_data), 1)
+#     def test_check_response_data(self):
+#         response = self.client.get(reverse('change_articles', kwargs={'pk': 1}), format='json')
+#         response.render()
+#         data = {
+#             'id': json.loads(response.content)['id'],
+#             'title': json.loads(response.content)['title']
+#         }
+#         self.assertEqual(data, {'id': 1, 'title': 'test_title'})
 #
-#         factory = APIRequestFactory(enforce_csrf_checks=True)
-#         view = SingleCategoryApiView.as_view()
-#         request = factory.delete(reverse('change_categories', kwargs={'pk': 1}))
-#         view(request, pk='1')
-#         response_data = Category.objects.all()
-#         print("Deleted: ", response_data)
+#     def test_delete_article(self):
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
+#         print("Created: ", articles, len(articles))
+#         self.assertEqual(len(articles), 1)
+#
+#         self.client.delete(reverse('change_articles', kwargs={'pk': articles[0].get('id')}), format='json')
+#
+#         response_data = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
+#         print("Deleted: ", response_data, len(response_data))
 #         self.assertEqual(len(response_data), 0)
 #
-#     def test_update_category(self):
-#         update_url = reverse('change_categories', kwargs={'pk': 1})
+#     def test_update_article(self):
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
+#         update_url = reverse('change_articles', kwargs={'pk': articles[0].get('id')})
 #
 #         valid_data = {
-#             'name': 'update_cat',
-#             'description': 'new_update_valid_desc_cat',
+#             'title': 'update_title',
+#             'description': 'new_update_valid_desc',
+#             'body': 'new_valupdate_id_body',
+#             'category': self.category.id,
 #         }
-#         print(Category.objects.all())
+#
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
+#         print("Before:", articles)
 #         response = self.client.put(update_url, valid_data, format='json', follow=True)
-#         print(Category.objects.all())
+#         articles = json.loads(self.client.get(self.articles_url, format='json', follow=True).content)
+#         print("After: ", articles)
 #         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(Category.objects.count(), 1)
-#         self.assertEqual(Category.objects.get().name, 'update_cat')
-#
-#
+#         self.assertEqual(len(articles), 1)
+#         self.assertEqual(articles[0].get('title'), 'update_title')
+
+
+class CategoryApiTests(APITestCase):
+    def setUp(self):
+        self.client = APIClient(enforce_csrf_checks=True)
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.client.force_authenticate(user=self.user)
+        self.url = reverse('view_categories')
+        self.data = {
+            'name': 'test_category',
+            'description': 'desc_category',
+        }
+        self.client.login(username='john', password='johnpassword')
+        self.add_category = self.client.post(self.url, self.data, format='json', follow=True)
+
+    def test_valid_create_category(self):
+        valid_data = {
+            'name': 'valid_test_category',
+            'description': 'valid_desc_category',
+        }
+
+        response = self.client.post(self.url, valid_data, format='json', follow=True)
+        categories = json.loads(self.client.get(self.url, format='json', follow=True).content)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(categories), 2)
+
+    def test_invalid_create_category(self):
+        invalid_data = {
+            'name': 'invalid_cat',
+            'description': '',  # empty
+        }
+
+        self.client.post(self.url, invalid_data, format='json', follow=True)
+        categories = json.loads(self.client.get(self.url, format='json', follow=True).content)
+
+        self.assertEqual(len(categories), 1)
+
+    def test_view_categories(self):
+        response = self.client.get(self.url, format='json', follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(json.loads(response.content)), 1)
+
+    def test_delete_category(self):
+        categories = json.loads(self.client.get(self.url, format='json', follow=True).content)
+        print("Created: ", categories)
+        self.assertEqual(len(categories), 1)
+
+        self.client.delete(reverse('change_categories', kwargs={'pk': categories[0].get('id')}), format='json')
+
+        categories = json.loads(self.client.get(self.url, format='json', follow=True).content)
+
+        print("Deleted: ", categories)
+        self.assertEqual(len(categories), 0)
+
+    def test_update_category(self):
+        categories = json.loads(self.client.get(self.url, format='json', follow=True).content)
+        update_url = reverse('change_categories', kwargs={'pk': categories[0].get('id')})
+
+        valid_data = {
+            'name': 'update_cat',
+            'description': 'new_update_valid_desc_cat',
+        }
+        print(categories)
+        response = self.client.put(update_url, valid_data, format='json', follow=True)
+        categories = json.loads(self.client.get(self.url, format='json', follow=True).content)
+        print(categories)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Category.objects.count(), 1)
+        self.assertEqual(Category.objects.get().name, 'update_cat')
+
+
 # class CommentsApiTests(APITestCase):
 #     def setUp(self):
 #         self.client = APIClient(enforce_csrf_checks=True)
