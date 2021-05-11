@@ -415,4 +415,3 @@ class UserApiTests(APITestCase):
     #     print(json.loads(response.content))
     #     self.assertEqual(len(users), 3)
     #     self.assertEqual(users[0].get('username'), update_data.get('username'))
-    #
