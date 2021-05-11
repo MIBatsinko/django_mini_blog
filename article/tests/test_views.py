@@ -404,5 +404,15 @@ class UserApiTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content).get('username'), users[1].get('username'))
 
-    def test_update_user(self):
-        pass
+    # def test_update_user(self):
+    #     update_data = {'username': 'jfgfffg', 'first_name': 'hjhjh', 'last_name': 'kkhkjk', 'email': 'lennon1@thebeatles.com', 'avatar': '/media/avatar.png'}
+    #     update_url = reverse('edit_user')
+    #     response = self.client.put(update_url, update_data, format='json', follow=True)
+    #     users = json.loads(self.client.get(self.users_url, format='json', follow=True).content)
+    #     print(users)
+    #     # self.assertEqual(response.status_code, 200)
+    #     response.render()
+    #     print(json.loads(response.content))
+    #     self.assertEqual(len(users), 3)
+    #     self.assertEqual(users[0].get('username'), update_data.get('username'))
+    #
