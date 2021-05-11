@@ -5,11 +5,15 @@ from miniblog.settings import STRIPE_PRICE_ID
 
 
 class Stripe:
-    domain_url = 'https://6cfad717e462.ngrok.io/payments/'
+    domain_url = 'https://8175bda9da0b.ngrok.io/payments/'
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     def __init__(self, user=None):
         self.user = user
+
+    @staticmethod
+    def stripe_api():
+        return stripe.api_key
 
     def get_success_url_domain(self):
         return self.domain_url + 'success?session_id={CHECKOUT_SESSION_ID}'

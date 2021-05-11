@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from payments.stripe_service import Stripe
 from users.models import UserProfile
-from miniblog import settings
 from payments.models import MemberAccount
 
 
@@ -13,14 +13,9 @@ def create_account(sender, instance, created, **kwargs):
     if created:
         userprofile = UserProfile.objects.create(user=instance, avatar='/avatar.png')
 
-        stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe_customer = stripe.Customer.create(
             email=instance.email,
             name=instance.get_full_name()
         )
 
         member_account = MemberAccount.objects.create(user=instance, customer_id=stripe_customer.id)
-
-        userprofile.save()
-        stripe_customer.save()
-        member_account.save()

@@ -12,7 +12,6 @@ from payments.models import MemberAccount
 @csrf_exempt
 @require_POST
 def stripe_webhook(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY
     endpoint_secret = settings.STRIPE_ENDPOINT_SECRET
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
@@ -24,6 +23,7 @@ def stripe_webhook(request):
         )
     except ValueError as e:
         # Invalid payload
+        print(e)
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
@@ -33,28 +33,17 @@ def stripe_webhook(request):
     event_data = event.data
     event_object = event.data.object
     try:
-        member_account = MemberAccount.objects.filter(customer_id=event_object.customer)
+        member_account = MemberAccount.objects.filter(customer_id=event_object.id)
+        print(member_account)
     except MemberAccount.DoesNotExist:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+    except AttributeError as e:
+        print("Error :", e)
 
     # Handle the event
-    if event.type == 'customer.subscription.created':
-        member_account.update(
-            sub_id=event_object.id,
-            account_type="Premium",
-            subscription_end_date=datetime.fromtimestamp(event_object.current_period_end).strftime('%Y-%m-%d'),
-            active_subscription=True if event_object.status == 'active' else False
-        )
-
-    elif event.type == 'customer.subscription.updated':
-        member_account.update(
-            sub_id=event_object.id,
-            account_type="Premium",
-            subscription_end_date=datetime.fromtimestamp(event_object.current_period_end).strftime('%Y-%m-%d'),
-            active_subscription=True if event_object.status == 'active' else False
-        )
-
-    elif event.type == 'customer.subscription.pending_update_applied':
+    if event.type in ['customer.subscription.created',
+                      'customer.subscription.updated',
+                      'customer.subscription.pending_update_applied']:
         member_account.update(
             sub_id=event_object.id,
             account_type="Premium",
@@ -72,9 +61,8 @@ def stripe_webhook(request):
         member_account.update(
             sub_id=event_object.id,
             account_type="Standard",
-            subscription_end_date=None,
             active_subscription=False
         )
 
     print(event.type)
-    return HttpResponse(status=200)
+    return HttpResponse(status=status.HTTP_200_OK)

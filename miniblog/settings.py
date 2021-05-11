@@ -75,19 +75,21 @@ SOCIALACCOUNT_PROVIDERS = {'facebook': {'METHOD': 'oauth2',
 
 SOCIAL_AUTH_REDIRECT = True
 
+TIME_ZONE = 'Europe/Kiev'
+
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_IMPORTS = ("payments.tasks", )
-# CELERY_BEAT_SCHEDULE = {
-#     'test': {
-#         'task': 'payments.tasks.show',
-#         'schedule': timedelta(seconds=1),
-#     },
-# }
-
+CELERY_IMPORTS = ("payments.tasks",)
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE = {
+    'check_subscribe': {
+        'task': 'payments.tasks.check_subscribe',
+        'schedule': crontab(hour=13, minute=36),  # timedelta(seconds=1),
+    },
+}
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL_HOST_USER
@@ -159,8 +161,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Kiev'
-
 USE_I18N = True
 
 USE_L10N = True
@@ -194,6 +194,9 @@ DECORATORS = [staff_member_required, login_required(login_url='my_account_login'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'TEST_REQUEST_RENDERER_CLASSES': [
         'rest_framework.renderers.MultiPartRenderer',
         'rest_framework.renderers.JSONRenderer',

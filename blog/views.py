@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
+from rest_framework import status
 
 from rest_framework.generics import get_object_or_404
 from rest_framework.reverse import reverse_lazy
@@ -76,9 +77,9 @@ class AddStarRating(View):
                 user=get_object_or_404(User, id=request.user.id),
                 defaults={'star_id': int(request.POST.get("star"))}
             )
-            return HttpResponse(status=201)
+            return HttpResponse(status=status.HTTP_201_CREATED)
         else:
-            return HttpResponse(status=400)
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
