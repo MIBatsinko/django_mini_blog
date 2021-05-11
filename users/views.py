@@ -5,12 +5,20 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import filters, status
+from rest_framework import filters, status, permissions
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, get_object_or_404, RetrieveAPIView
 
 from .forms import UserProfileForm, UserForm
 from .models import UserProfile
 from .serializers import UserSerializer, UserResponseSerializer, SingleUserSerializer
+
+
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.username == request.user.username
 
 
 class UserApiView(ListAPIView):
@@ -24,22 +32,13 @@ class UserApiView(ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
-class SingleUserApiView(RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = SingleUserSerializer
-
-
 @method_decorator(csrf_exempt, name='dispatch')
-class SingleUserUpdateApiView(RetrieveUpdateAPIView):
+class SingleUserApiView(RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = SingleUserSerializer
-
-    def get_object(self):
-        return self.request.user
+    permission_classes = [IsOwnerOrReadOnly]
 
 
-@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class UserProfilePageView(TemplateView):
     model = UserProfile
     template_name = 'blog/profile.html'
