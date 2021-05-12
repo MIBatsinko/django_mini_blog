@@ -4,6 +4,8 @@ import blog.views as views
 from users.views import RatingUserPageView, UserProfilePageView, UserProfileUpdateView
 
 urlpatterns = [
+    # TODO: змінити стартову сторінку та виправити сторінку зі статтями
+    #  path('', views.BlogHomePage.home, name='blog_index'),
     path('', views.BlogHomePage.home, name='blog_index'),
     path('add_post/', views.ArticleCreateView.as_view(), name='blog_add'),
     path('<int:pk>/', views.ArticleDetailView.as_view(), name='blog_view'),

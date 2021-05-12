@@ -26,7 +26,7 @@ class BlogHomePage:
         num_visits = self.session.get('num_visits', 0)
         self.session['num_visits'] = num_visits + 1
 
-        return render(self, 'blog/blog_index.html', {"blog": blog, 'categories': categories, 'num_visits': num_visits})
+        return render(self, 'blog/blog-list.html', {"blog": blog, 'categories': categories, 'num_visits': num_visits})
 
 
 class ArticleDetailView(DetailView):
@@ -85,7 +85,7 @@ class AddStarRating(View):
 @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class ArticleCreateView(CreateView):
     model = Article
-    template_name = 'blog/blog_add.html'
+    template_name = 'blog/add-article.html'
     form_class = ArticlesForm
 
     def get_context_data(self, **kwargs):
