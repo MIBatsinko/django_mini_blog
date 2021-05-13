@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% block title %} Articles {% endblock %}
+{% load static %}
 {% block content %}
 
-	<div class="banner padding-tb-20px background-overlay" style="background-image: url('https://storage.bash.news/E/8/4/E84C26E03ED204C7.jpg');">>
+	<div class="banner padding-tb-20px background-overlay" style="background-image: url({% static 'blog/img/index_background.jpg' %});">>
 		<div class="container">
 			<div class="padding-tb-200px z-index-2 position-relative">
-				<h1 class="text-yellow pull-l icon-large font-weight-700 margin-bottom-40px">+20,000</h1>
-				<h3 class="text-yellow icon-large font-weight-500">interesting articles</h3>
-				<div class="margin-top-45px">
+				<div class="margin-top-170px" style="margin-left: 700px;">
 					<a href="{% url 'blog_index' %}" class="text-red btn btn-md border-3 border-radius-0 btn-inline-block padding-lr-25px opacity-hover-10">Browse Now</a>
 				</div>
 			</div>

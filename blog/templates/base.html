@@ -64,8 +64,8 @@
 								<a href="{% url 'blog_add' %}" class="text-white float-right padding-13px"><i class="fas fa-plus"></i> Add article </a>
 
 							{% else %}
-								<a href="{% url 'my_account_login' %}"><i class="fas fa-home"></i> Login</a>
-								<a href="{% url 'my_account_signup' %}"><i class="fas fa-home"></i> Registration</a>
+								<a href="{% url 'my_account_login' %}" class="text-white float-right padding-13px"><i class="fas fa-sign-in-alt"></i> Login</a>
+								<a href="{% url 'my_account_signup' %}" class="text-white float-right padding-13px"><i class="fas fa-home"></i> Registration</a>
 							{% endif %}
 							</ul>
 						</div>
