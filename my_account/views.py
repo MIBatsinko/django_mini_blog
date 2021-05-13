@@ -26,7 +26,7 @@ def user_login(request):
                 return render(request, 'my_account/invalid_login.html')
     else:
         form = LoginForm()
-    return render(request, 'my_account/login.html', {'form': form})
+    return render(request, 'my_account/page-login.html', {'form': form})
 
 
 def register(request):
@@ -45,7 +45,7 @@ def register(request):
             return render(request, 'my_account/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
-    return render(request, 'my_account/register.html', {'user_form': user_form})
+    return render(request, 'my_account/page-sign-up.html', {'user_form': user_form})
 
 
 class LogoutView(View):
