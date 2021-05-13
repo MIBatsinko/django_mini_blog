@@ -17,7 +17,7 @@
                 {% if request.POST.category_select == el.category.name %}
                     {% include 'include/show_articles.html' %}
                 {% endif %}
-            {% elif request.POST.category_select == 'all' or request.POST.category_select is None %}
+            {% elif request.POST.category_select == 'All categories' or request.POST.category_select is None %}
                 {% include 'include/show_articles.html' %}
             {% endif %}
         {% endfor %}
@@ -25,6 +25,7 @@
         <p>You have not posts</p>
     {% endif %}
 				<div class="text-left">
+<!--					TODO:-->
 					<a href="#" class="btn box-shadow margin-bottom-50px padding-tb-10px btn-sm border-2 border-radius-30 btn-inline-block width-210px background-dark text-white">Loading More</a>
 				</div>
 			</div>
@@ -48,14 +49,14 @@
 				<div class="widget widget_categories">
 					<div class="margin-bottom-30px">
 						<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-folder-open margin-right-10px text-main-color"></i> Categories</h4>
-						<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 							<ul>
-								<li><a href="#">Tech</a></li>
-								<li><a href="#">Gallary</a></li>
-								<li><a href="#">UI Design </a></li>
-								<li><a href="#">Shop</a></li>
-								<li><a href="#">Wordpress  </a></li>
-								<li><a href="#">Cultur</a></li>
+								<form action="" method="post" class="empty">
+									<li><input name="category_select" type="submit" value="All categories"></li>
+									{% for category in categories %}
+										{% csrf_token %}
+										<li><input name="category_select" type="submit" value="{{ category }}"></li>
+									{% endfor %}
+								</form>
 							</ul>
 						</div>
 					</div>
