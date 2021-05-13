@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
-from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
+from django.views.generic import DetailView, UpdateView, DeleteView, CreateView, ListView
 from rest_framework import status
 
 from rest_framework.generics import get_object_or_404
@@ -16,17 +16,33 @@ from .forms import ArticlesForm, RatingForm
 from .models import Rating
 
 
-class BlogHomePage:
+class HomePage:
     def home(self):
-        blog = Article.objects.order_by('-date')
-        categories = Category.objects.all()
-
         # num_authors = Author.objects.count()  # The 'all()' is implied by default.
         # Number of visits to this view, as counted in the session variable.
         num_visits = self.session.get('num_visits', 0)
         self.session['num_visits'] = num_visits + 1
 
-        return render(self, 'blog/blog-list.html', {"blog": blog, 'categories': categories, 'num_visits': num_visits})
+        return render(self, 'blog/index.html', {'num_visits': num_visits})
+
+
+class Blog:
+    def articles(self):
+        blog = Article.objects.order_by('-date')
+        categories = Category.objects.all()
+
+        return render(self, 'blog/blog-list.html', {"article": blog, 'categories': categories})
+
+
+# class ArticlesView(ListView):
+#     model = Article
+#     template_name = 'blog/blog-list.html'
+#     context_object_name = 'article'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(ArticlesView, self).get_context_data(**kwargs)
+#         context['categories'] = Category.objects.all()
+#         return context
 
 
 class ArticleDetailView(DetailView):
