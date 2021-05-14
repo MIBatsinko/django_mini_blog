@@ -52,6 +52,10 @@
 												<a class="d-inline-block text-dark text-medium margin-right-20px" href="#">{{ comment.author }} </a>
 												<span class="text-extra-small">Date :  <a href="#" class="text-main-color">{{ comment.date_created }}</a></span>
 												<p class="margin-top-15px text-grey-2">{{ comment.body }}</p>
+												{% if user.id == comment.author.id %}
+													<a href="{% url 'comment_edit' comment.id %}" class="btn btn-info">Edit</a>
+													<a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
+												{% endif %}
 											</div>
 										</li>
 									{% endifequal %}
@@ -90,7 +94,7 @@
 						<ul>
 							{% for article in articles %}
 								{% csrf_token %}
-							<li><a href="{% url 'blog_view' article.id %}">{{ article }}</a>></li>
+								<li><a href="{% url 'blog_view' article.id %}">{{ article }}</a>></li>
 							{% endfor %}
 						</ul>
 					</div>
