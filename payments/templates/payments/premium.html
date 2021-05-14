@@ -1,29 +1,31 @@
 {% extends 'base.html' %}
-
-{% load static %}
-
 {% block title %}Payment{% endblock %}
-
 {% block content %}
-<div class="container">
-  {% if stripe_customer.active_subscription == True %}
-    <h4>Your subscription:</h4>
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ stripe_customer.account_type }}</h5>
-        <p class="card-text">
-          {{ stripe_customer.subscription_end_date }}
-        </p>
-      </div>
-      <br><a href="{% url 'cancel_sub' %}" class="btn btn-danger">Cancel subscription</a>
-    </div>
-  {% else %}
-    <h3>Premium account will give you more opportunities</h3>
-    <h3>It's cost 20$ per month</h3>
-    <button class="btn btn-warning" id="submitBtn">Buy premium!</button>
-  {% endif %}
-</div>
 
+<div class="margin-tb-200px">
+	<div class="container" align="center">
+		<div class="row">
+			<div class="col-lg-12">
+              {% if stripe_customer.active_subscription == True %}
+                <h4>Your subscription:</h4>
+                <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ stripe_customer.account_type }}</h5>
+                    <p class="card-text">
+                      {{ stripe_customer.subscription_end_date }}
+                    </p>
+                  </div>
+                  <br><a href="{% url 'cancel_sub' %}" class="btn btn-danger">Cancel subscription</a>
+                </div>
+              {% else %}
+                <h3>Premium account will give you more opportunities</h3>
+                <h3>It's cost 20$ per month</h3>
+                <button class="btn btn-warning" id="submitBtn">Buy premium!</button>
+              {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}

@@ -53,3 +53,17 @@ form.empty {
   border-radius: 10px;
   margin-top: 10px;
 }
+
+.profile-pic{
+    max-width: 200px;
+    max-height:200px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.profile-pic-comments{
+    max-width: 60px;
+    max-height:60px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
