@@ -1,7 +1,10 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
+{% block title %}Log-in{% endblock %}
 {% block content %}
 
+{% load account socialaccount %}
+
+{% get_providers as socialaccount_providers %}
 	<div id="page-title" class="padding-tb-30px gradient-white text-center">
 		<div class="container">
 			<ol class="breadcrumb opacity-5">
@@ -16,36 +19,27 @@
 	<div class="container" style="margin-bottom: 100px;">
 		<!--======= log_in_page =======-->
 <!--		TODO: styles to css-->
-		<div id="log-in" class="box-shadow border-radius-30" style="width: 50%; margin-left: 280px;">
+		<div id="log-in" class="social-form box-shadow border-radius-30" style="width: 40%; margin-left: 325px;">
 
-			<div class="form-output" style="margin-right: 450px; padding: 1px;">
-				<form>
+			<div class="form-output" style="margin-right: 300px; padding: 10px;">
+				<form method="POST" action="{% url 'my_account_login' %}">
 					<div class="form-group label-floating">
-						<label class="control-label">Your Email</label>
-						<input class="form-control" placeholder="" type="email">
+						  {% csrf_token %}
+						  {{ form.as_p }}
+						  {% if redirect_field_value %}
+						  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+						  {% endif %}
 					</div>
-					<div class="form-group label-floating">
-						<label class="control-label">Your Password</label>
-						<input class="form-control" placeholder="" type="password">
-					</div>
+						<a href="{% url 'my_account_reset_password' %}" class="forgot">Forgot my Password</a>
 
-					<div class="remember">
-						<div class="checkbox">
-							<label>
-							<input name="optionsCheckboxes" type="checkbox">
-								Remember Me
-						</label>
-						</div>
-						<a href="#" class="forgot">Forgot my Password</a>
-					</div>
-
-					<a href="dashboard-home.html" class="btn btn-md btn-primary full-width">Login</a>
+					<br><button type="submit" class="btn btn-md btn-primary width-183px margin-left-80px">Sign In</button>
 
 					<div class="or"></div>
 
-					<a href="#" class="btn btn-md bg-facebook full-width btn-icon-left"><i class="fab fa-facebook margin-right-8px" aria-hidden="true"></i> Login with Facebook</a>
-
-					<p>Don't you have an account? <a href="page-sign-up.html">Register Now!</a> </p>
+					{% for provider in socialaccount_providers %}
+						<a href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}" class="btn btn-md bg-{{provider.id}} btn-icon-left margin-left-70px"><i class="fab fa-{{provider.id}} margin-right-8px" aria-hidden="true"></i> Login with {{provider.id}}</a><br>
+					{% endfor %}
+					<p>Don't you have an account? <a href="{% url 'my_account_signup' %}">Register Now!</a> </p>
 				</form>
 			</div>
 		</div>

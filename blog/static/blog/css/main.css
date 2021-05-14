@@ -38,3 +38,18 @@ form.empty {
     margin-top: 0px;
 }
 
+.social-form .bg-facebook {
+  background-color: #2f5b9d;
+  color: #FFF;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.social-form .bg-google {
+  background-color: #EA3C16;
+  color: #FFF;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}
