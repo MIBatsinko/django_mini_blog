@@ -1,39 +1,31 @@
 {% extends "base.html" %}
-{% block title %} Articles {% endblock %}
+{% block title %} Add article {% endblock %}
+{% block page_breadcrumbs %}Add article{% endblock %}
 {% block content %}
 	<div class="container">
-
+				<form id="article" method="post">
+					{% csrf_token %}
 		<div class="margin-tb-45px full-width">
 			<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-list-alt margin-right-10px text-main-color"></i>Basic Informations</h4>
 			<div class="padding-30px padding-bottom-30px background-white border-radius-10">
-				<form>
+            		<span>{{ form.errors }}</span><br>
 					<div class="form-group margin-bottom-20px">
-						<label><i class="far fa-list-alt margin-right-10px"></i> Recipe Title</label>
-						<input type="text" class="form-control form-control-sm" id="ListingTitle" placeholder="Listing Title">
+						<label><i class="far fa-list-alt margin-right-10px"></i> Title</label>
+						<input type="text" class="form-control form-control-sm" id="title" name="title" form="article" placeholder="Article Title">
 					</div>
 					<div class="form-group margin-bottom-20px">
 						<div class="row">
 							<div class="col-md-6">
 								<label><i class="far fa-folder-open margin-right-10px"></i> Category</label>
-								<select class="form-control form-control-sm">
-                                    <option>Fish</option>
-                                    <option>Cocktails</option>
-                                    <option>Eggs</option>
-                                    <option>Salads</option>
-                                    <option>Asian</option>
-                                    <option>Pizza</option>
+								<select form="article" name="category" id="category" class="form-control form-control-sm">
+									{% for category in categories %}
+                                    	<option>{{category}}</option>
+									{% endfor %}
                                 </select>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group margin-bottom-20px">
-									<label><i class="far fa-flag margin-right-10px"></i> Keywords</label>
-									<input type="text" class="form-control form-control-sm" id="ListingKeywords" placeholder="Keywords">
-								</div>
 							</div>
 						</div>
 					</div>
 
-				</form>
 			</div>
 		</div>
 
@@ -41,21 +33,18 @@
 			<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-list-alt margin-right-10px text-main-color"></i>Description</h4>
 			<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 				<div class="margin-bottom-20px">
-					<textarea class="form-control" placeholder="Html Tag Enabled" id="exampleTextarea" rows="8"></textarea>
+					<textarea class="form-control" placeholder="Write article description" id="description" name="description" form="article" rows="2"></textarea>
 				</div>
-				<div class="row">
-					<div class="col-md-6 margin-bottom-20px">
-						<label><i class="fas fa-video margin-right-10px"></i> Video URL</label>
-						<input type="text" class="form-control form-control-sm" placeholder="http://www.">
-					</div>
-					<div class="col-md-6 margin-bottom-20px">
-						<label><i class="far fa-images margin-right-10px"></i> Image URL</label>
-						<input type="text" class="form-control form-control-sm" placeholder="http://www.">
-					</div>
+			</div>
+			<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-list-alt margin-right-10px text-main-color"></i>Body</h4>
+			<div class="padding-30px padding-bottom-30px background-white border-radius-10">
+				<div class="margin-bottom-20px">
+					<textarea class="form-control" placeholder="Write article text" id="body" name="body" form="article" rows="8"></textarea>
 				</div>
 			</div>
 		</div>
-		<a href="#" class="btn btn-lg border-2  ba-1 text-white margin-bottom-80px btn-block border-radius-15 padding-15px box-shadow">Add Recipe</a>
+		<button type="submit" class="btn btn-lg border-2  ba-1 text-white margin-bottom-80px btn-block border-radius-15 padding-15px box-shadow">Add Article</button>
+				</form>
 
 	</div>
 {% endblock %}

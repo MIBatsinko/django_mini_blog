@@ -74,6 +74,14 @@
 				</div>
 			</div>
 		</div>
+
+		<!--	breadcrumb	-->
+		<div class="float-sm-right" align="center">
+            <ol class="breadcrumb">
+              <li><a href="{% url 'index' %}">Home</a></li>/
+              <li class="breadcrumb-item active">{% block page_breadcrumbs %}{% endblock %}</li>
+            </ol>
+		</div><!-- /.col -->
 	</header>
 	<!-- // Header  -->
 
