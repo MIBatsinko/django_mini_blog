@@ -47,15 +47,17 @@ class Blog:
 
 class ArticleDetailView(DetailView):
     model = Article
-    template_name = 'blog/blog_view.html'
+    template_name = 'blog/blog-single.html'
     context_object_name = 'article'
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['comments'] = Comment.objects.all()
+        context['comments'] = Comment.objects.filter(article=kwargs.get('object').id)
         context['star_form'] = RatingForm()
+        context['categories'] = Category.objects.all()
+        context['articles'] = Article.objects.order_by("-date")
         try:
-            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs['object'].id)
+            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object').id)
         except Rating.DoesNotExist:
             context['mark'] = 0
         except AttributeError:

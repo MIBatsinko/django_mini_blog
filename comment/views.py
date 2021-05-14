@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import viewsets, filters
@@ -50,7 +51,7 @@ class CommentDeleteView(DeleteView):
 
 class CommentCreateView(CreateView):
     model = Comment
-    template_name = 'comment/comment_add.html'
+    template_name = 'blog/blog-single.html'
     form_class = CommentsForm
     success_url = '/blog/comments/'
 
@@ -64,6 +65,10 @@ class CommentCreateView(CreateView):
         instance.save()
 
         return redirect(reverse_lazy('blog_view', (article_id, )))
+
+    def form_invalid(self, form):
+        article_id = get_object_or_404(self.kwargs, 'article_id')
+        return redirect(reverse_lazy('blog_view', (article_id, form,)))
 
 
 class CommentApiView(ListCreateAPIView):
