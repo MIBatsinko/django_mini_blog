@@ -2,23 +2,28 @@
 {% load static %}
 {% block content %}
 <div class="margin-tb-30px">
-	<div class="container">
+	<div class="container" align="center">
 		<div class="row">
 			<div class="col-lg-8">
+                <div class="blog-entry background-white border-1 border-grey-1 margin-bottom-35px box-shadow border-radius-10 overflow-hidden" style="width: 60%; margin-left: 325px;">
+
+                            <div class="padding-lr-25px padding-tb-50px">
+
                 <h1 class="font-weight-300">Profile {{ user.username }}</h1>
-<img src="{{request.user.userprofile.avatar.url}}" >
+                <img src="{{request.user.userprofile.avatar.url}}" >
 
-<br><br><a href="{% url 'profile_settings' %}" class="btn btn-success">Settings</a><br><br>
-
-<p>Username: {{ user.username }} <br>
-Name: {{ user.first_name }} <br>
-Email-profile: {{ user.email }} <br>
-Avatar path: {{ user.userprofile.avatar }} <br>
-Date of registration: {{ user.date_joined }} <br>
-</p>
-
-<br><a href="{% url 'premium' %}" class="btn btn-info">Buy premium account</a><br>
-
+                <br><br><a href="{% url 'profile_settings' %}" class="btn btn-success">Settings</a><br><br>
+<div align="left" style="margin-left: 100px;">
+                <p>Username: {{ user.username }} <br>
+                Name: {{ user.first_name }} <br>
+                Email-profile: {{ user.email }} <br>
+                Avatar path: {{ user.userprofile.avatar }} <br>
+                Date of registration: {{ user.date_joined }} <br>
+                </p>
+</div>
+                <br><a href="{% url 'premium' %}" class="btn btn-info">Buy premium account</a><br>
+                            </div>
+                </div>
             </div>
         </div>
     </div>
