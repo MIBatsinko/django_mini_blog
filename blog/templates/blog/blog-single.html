@@ -18,6 +18,7 @@
 							<b>Rating:</b>
 							{% csrf_token %}
 							<input type="hidden" value="{{ article.id }}" name="article">
+							{% if user.is_authenticated %}
 							<span class="rating">
 								{% for k, v in star_form.fields.star.choices %}
 									<input id="rating{{ v }}" type="radio" name="star"
@@ -25,6 +26,9 @@
 									<label for="rating{{ v }}">{{ k }}</label>
 								{% endfor %}
 							</span>
+							{% else %}
+							<p>Sign in to rate articles</p>
+							{% endif %}
 								<span class="editContent">Average Mark: {{ article.total_rating }}</span>
 							{% if mark.star %}
 								<br><span class="editContent">Your mark: {{ mark.star }}</span>
@@ -71,6 +75,7 @@
 					<div class="margin-bottom-30px">
 						<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="fas fa-comment-alt margin-right-10px text-main-color"></i> Add Comment</h4>
 						<div class="padding-30px padding-bottom-30px background-white border-radius-10">
+							{% if user.is_authenticated %}
 							<form method="post" id="add_comment" action="{% url 'comment_add' article.id %}" class="comment-form">
 								{% csrf_token %}
 								<div class="form-row">
@@ -84,6 +89,9 @@
 								</div>
 								<button form="add_comment" type="submit" class="btn-sm btn-lg btn-block background-main-color text-white text-center font-weight-bold text-uppercase border-radius-10 padding-10px">Add Now !</button>
 							</form>
+							{% else %}
+							<h4>Sign in to leave a comment</h4>
+							{% endif %}
 						</div>
 					</div>
 

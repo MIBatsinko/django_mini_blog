@@ -68,7 +68,7 @@ class ArticleDetailView(DetailView):
 @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class ArticleUpdateView(UpdateView):
     model = Article
-    template_name = 'blog/blog_add.html'
+    template_name = 'blog/add-article.html'
     context_object_name = 'article'
     form_class = ArticlesForm
 
@@ -81,7 +81,7 @@ class ArticleUpdateView(UpdateView):
 @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class ArticleDeleteView(DeleteView):
     model = Article
-    success_url = '/'
+    success_url = '/blog/'
     template_name = 'blog/blog_delete.html'
 
 

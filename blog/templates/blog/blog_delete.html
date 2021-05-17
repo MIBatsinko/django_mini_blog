@@ -1,12 +1,20 @@
 {% extends "base.html" %}
-{% block title %} Delete post {% endblock %}
-{% block page_breadcrumbs %}Delete article{% endblock %}
+{% block title %} Delete article {% endblock %}
 {% block content %}
-    <div class="features">
-        <h1>Delete post</h1>
-        <form method="post">
-            {% csrf_token %}
-            <button class="btn btn-success" type="submit">Delete post</button>
-          </form>
+
+<div class="margin-tb-100px">
+    <div class="container" align="center">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Are you sure you want to delete article?</h1>
+                <form method="post" class="div-center">
+                    {% csrf_token %}
+                    <div><h4>"{{ article.body }}"</h4></div>
+
+                    <button class="btn btn-success" type="submit">Delete article</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
