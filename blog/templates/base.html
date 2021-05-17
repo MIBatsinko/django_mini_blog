@@ -58,11 +58,10 @@
 								<li class="has-dropdown"><a href="{% url 'blog_index' %}">Blog</a>
 								</li>
 							{% if user.is_authenticated %}
-								<a href="{% url 'my_account_logout' %}" class="text-white float-right padding-13px"><i class="fas fa-sign-out-alt"></i> Logout</a>
+								<a href="{% url 'my_account_logout' %}" class="text-white float-right padding-17px"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
-								<a href="{% url 'profile' %}" class="text-white float-right padding-13px"><i class="far fa-user"></i> {{ user }} </a>
-								<a href="{% url 'blog_add' %}" class="text-white float-right padding-13px"><i class="fas fa-plus"></i> Add article </a>
-
+								<a href="{% url 'profile' %}" class="text-white float-right padding-17px"><i class="far fa-user"></i> {{ user }} </a>
+								<a href="{% url 'blog_add' %}" class="text-white float-right padding-17px"><i class="fas fa-plus"></i> Add article </a>
 							{% else %}
 								<a href="{% url 'my_account_login' %}" class="text-white float-right padding-13px"><i class="fas fa-sign-in-alt"></i> Login</a>
 								<a href="{% url 'my_account_signup' %}" class="text-white float-right padding-13px"><i class="fas fa-home"></i> Registration</a>
