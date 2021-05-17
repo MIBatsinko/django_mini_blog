@@ -35,9 +35,13 @@
 							{{ article.body }}
 						</div>
 						<!-- .entry-content -->
-
-						<!-- Post tags -->
 						<hr>
+						{% if user.id == article.author.id %}
+						<div align="center">
+							<a href="{% url 'blog_edit' article.id %}" class="btn btn-info">Update</a>
+							<a href="{% url 'blog_delete' article.id %}" class="btn btn-danger">Delete</a>
+						</div>
+						{% endif %}
 					</div>
 
 					<div class="margin-bottom-30px">
