@@ -8,8 +8,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1>Edit comment</h1>
-<!--                   TODO: style&ndash;&gt;-->
-                <form method="post" style="margin-left: 0px; margin-top: 50px;">
+                <form method="post" class="div-center">
                     {% csrf_token %}
                         {% for error in form.errors %}
                             <span>{{ error }}</span><br>

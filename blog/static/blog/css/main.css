@@ -67,3 +67,18 @@ form.empty {
     margin: 0 auto;
     border-radius: 50%;
 }
+
+.div-center{
+margin-left: 0px;
+margin-top: 50px;
+}
+
+.comment-form{
+margin-left: 100px;
+margin-top: 0px;
+}
+
+.auth-page{
+width: 40%;
+margin-left: 325px;
+}
