@@ -11,7 +11,7 @@
             		<span>{{ form.errors }}</span><br>
 					<div class="form-group margin-bottom-20px">
 						<label><i class="far fa-list-alt margin-right-10px"></i>Title</label>
-						<input type="text" class="form-control form-control-sm" id="title" name="title" form="article" placeholder="Article Title" value="{{ form.title.value }}">
+						<input type="text" class="form-control form-control-sm" id="title" name="title" form="article" placeholder="Article Title" value="{% if form.title.value != None %} {{ form.title.value }} {% endif %}">
 					</div>
 					<div class="form-group margin-bottom-20px">
 						<div class="row">
@@ -33,17 +33,17 @@
 			<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-list-alt margin-right-10px text-main-color"></i>Description</h4>
 			<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 				<div class="margin-bottom-20px">
-					<textarea class="form-control" placeholder="Write article description" id="description" name="description" form="article" rows="2">{{ form.description.value }}</textarea>
+					<textarea class="form-control" placeholder="Write article description" id="description" name="description" form="article" rows="2">{% if form.title.value != None %} {{ form.description.value }} {% endif %}</textarea>
 				</div>
 			</div>
 			<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-list-alt margin-right-10px text-main-color"></i>Body</h4>
 			<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 				<div class="margin-bottom-20px">
-					<textarea class="form-control" placeholder="Write article text" id="body" name="body" form="article" rows="8">{{ form.body.value }}</textarea>
+					<textarea class="form-control" placeholder="Write article text" id="body" name="body" form="article" rows="8">{% if form.title.value != None %} {{ form.body.value }} {% endif %}</textarea>
 				</div>
 			</div>
 		</div>
-		<button type="submit" class="btn btn-lg border-2  ba-1 text-white margin-bottom-80px btn-block border-radius-15 padding-15px box-shadow">Add Article</button>
+		<button type="submit" class="btn btn-lg border-2  ba-1 text-white margin-bottom-80px btn-block border-radius-15 padding-15px box-shadow">{% if form.title.value != None %} Save changes {% else %} Add Article {% endif %}</button>
 				</form>
 
 	</div>
