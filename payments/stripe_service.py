@@ -1,11 +1,11 @@
 import stripe
 
 from miniblog import settings
-from miniblog.settings import STRIPE_PRICE_ID
+from miniblog.settings import STRIPE_PRICE_ID, ALLOWED_HOSTS
 
 
 class Stripe:
-    domain_url = 'https://8175bda9da0b.ngrok.io/payments/'
+    domain_url = 'https://' + ALLOWED_HOSTS[-1] + '/payments/'
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     def __init__(self, user=None):

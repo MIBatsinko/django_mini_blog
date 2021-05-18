@@ -33,8 +33,10 @@ def stripe_webhook(request):
     event_data = event.data
     event_object = event.data.object
     try:
-        member_account = MemberAccount.objects.filter(customer_id=event_object.id)
+        member_account = MemberAccount.objects.filter(customer_id=event_object.customer)
         print(member_account)
+        print(event_object)
+        print(event_object.customer)
     except MemberAccount.DoesNotExist:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
     except AttributeError as e:
@@ -63,6 +65,9 @@ def stripe_webhook(request):
             account_type="Standard",
             active_subscription=False
         )
+    elif event.type in ['charge.succeeded', 'charge.updated']:
+        member_account.update(card_id=event_object.get('payment_method'))
+        print(event_object.get('payment_method'))
 
     print(event.type)
     return HttpResponse(status=status.HTTP_200_OK)

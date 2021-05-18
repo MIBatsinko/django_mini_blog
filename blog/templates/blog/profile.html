@@ -16,8 +16,8 @@
                         <p>Username: {{ user.username }} <br>
                         Name: {{ user.first_name }} <br>
                         Email-profile: {{ user.email }} <br>
-                        Avatar path: {{ user.userprofile.avatar }} <br>
                         Date of registration: {{ user.date_joined }} <br>
+                        Card: {{ user.memberaccount.card_id }} <br>
                         </p>
                     </div>
                     <br><a href="{% url 'premium' %}" class="btn btn-info">Buy premium account</a><br>

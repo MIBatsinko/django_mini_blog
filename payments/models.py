@@ -9,6 +9,7 @@ class MemberAccount(models.Model):
     account_type = models.CharField(default="Standard", max_length=255)  # or Premium
     subscription_end_date = models.DateField(null=True, blank=True)
     active_subscription = models.BooleanField(default=False)
+    card_id = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
         return self.user.username
