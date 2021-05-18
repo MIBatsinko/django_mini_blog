@@ -10,8 +10,8 @@
 				<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="fas fa-file-alt margin-right-10px text-main-color"></i> {{ article.title }}</h4>
 				<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 					<div class="meta">
-						<span class="margin-right-20px text-extra-small">By :  <a href="#">{{ article.author }}</a></span>
-						<span class="margin-right-20px text-extra-small">Date :  <a href="#">{{ article.date }}</a></span>
+						<span class="margin-right-20px text-extra-small">By :  {{ article.author }}</span>
+						<span class="margin-right-20px text-extra-small">Date :  {{ article.date }}</span>
 					</div>
 					<hr>
 					<form action="{% url 'add_rating' %}" method="post" name="rating">
