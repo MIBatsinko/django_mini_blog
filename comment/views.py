@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import viewsets, filters
@@ -21,19 +20,6 @@ class CommentViewSet(viewsets.ModelViewSet):
         if self.request.method in ['PATCH', 'PUT', 'DELETE']:
             queryset = queryset.filter(author=self.request.user)
         return queryset
-
-
-class CommentsDetailView(DetailView):
-    model = Comment
-    template_name = 'blog/blog_view.html'
-    context_object_name = 'comment'
-    slug_field = 'article'
-    slug_url_kwarg = 'article'
-
-    def get_context_data(self, **kwargs):
-        context = super(CommentsDetailView, self).get_context_data(**kwargs)
-        context['article'] = Article.objects.all()
-        return context
 
 
 class CommentUpdateView(UpdateView):
