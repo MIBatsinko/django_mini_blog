@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} {{ article.title }} {% endblock %}
 {% block content %}
 {% block page_breadcrumbs %}Article {{ article.title }}{% endblock %}
@@ -55,7 +56,7 @@
 							{% for comment in comments %}
 								{% ifequal article.id comment.article.id %}
 									<li class="border-bottom-1 border-grey-1 margin-bottom-20px">
-										<img src="{{ comment.author.userprofile.avatar.url }}" class="profile-pic-comments float-left margin-right-20px border-radius-60 margin-bottom-20px" alt="">
+										<img src="{% if comment.author.userprofile.avatar %} {{ comment.author.userprofile.avatar.url }} {% else %} {% static 'images/avatar.png' %} {% endif %}" class="profile-pic-comments float-left margin-right-20px border-radius-60 margin-bottom-20px" alt="">
 										<div class="margin-left-85px">
 											<a class="d-inline-block text-dark text-medium margin-right-20px" href="#">{{ comment.author }} </a>
 											<span class="text-extra-small">Date :  <a href="#" class="text-main-color">{{ comment.date_created }}</a></span>
@@ -101,7 +102,7 @@
 			<div class="col-lg-4">
 				<div class="widget widget_categories">
 				<div class="margin-bottom-30px">
-					<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-folder-open margin-right-10px text-main-color"></i> Last Articles </h4>
+					<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-folder-open margin-right-10px text-main-color"></i> Recent Articles </h4>
 					<ul>
 						{% for article in articles|slice:10 %}
 							{% csrf_token %}

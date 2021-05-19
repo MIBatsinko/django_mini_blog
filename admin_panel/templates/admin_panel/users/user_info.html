@@ -15,7 +15,7 @@
   <div class="content-wrapper">
     <div class="features">
         <h1>Profile <b>{{ select_user.username }}</b></h1>
-        <p><b>Avatar: </b><img src="{{ select_user.userprofile.avatar.url }}" width="10%" height="10%"></p>
+        <p><b>Avatar: </b><img src="{% if select_user.userprofile.avatar %} {{ select_user.userprofile.avatar.url }} {% else %} {% static 'images/avatar.png' %} {% endif %}" width="10%" height="10%"></p>
         <p><b>Name:</b> {{ select_user.first_name }}</p>
         <p><b>Email:</b> {{ select_user.email }}</p>
         <p><b>Date of registration:</b> {{ select_user.date_joined }}</p>

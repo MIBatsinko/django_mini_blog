@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} Profile {% endblock %}
 {% block page_breadcrumbs %}Profile{% endblock %}
 {% block content %}
@@ -10,7 +11,7 @@
                 <div class="blog-entry background-white border-1 border-grey-1 margin-bottom-35px box-shadow border-radius-10 overflow-hidden" style="width: 60%; margin-left: 325px;">
                     <div class="padding-lr-25px padding-tb-50px">
                     <h1 class="font-weight-300">Profile {{ user.username }}</h1>
-                    <img src="{{ request.user.userprofile.avatar.url }}" >
+                    <img class="profile-pic" src="{% if request.user.userprofile.avatar %} {{ request.user.userprofile.avatar.url }} {% else %} {% static 'images/avatar.png' %} {% endif %}" >
                     <br><br><a href="{% url 'profile_settings' %}" class="btn btn-success">Settings</a><br><br>
                     <div align="left" style="margin-left: 20px;">
                         <p>Username: {{ user.username }} <br>
