@@ -25,60 +25,59 @@ Articles
         <div class="row">
           <div class="col-12">
             <div class="card">
-    <div class="card-body">
-      <table id="example1" class="table table-bordered table-striped">
-        <thead>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th>Author</th>
-          <th>Date of publication</th>
-          <th>Total rating</th>
-          <th>
-            <a href="{% url 'article_add' %}" type="button" class="btn btn-block btn-outline-primary btn-flat">Add article</a>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-        <tr>
-          <td>{{ article.title }}</td>
-          <td>{{ article.description }}</td>
-          <td>{{ article.category }}</td>
-          <td>{{ article.author }}</td>
-          <td>{{ article.date }}</td>
-          <td>{{ article.total_rating }}</td>
-          <td>
-            <div style="float: left;">
-              <a href="{% url 'article_details' article.id %}" type="button" class="btn btn-block btn-info btn-sm">Details</a>
-            </div>
-            <div style="float: left;">
-              <a href="{% url 'article_edit' article.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
-            </div>
-              <div style="float: left;">
-                <button class="first btn btn-block btn-danger btn-sm" id="{{ article.id }}" onclick="deleteArticle(this.id)"
-                        type="button">Delete</button>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Author</th>
+                    <th>Date of publication</th>
+                    <th>Total rating</th>
+                    <th>
+                      <a href="{% url 'article_add' %}" type="button" class="btn btn-block btn-outline-primary btn-flat">Add article</a>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for article in articles %}
+                  <tr>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.description }}</td>
+                    <td>{{ article.category }}</td>
+                    <td>{{ article.author }}</td>
+                    <td>{{ article.date }}</td>
+                    <td>{{ article.total_rating }}</td>
+                    <td>
+                      <div style="float: left;">
+                        <a href="{% url 'article_details' article.id %}" type="button" class="btn btn-block btn-info btn-sm">Details</a>
+                      </div>
+                      <div style="float: left;">
+                        <a href="{% url 'article_edit' article.id %}" type="button" class="btn btn-block btn-warning btn-sm">Edit</a>
+                      </div>
+                        <div style="float: left;">
+                          <button class="first btn btn-block btn-danger btn-sm" id="{{ article.id }}" onclick="deleteArticle(this.id)"
+                                  type="button">Delete</button>
+                        </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Author</th>
+                    <th>Date of publication</th>
+                    <th>Total rating</th>
+                    <th></th>
+                  </tr>
+                  </tfoot>
+                </table>
               </div>
-          </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-        <tfoot>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th>Author</th>
-          <th>Date of publication</th>
-          <th>Total rating</th>
-          <th></th>
-        </tr>
-        </tfoot>
-      </table>
-    </div>
-                            </div>
-              <!-- /.card-body -->
+            </div>              <!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>

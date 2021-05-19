@@ -44,7 +44,7 @@
 					{% if user.id == article.author.id %}
 					<div align="center">
 						<a href="{% url 'blog_edit' article.id %}" class="btn btn-info">Update</a>
-						<a href="{% url 'blog_delete' article.id %}" class="btn btn-danger">Delete</a>
+						<button class="btn btn-danger btn-sm" id="{{ article.id }}" onclick="deleteArticle(this.id)" type="button">Delete</button>
 					</div>
 					{% endif %}
 				</div>
@@ -115,5 +115,63 @@
 		</div>
 	</div>
 </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+
+<script>
+function deleteArticle(id_button){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+      $.ajax({
+        url: 'delete/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+            window.location.replace('/blog/');
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      }
+    })
+};
+</script>
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+</script>
 
 {% endblock %}
