@@ -64,6 +64,7 @@
 											{% if user.id == comment.author.id %}
 												<a href="{% url 'comment_edit' comment.id %}" class="btn btn-info">Edit</a>
 												<a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger">Delete</a>
+												<button class="btn btn-danger btn-sm" id="{{ comment.id }}" onclick="deleteComment(this.id, {{ article.id }})" type="button">Delete</button>
 											{% endif %}
 										</div>
 									</li>
@@ -134,7 +135,7 @@ function deleteArticle(id_button){
     if (result.isConfirmed) {
       Swal.fire(
         'Deleted!',
-        'Your file has been deleted.',
+        'Your article has been deleted.',
         'success'
       )
       $.ajax({
@@ -144,6 +145,41 @@ function deleteArticle(id_button){
         success: function(data) {
             setTimeout(function() {
             window.location.replace('/blog/');
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      }
+    })
+};
+</script>
+<script>
+function deleteComment(id_button, id_article){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your comment has been deleted.',
+        'success'
+      )
+      $.ajax({
+        url: '/comments/' + id_button + '/delete/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+            window.location.replace('/' + id_article + '/');
             }, 1000);
         },
         failure: function(data) {

@@ -11,14 +11,14 @@ urlpatterns = [
             path('', include('article.urls')),
             path('categories/', include('article.urls')),
         ])),
-        path('comments/', include('comment.urls')),
+        # path('comments/', include('comment.urls')),
         path('users/', include('users.urls')),
         # path('articles/', include('article.urls')),
         path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     ])),
 
     path('', include('blog.urls')),
-
+    path('comments/', include('comment.urls')),
     path('payments/', include('payments.urls')),
     path('my_account/', include('my_account.urls')),
     path('accounts/', include('allauth.urls')),
