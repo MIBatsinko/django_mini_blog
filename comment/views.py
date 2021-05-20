@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import viewsets, filters
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
@@ -42,13 +43,11 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class CommentEdit:
     def post(self, pk):
-        print(pk)
-        print(self.POST)
-        print(self.POST['com_edit'])
         comment = Comment.objects.filter(id=pk)
-        print(comment[0].body)
-        comment.update(body=self.POST.get('com_edit'))
-        print(comment[0].body)
+        try:
+            comment.update(body=self.POST.get('com_edit'))
+        except MultiValueDictKeyError:
+            pass
         return redirect(reverse_lazy('blog_view', (comment[0].article.id, )))
 
 
