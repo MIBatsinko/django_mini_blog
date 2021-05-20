@@ -56,6 +56,7 @@ class ArticleDetailView(DetailView):
         context['star_form'] = RatingForm()
         context['categories'] = Category.objects.all()
         context['articles'] = Article.objects.order_by("-date")
+        context['comment_id'] = 1
         try:
             context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object').id)
         except Rating.DoesNotExist:

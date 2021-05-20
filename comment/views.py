@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import viewsets, filters
@@ -22,16 +23,38 @@ class CommentViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class CommentUpdateView(UpdateView):
-    model = Comment
-    template_name = 'comment/comment_add.html'
-    form_class = CommentsForm
-    success_url = '/'
+# class CommentUpdateView(UpdateView):
+#     model = Comment
+#     template_name = 'comment/comment_add.html'
+#     form_class = CommentsForm
+#     success_url = '/blog/'
+
+#
+# class CommentEdit:
+#     def post(self, pk):
+#         print(pk)
+#         print(self.POST)
+#         print(self.POST.get('content'))
+#         comment = Comment.objects.filter(id=pk)
+#         comment.update(body=self.POST.get('content'))
+#         return HttpResponse(self.POST.get('content'))
+
+
+class CommentEdit:
+    def post(self, pk):
+        print(pk)
+        print(self.POST)
+        print(self.POST['com_edit'])
+        comment = Comment.objects.filter(id=pk)
+        print(comment[0].body)
+        comment.update(body=self.POST.get('com_edit'))
+        print(comment[0].body)
+        return redirect(reverse_lazy('blog_view', (comment[0].article.id, )))
 
 
 class CommentDeleteView(DeleteView):
     model = Comment
-    success_url = '/'
+    success_url = '/blog/'
     template_name = 'comment/comment_delete.html'
 
 

@@ -1,650 +1,347 @@
-<!DOCTYPE html>
-<html lang="en-US">
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ article.title }} {% endblock %}
+{% block content %}
+{% block page_breadcrumbs %}Article {{ article.title }}{% endblock %}
 
-<head>
-	<title>Cook Note - Food Recipes HTML Template</title>
-	<meta name="author" content="Nile-Theme">
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<meta name="keywords" content="recipes food, recipes , chinese food, italian food">
-	<meta name="description" content="Cook Note - Food & Recipes Food Template">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- google fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800%7CPoppins:100,200,300i,300,400,700,400i,500%7CDancing+Script:700" rel="stylesheet">
-	<!-- animate -->
-	<link rel="stylesheet" href="assets/css/animate.css" />
-	<!-- owl Carousel assets -->
-	<link href="assets/css/owl.carousel.css" rel="stylesheet">
-	<link href="assets/css/owl.theme.css" rel="stylesheet">
-	<!-- bootstrap -->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-	<!-- hover anmation -->
-	<link rel="stylesheet" href="assets/css/hover-min.css">
-	<!-- flag icon -->
-	<link rel="stylesheet" href="assets/css/flag-icon.min.css">
-	<!-- main style -->
-	<link rel="stylesheet" href="assets/css/style.css">
-	<!-- colors -->
-	<link rel="stylesheet" href="assets/css/colors/main.css">
-	<!-- elegant icon -->
-	<link rel="stylesheet" href="assets/css/elegant_icon.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-
-</head>
-
-<body>
-
-	<header class="background-main-color">
-		<div class="container">
-			<div class="header-output">
-				<div class="header-in">
-
-					<div class="row">
-						<div class="col-lg-2 col-md-12">
-							<a id="logo" href="index.html" class="d-inline-block margin-tb-5px"><img src="assets/img/logo-small.png" alt=""></a>
-							<a class="mobile-toggle padding-13px background-main-color" href="#"><i class="fas fa-bars"></i></a>
-						</div>
-						<div class="col-lg-8 col-md-12 position-inherit">
-							<ul id="menu-main" class="white-link dropdown-dark text-lg-center nav-menu link-padding-tb-17px">
-								<li class="has-dropdown"><a href="#">Home</a>
-									<ul class="sub-menu text-left">
-										<li><a href="index.html">Home 1</a></li>
-										<li><a href="index-2.html">Home 2</a></li>
-										<li><a href="index-3.html">Home 3</a></li>
-									</ul>
-								</li>
-								<li class="has-dropdown"><a href="#">Recipes</a>
-									<ul class="sub-menu text-left">
-										<li><a href="recipes-grid-layout.html">Recipes - Grid Layout </a></li>
-										<li><a href="recipes-list-layout.html">Recipes - List Layout</a></li>
-										<li><a href="authors-layout-1.html">Authors - Layout (1)</a></li>
-										<li><a href="authors-layout-2.html">Authors - Layout (2)</a></li>
-										<li><a href="single-recipe.html">Single Recipe</a></li>
-									</ul>
-								</li>
-								<li class="has-dropdown"><a href="#">Blog</a>
-									<ul class="sub-menu text-left">
-										<li><a href="blog-grid.html">Blog Grid </a></li>
-										<li><a href="blog-list.html">Blog List</a></li>
-										<li><a href="blog-classic.html">Blog Classic</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
-									</ul>
-								</li>
-								<li class="has-dropdown"><a href="#">Pages</a>
-									<ul class="sub-menu text-left">
-										<li><a href="page-about.html">About Us </a></li>
-										<li><a href="add-recipe.html">Add Recipe</a></li>
-										<li><a href="page-login.html">Login Page</a></li>
-										<li><a href="page-sign-up.html">Sign up</a></li>
-										<li><a href="search-page.html">Search  Page</a></li>
-										<li><a href="page-contact-us.html">Contact Us</a></li>
-										<li><a href="page-404.html">Pages 404</a></li>
-									</ul>
-								</li>
-								<li><a href="page-contact-us.html">Conact Us</a></li>
-							</ul>
-						</div>
-						<div class="col-lg-2 col-md-12 d-none d-lg-block">
-							<hr class="margin-bottom-0px d-block d-sm-none">
-							<a href="add-recipe.html" class="text-white ba-2 box-shadow float-right padding-lr-23px padding-tb-15px text-extra-large"><i class="fas fa-plus"></i></a>
-							<a href="page-login.html" class="text-white ba-1 box-shadow float-right padding-lr-23px padding-tb-15px text-extra-large"><i class="far fa-user"></i></a>
-						</div>
+<div class="margin-tb-30px">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="fas fa-file-alt margin-right-10px text-main-color"></i> {{ article.title }}</h4>
+				<div class="padding-30px padding-bottom-30px background-white border-radius-10">
+					<div class="meta">
+						<span class="margin-right-20px text-extra-small">By :  {{ article.author }}</span>
+						<span class="margin-right-20px text-extra-small">Date :  {{ article.date }}</span>
 					</div>
-
+					<hr>
+					<form action="{% url 'add_rating' %}" method="post" name="rating">
+						<b>Rating:</b>
+						{% csrf_token %}
+						<input type="hidden" value="{{ article.id }}" name="article">
+						{% if user.is_authenticated %}
+						<span class="rating">
+							{% for k, v in star_form.fields.star.choices %}
+								<input id="rating{{ v }}" type="radio" name="star"
+									   value="{{ k }}">
+								<label for="rating{{ v }}">{{ k }}</label>
+							{% endfor %}
+						</span>
+						{% else %}
+						<p>Sign in to rate articles</p>
+						{% endif %}
+							<span class="editContent">Average Mark: {{ article.total_rating }}</span>
+						{% if mark.star %}
+							<br><span class="editContent">Your mark: {{ mark.star }}</span>
+						{% endif %}
+					</form>
+					<br><hr>
+					<div class="entry-content">
+						{{ article.body }}
+					</div>
+					<!-- .entry-content -->
+					<hr>
+					{% if user.id == article.author.id %}
+					<div align="center">
+						<a href="{% url 'blog_edit' article.id %}" class="btn btn-info">Update</a>
+						<button class="btn btn-danger btn-sm" id="{{ article.id }}" onclick="deleteArticle(this.id)" type="button">Delete</button>
+					</div>
+					{% endif %}
 				</div>
-			</div>
-		</div>
-	</header>
-	<!-- // Header  -->
 
+				<div class="margin-bottom-30px">
+					<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="fas fa-comment-alt margin-right-10px text-main-color"></i> Comments {{ comments.count }}</h4>
+					<div class="padding-30px padding-bottom-30px background-white border-radius-10">
+						<ul class="commentlist padding-0px margin-0px list-unstyled text-grey-3">
+							{% for comment in comments %}
+								{% ifequal article.id comment.article.id %}
+									<li class="border-bottom-1 border-grey-1 margin-bottom-20px">
+										<img src="{% if comment.author.userprofile.avatar %} {{ comment.author.userprofile.avatar.url }} {% else %} {% static 'images/avatar.png' %} {% endif %}" class="profile-pic-comments float-left margin-right-20px border-radius-60 margin-bottom-20px" alt="">
+										<div class="margin-left-85px">
+											<p class="d-inline-block text-dark text-medium margin-right-20px">{{ comment.author }} </p>
+											<span class="text-extra-small">Date :  <p class="d-inline-block">{{ comment.date_created }}</p></span>
 
-
-
-	<div class="banner padding-tb-20px">
-		<div class="container">
-
-			<div class="padding-tb-120px z-index-2 position-relative">
-				<div class="text-center">
-					<h1 class="text-white pull-l icon-large font-weight-500 margin-bottom-40px">+20,000</h1>
-					<h3 class="text-white icon-large font-weight-100">Cooking Recipes</h3>
-				</div>
-				<div class="margin-top-45px">
-					<div class="row justify-content-center margin-tb-60px">
-						<div class="col-lg-8">
-							<div class="listing-search">
-								<form class="row no-gutters">
-									<div class="col-md-4">
-										<div class="keywords">
-											<input class="listing-form first" type="text" placeholder="Keywords..." value="">
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="categories dropdown">
-											<a class="listing-form d-block text-nowrap" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Categories</a>
-											<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-												<button class="dropdown-item text-up-small" type="button">Fish</button>
-												<button class="dropdown-item text-up-small" type="button">Cocktails</button>
-												<button class="dropdown-item text-up-small" type="button">Salads</button>
-												<button class="dropdown-item text-up-small" type="button">Asian</button>
-												<button class="dropdown-item text-up-small" type="button">Fish</button>
-												<button class="dropdown-item text-up-small" type="button">Cocktails</button>
-												<button class="dropdown-item text-up-small" type="button">Salads</button>
-												<button class="dropdown-item text-up-small" type="button">Asian</button>
+											{% if user.id == comment.author.id %}
+												<p><a class="edit btn btn-info btn-sm">Edit</a></p>
+											{% endif %}
+											<div class="reviews-meta">
+												<p contenteditable="true" id="{{ comment.id }}" class="comment_edit margin-top-15px text-grey-2">{{ comment.body }}</p>
 											</div>
+											<div id="reviews-meta">
+												<div id="com_edit">{{ comment.body }}</div>
+											<a class='edit'>edit</a>
+											</div>
+
+											{% if user.id == comment.author.id %}
+											<button class="save" style="display: none;">Сохранить</button>
+												<button class="btn btn-danger btn-sm" id="{{ comment.id }}" onclick="deleteComment(this.id, {{ article.id }})" type="button">Delete</button>
+											{% endif %}
 										</div>
-									</div>
-									<div class="col-md-4">
-										<a class="listing-bottom background-second-color box-shadow" href="#">Search Now</a>
-									</div>
-								</form>
-							</div>
-						</div>
+									</li>
+								{% endifequal %}
+							{% endfor %}
+						</ul>
 					</div>
 				</div>
-			</div>
-		</div>
-		<!-- //container  -->
-		<video class="background-grey-3" autoplay loop id="video-background" muted plays-inline><source src="#video-url" type="video/mp4"></video>
 
-	</div>
-
-
-	<div class="background-light-grey">
-		<div class="container padding-top-100px">
-			<div class="row">
-				<div class="col-xl-2 col-lg-3 col-md-4 col-6 sm-mb-25px">
-					<a href="#" class="d-block box-shadow background-main-color text-white hvr-float">
-						<div class="thum"><img src="http://placehold.it/450x250" alt=""></div>
-						<h4 class="text-center padding-15px">Fish</h4>
-					</a>
-				</div>
-				<div class="col-xl-2 col-lg-3 col-md-4 col-6 sm-mb-25px">
-					<a href="#" class="d-block box-shadow background-main-color text-white hvr-float">
-						<div class="thum"><img src="http://placehold.it/450x250" alt=""></div>
-						<h4 class="text-center padding-15px">Cocktails</h4>
-					</a>
-				</div>
-				<div class="col-xl-2 col-lg-3 col-md-4 col-6 sm-mb-25px">
-					<a href="#" class="d-block box-shadow background-main-color text-white hvr-float">
-						<div class="thum"><img src="http://placehold.it/450x250" alt=""></div>
-						<h4 class="text-center padding-15px">Eggs</h4>
-					</a>
-				</div>
-				<div class="col-xl-2 col-lg-3 col-md-4 col-6 sm-mb-25px">
-					<a href="#" class="d-block box-shadow background-main-color text-white hvr-float">
-						<div class="thum"><img src="http://placehold.it/450x250" alt=""></div>
-						<h4 class="text-center padding-15px">Salads</h4>
-					</a>
-				</div>
-				<div class="col-xl-2 col-lg-3 col-md-4 col-6 sm-mb-25px">
-					<a href="#" class="d-block box-shadow background-main-color text-white hvr-float">
-						<div class="thum"><img src="http://placehold.it/450x250" alt=""></div>
-						<h4 class="text-center padding-15px">Asian</h4>
-					</a>
-				</div>
-				<div class="col-xl-2 col-lg-3 col-md-4 col-6 sm-mb-25px">
-					<a href="#" class="d-block box-shadow background-main-color text-white hvr-float">
-						<div class="thum"><img src="http://placehold.it/450x250" alt=""></div>
-						<h4 class="text-center padding-15px">Pizza</h4>
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<section class="padding-tb-100px background-light-grey">
-		<div class="container">
-			<div class="title text-center">
-				<h2 class="font-weight-700 text-main-color">Latest Recipes</h2>
-				<div class="row justify-content-center margin-bottom-45px">
-					<div class="col-md-7">
-						<p class="text-grey-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+				<div class="margin-bottom-30px">
+					<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="fas fa-comment-alt margin-right-10px text-main-color"></i> Add Comment</h4>
+					<div class="padding-30px padding-bottom-30px background-white border-radius-10">
+						{% if user.is_authenticated %}
+						<form method="post" id="add_comment" action="{% url 'comment_add' article.id %}" class="comment-form">
+							{% csrf_token %}
+							<div class="form-row">
+								{% for error in form.errors %}
+									<span>{{ error }}</span><br>
+								{% endfor %}
+							</div>
+							<div class="form-group">
+								<label>Comment :</label>
+								<textarea class="form-control" name="body" id="body" form="add_comment" rows="3" placeholder="Comment"></textarea>
+							</div>
+							<button form="add_comment" type="submit" class="btn-sm btn-lg btn-block background-main-color text-white text-center font-weight-bold text-uppercase border-radius-10 padding-10px">Add Now !</button>
+						</form>
+						{% else %}
+						<h4>Sign in to leave a comment</h4>
+						{% endif %}
 					</div>
 				</div>
 			</div>
 
-			<div class="recipes-masonry">
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x335" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x475" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x335" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x475" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x335" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x335" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x335" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-				<!-- Recipe Item -->
-				<div class="col-xl-3 col-lg-4 col-md-6 recipe-item margin-bottom-40px">
-					<div class="card border-0 box-shadow">
-						<div class="card-img-top"><a href="#"><img src="http://placehold.it/420x335" alt=""></a></div>
-						<div class="padding-lr-30px padding-tb-20px">
-							<h5 class="margin-bottom-20px margin-top-10px"><a class="text-dark" href="#">Slow Cooker Loaded Potato Soup</a></h5>
-							<div class="rating">
-								<ul>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li class="active"></li>
-									<li></li>
-								</ul>
-							</div>
-							<hr>
-							<div class="row no-gutters">
-								<div class="col-4 text-left"><a href="#" class="text-red"><i class="far fa-heart"></i> Save</a></div>
-								<div class="col-8 text-right"><a href="#" class="text-grey-2"><i class="fas fa-users"></i> 6-8 servings</a></div>
-							</div>
-						</div>
-						<div class="background-light-grey border-top-1 border-grey padding-lr-30px padding-tb-20px">
-							<a href="#" class="d-inline-block text-grey-3 h6 margin-bottom-0px margin-right-15px"><img src="http://placehold.it/50x50" class="height-30px border-radius-30 margin-right-15px" alt=""> Salim Aldosery</a>
-						</div>
-					</div>
-				</div>
-				<!-- // Recipe Item -->
-
-
-			</div>
-			<div class="text-center">
-				<a href="#" class="btn box-shadow margin-top-50px padding-tb-10px btn-sm border-2 border-radius-30 btn-inline-block width-210px background-second-color text-white">Show All Recipes</a>
-			</div>
-		</div>
-		<!-- // container -->
-	</section>
-
-
-	<section class="padding-tb-100px background-white">
-		<div class="container">
-
-			<div class="title text-center">
-				<h2 class="font-weight-700 text-main-color"> Top Authors</h2>
-				<div class="row justify-content-center margin-bottom-45px">
-					<div class="col-md-7">
-						<p class="text-grey-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-
-				<div class="col-lg-2 col-md-3 text-center">
-					<div class="hvr-float">
-						<div class="thum"><a href="#"><img class="border-radius-8 box-shadow" src="http://placehold.it/270x270" alt=""></a></div>
-						<a class="h4 d-block margin-top-20px" href="#">Ali haleem</a>
-						<small class="text-grey-2">(145 Recipes)</small>
-					</div>
-				</div>
-
-
-				<div class="col-lg-2 col-md-3 text-center">
-					<div class="hvr-float">
-						<div class="thum"><a href="#"><img class="border-radius-8 box-shadow" src="http://placehold.it/270x270" alt=""></a></div>
-						<a class="h4 d-block margin-top-20px" href="#">Salim Aldosery</a>
-						<small class="text-grey-2">(145 Recipes)</small>
-					</div>
-				</div>
-
-
-				<div class="col-lg-2 col-md-3 text-center">
-					<div class="hvr-float">
-						<div class="thum"><a href="#"><img class="border-radius-8 box-shadow" src="http://placehold.it/270x270" alt=""></a></div>
-						<a class="h4 d-block margin-top-20px" href="#">Rabie Khair</a>
-						<small class="text-grey-2">(145 Recipes)</small>
-					</div>
-				</div>
-
-
-				<div class="col-lg-2 col-md-3 text-center">
-					<div class="hvr-float">
-						<div class="thum"><a href="#"><img class="border-radius-8 box-shadow" src="http://placehold.it/270x270" alt=""></a></div>
-						<a class="h4 d-block margin-top-20px" href="#">Momen Alsho</a>
-						<small class="text-grey-2">(145 Recipes)</small>
-					</div>
-				</div>
-
-
-				<div class="col-lg-2 col-md-3 text-center">
-					<div class="hvr-float">
-						<div class="thum"><a href="#"><img class="border-radius-8 box-shadow" src="http://placehold.it/270x270" alt=""></a></div>
-						<a class="h4 d-block margin-top-20px" href="#">M.Salman ali</a>
-						<small class="text-grey-2">(145 Recipes)</small>
-					</div>
-				</div>
-
-
-				<div class="col-lg-2 col-md-3 text-center">
-					<div class="hvr-float">
-						<div class="thum"><a href="#"><img class="border-radius-8 box-shadow" src="http://placehold.it/270x270" alt=""></a></div>
-						<a class="h4 d-block margin-top-20px" href="#">Khalid Ziaad</a>
-						<small class="text-grey-2">(145 Recipes)</small>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="text-center">
-				<a href="#" class="btn box-shadow margin-top-50px padding-tb-10px btn-sm border-2 border-radius-30 btn-inline-block width-210px background-dark text-white">Show All Authors</a>
-			</div>
-
-		</div>
-	</section>
-
-
-	<section class="padding-tb-100px background-light-grey">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8">
-					<h1 class="text-grey-2 margin-bottom-12px margin-top-20px font-weight-300"><span class="text-dark">Download</span> Cook Note App</h1>
-				</div>
-				<div class="col-md-4 text-lg-right">
-
-					<a href="#" class="btn box-shadow padding-lr-30px  padding-tb-10px btn-sm border-2 border-radius-30 btn-inline-block background-main-color text-white margin-right-20px margin-tb-12px"><i class="fab fa-google-play"></i> Google Play</a>
-
-					<a href="#" class="btn box-shadow padding-lr-30px  padding-tb-10px btn-sm border-2 border-radius-30 btn-inline-block background-dark text-white margin-tb-12px"><i class="fab fa-apple"></i>  App Store</a>
-
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<div class="instgram-feed">
-		<div class="row no-gutters">
-			<div class="col-md-2 col-6">
-				<a href="#"><img src="http://placehold.it/600x600" alt></a>
-			</div>
-			<div class="col-md-2 col-6">
-				<a href="#"><img src="http://placehold.it/600x600" alt></a>
-			</div>
-			<div class="col-md-2 col-6">
-				<a href="#"><img src="http://placehold.it/600x600" alt></a>
-			</div>
-			<div class="col-md-2 col-6">
-				<a href="#"><img src="http://placehold.it/600x600" alt></a>
-			</div>
-			<div class="col-md-2 col-6">
-				<a href="#"><img src="http://placehold.it/600x600" alt></a>
-			</div>
-			<div class="col-md-2 col-6">
-				<a href="#"><img src="http://placehold.it/600x600" alt></a>
-			</div>
-		</div>
-	</div>
-
-
-	<footer class="padding-top-100px padding-bottom-70px background-dark">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-4 col-md-4 sm-mb-30px">
-					<div class="logo margin-bottom-10px"><img src="assets/img/logo-1.png" alt=""></div>
-					<div class="text-grey-2  font-weight-300">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy .</div>
-					<ul class="list-inline text-left margin-tb-20px margin-lr-0px text-white">
-						<li class="list-inline-item"><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
-						<li class="list-inline-item"><a class="youtube" href="#"><i class="fab fa-youtube"></i></a></li>
-						<li class="list-inline-item"><a class="linkedin" href="#"><i class="fab fa-linkedin"></i></a></li>
-						<li class="list-inline-item"><a class="google" href="#"><i class="fab fa-google-plus"></i></a></li>
-						<li class="list-inline-item"><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
-						<li class="list-inline-item"><a class="rss" href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>
-					</ul>
-					<!-- // Social -->
-				</div>
-
-				<div class="col-lg-4  col-md-4 sm-mb-30px">
-					<ul class="footer-menu-2 row margin-0px padding-0px list-unstyled">
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Home</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Featured</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Feedback</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Ask a Question</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Team</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Maintenance</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Get a Quote</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Contact Us</a></li>
-					</ul>
-				</div>
-
-				<div class="col-lg-4  col-md-4 sm-mb-30px">
-					<ul class="footer-menu-2 row margin-0px padding-0px list-unstyled">
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Home</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Featured</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Feedback</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Ask a Question</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Team</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Maintenance</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Get a Quote</a></li>
-						<li class="col-6  padding-tb-5px"><a href="#" class="text-grey-2">Contact Us</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</div>
-	</footer>
-
-
-	<div class="padding-tb-10px background-main-color">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6">
-					<div class="text-white margin-tb-15px text-center text-lg-left">
-						Cook Note | @2017 All copy rights reserved
-					</div>
-				</div>
-				<div class="col-md-6">
-					<ul class="list-inline text-lg-right text-center margin-lr-0px margin-tb-15px text-white">
-						<li class="list-inline-item margin-lr-8px"><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
-						<li class="list-inline-item margin-lr-8px"><a class="facebook" href="#"><i class="fab fa-youtube"></i></a></li>
-						<li class="list-inline-item margin-lr-8px"><a class="facebook" href="#"><i class="fab fa-linkedin"></i></a></li>
-						<li class="list-inline-item margin-lr-8px"><a class="facebook" href="#"><i class="fab fa-google-plus"></i></a></li>
-						<li class="list-inline-item margin-lr-8px"><a class="facebook" href="#"><i class="fab fa-twitter"></i></a></li>
-						<li class="list-inline-item margin-lr-8px"><a class="rss" href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>
+			<div class="col-lg-4">
+				<div class="widget widget_categories">
+				<div class="margin-bottom-30px">
+					<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="far fa-folder-open margin-right-10px text-main-color"></i> Recent Articles </h4>
+					<ul>
+						{% for article in articles|slice:10 %}
+							{% csrf_token %}
+							<li><a href="{% url 'blog_view' article.id %}">{{ article }}</a>></li>
+						{% endfor %}
 					</ul>
 				</div>
 			</div>
+			</div>
 		</div>
 	</div>
+</div>
+<div id="frame">
+<div id="data">bla bla bla</div>
 
-	<script src="assets/js/jquery-3.2.1.min.js"></script>
-	<script src="assets/js/sticky-sidebar.js"></script>
-	<script src="assets/js/YouTubePopUp.jquery.js"></script>
-	<script src="assets/js/owl.carousel.min.js"></script>
-	<script src="assets/js/imagesloaded.min.js"></script>
-	<script src="assets/js/masonry.min.js"></script>
-	<script src="assets/js/wow.min.js"></script>
-	<script src="assets/js/custom.js"></script>
-	<script src="assets/js/popper.min.js"></script>
-	<script src="assets/js/bootstrap.min.js"></script>
-</body>
+<a class='editt'>editt</a>
+</div>
+{% endblock %}
 
-</html>
+{% block extra_scripts %}
+
+<script>
+function deleteArticle(id_button){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your article has been deleted.',
+        'success'
+      )
+      $.ajax({
+        url: 'delete/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+            window.location.replace('/blog/');
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      }
+    })
+};
+</script>
+<script>
+function deleteComment(id_button, id_article){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(
+        'Deleted!',
+        'Your comment has been deleted.',
+        'success'
+      )
+      $.ajax({
+        url: '/comments/' + id_button + '/delete/',
+        type: 'post',
+        data: {'pk': id_button, 'csrfmiddlewaretoken': getCookie('csrftoken')},
+        success: function(data) {
+            setTimeout(function() {
+            window.location.replace('/' + id_article + '/');
+            }, 1000);
+        },
+        failure: function(data) {
+            alert('Got an error');
+        }
+        });
+
+      }
+    })
+};
+</script>
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+</script>
+<script>
+$(function () {
+	$('.edit').click(function () {
+		var wrap = $(this).parent().next().children('.comment_edit');
+		var comment = $(this).parent().next().children('.comment_edit').text();
+		$(wrap).append('<input class="edit_field" type="text" name="comment_edit" value="'+comment+'">');
+		console.log(comment);
+	});
+
+	$('.reviews-meta').on('change','.edit_field',function(){
+		var n = $(this).attr('name');
+		var v = $('input[name='+n+']').val();
+		var p = $(this).parent();
+		$(p).text(v);
+	});
+});
+</script>
+
+<script>
+var contentold={};   //объявляем переменную для хранения неизменного текста
+
+function savedata(elementidsave,contentsave) {
+              //функция для сохранения отредактированного текста с помощью ajax
+  $.ajax({
+          url: '/comments/' + elementidsave + '/edit/',    //url который обрабатывает и сохраняет наш текст
+          type: 'POST',
+          data: {
+                     content: contentsave,     //наш пост запрос
+                      'csrfmiddlewaretoken': getCookie('csrftoken'),
+                      'pk': elementidsave
+                 },
+          success:function (data) { //получили ответ от сервера - обрабатываем
+          if (data == contentsave)
+        //сервер прислал нам отредактированный текст, значит всё ok
+            {
+               $('#'+elementidsave).html(data);
+//записываем присланные данные от сервера в элемент, который редактировался
+               $('<div id="status">Данные успешно сохранены:'+data+'</div>')
+                       //выводим      сообщение об успешном ответе сервера
+                        .insertAfter('#'+elementidsave)
+                        .addClass("success")
+                        .fadeIn('fast')
+                        .delay(1000)
+                        .fadeOut('slow', function() {this.remove();});
+                            //уничтожаем элемент
+                }
+                  else
+                 {
+                   $('<div id="status">Запрос завершился ошибкой:'+data+'</div>')
+                                                // выводим данные про ошибку
+                       .insertAfter('#'+elementidsave)
+                       .addClass("error")
+                       .fadeIn('fast')
+                       .delay(3000)
+                       .fadeOut('slow', function() {this.remove();});
+                             //уничтожаем элемент
+                        }
+                    }
+               });
+       }
+    $(document).ready(function() {
+       	$('[contenteditable="true"]')     //редактируемый элемент
+            .mousedown(function (e)    //обрабатываем событие нажатие мышки
+                  {
+                    e.stopPropagation();
+                    elementid=this.id;
+                    contentold[elementid]=$(this).html();  //текст до редактирования
+                    $(this).bind('keydown', function(e) {    //обработчик нажатия Escape
+                        if(e.keyCode==27){
+                             e.preventDefault();
+                             $(this).html(contentold[elementid]);
+                                       	//возвращаем текст до редактирования
+                             }
+                           });
+                           $(".save").show();//показываем кнопку "сохранить"
+                              })
+              .blur(function (event)      //обрабатываем событие потери фокуса
+                  {
+                      var elementidsave=this.id;             //id элемента потерявшего фокус
+                      var  contentsave = $(this).html();           //текст для сохранения
+                      event.stopImmediatePropagation();
+                      if (elementid===elementidsave)
+                                    // если id не совпадает с id элемента, потерявшего фокус,
+                      {$(".save").hide(); }
+                           // значит фокус  в редактируемом элементе, кнопку не прячем
+                      if (contentsave!=contentold[elementidsave])  //если текст изменился
+                            {
+                                savedata(elementidsave,contentsave);   //отправляем на сервер
+                                console.log(elementidsave);
+                            }
+                    });
+	});
+</script>
+<script>
+$(function() {
+    $('#reviews-meta a').click(function()
+    {
+        $('#reviews-meta').html('<form action="{% url 'comment_edit' 1 %}" method="post">{% csrf_token %}<textarea name="com_edit">' +
+          $('#com_edit').text() +
+          '</textarea><input type="submit" value="Edit"></form>');
+    })
+})
+</script>
+<script type="text/javascript">
+     $(function() {
+      $('.companyInfo').append('<textarea value="save" class="textArea"></textarea>');
+      $('.companyInfo').append('<button class="saveme">save</button>');
+      $(document).on('click', '.saveme', function() {
+        var text = $('.textArea').val();
+        $('.newDiv').append('<p><input type="button" class="edit" value="edit">'+text+'</p>');
+      $(document).on('click', '.edit', function() {
+        var result = $(this).parent().text();
+        var $textarea = $('<textarea class="textArea2"></textarea><button class="save">save</button>');
+        $textarea.val(result)
+        $(this).parent().html($textarea);
+          $(document).on('click', '.save', function() {
+            var textInner = $('.textArea2').val();
+            $(this).parent().parent().html('<p><input type="button" class="edit" value="edit">'+textInner+'</p>');
+          })
+      })
+      })
+    })
+</script>
+{% endblock %}

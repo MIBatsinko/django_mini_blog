@@ -58,16 +58,24 @@
 									<li class="border-bottom-1 border-grey-1 margin-bottom-20px">
 										<img src="{% if comment.author.userprofile.avatar %} {{ comment.author.userprofile.avatar.url }} {% else %} {% static 'images/avatar.png' %} {% endif %}" class="profile-pic-comments float-left margin-right-20px border-radius-60 margin-bottom-20px" alt="">
 										<div class="margin-left-85px">
-											<a class="d-inline-block text-dark text-medium margin-right-20px" href="#">{{ comment.author }} </a>
-											<span class="text-extra-small">Date :  <a href="#" class="text-main-color">{{ comment.date_created }}</a></span>
+											<p class="d-inline-block text-dark text-medium margin-right-20px">{{ comment.author }} </p>
+											<span class="text-extra-small">Date :  <p class="d-inline-block">{{ comment.date_created }}</p></span>
 
 											{% if user.id == comment.author.id %}
 												<p><a class="edit btn btn-info btn-sm">Edit</a></p>
 											{% endif %}
 											<div class="reviews-meta">
-												<p class="comment_edit margin-top-15px text-grey-2">{{ comment.body }}</p>
+												<p contenteditable="true" id="{{ comment.id }}" class="comment_edit margin-top-15px text-grey-2">{{ comment.body }}</p>
 											</div>
+
+											<div id="comment_div_edit">
+												<div id="{{ comment.id }}">{{ comment.body }}</div>
+												<button id="{{ comment.id }}" onclick="editComment(this.id)" type="button">click</button>
+											<a class='edit'>edit</a>
+											</div>
+
 											{% if user.id == comment.author.id %}
+											<button class="save" style="display: none;">Сохранить</button>
 												<button class="btn btn-danger btn-sm" id="{{ comment.id }}" onclick="deleteComment(this.id, {{ article.id }})" type="button">Delete</button>
 											{% endif %}
 										</div>
@@ -117,6 +125,11 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div id="frame">
+<div id="data">bla bla bla</div>
+
+<a class='editt'>editt</a>
 </div>
 {% endblock %}
 
@@ -226,5 +239,144 @@ $(function () {
 		$(p).text(v);
 	});
 });
+</script>
+
+<script>
+var contentold={};   //объявляем переменную для хранения неизменного текста
+
+function savedata(elementidsave,contentsave) {
+              //функция для сохранения отредактированного текста с помощью ajax
+  $.ajax({
+          url: '/comments/' + elementidsave + '/edit/',    //url который обрабатывает и сохраняет наш текст
+          type: 'POST',
+          data: {
+                     content: contentsave,     //наш пост запрос
+                      'csrfmiddlewaretoken': getCookie('csrftoken'),
+                      'pk': elementidsave
+                 },
+          success:function (data) { //получили ответ от сервера - обрабатываем
+          if (data == contentsave)
+        //сервер прислал нам отредактированный текст, значит всё ok
+            {
+               $('#'+elementidsave).html(data);
+//записываем присланные данные от сервера в элемент, который редактировался
+               $('<div id="status">Данные успешно сохранены:'+data+'</div>')
+                       //выводим      сообщение об успешном ответе сервера
+                        .insertAfter('#'+elementidsave)
+                        .addClass("success")
+                        .fadeIn('fast')
+                        .delay(1000)
+                        .fadeOut('slow', function() {this.remove();});
+                            //уничтожаем элемент
+                }
+                  else
+                 {
+                   $('<div id="status">Запрос завершился ошибкой:'+data+'</div>')
+                                                // выводим данные про ошибку
+                       .insertAfter('#'+elementidsave)
+                       .addClass("error")
+                       .fadeIn('fast')
+                       .delay(3000)
+                       .fadeOut('slow', function() {this.remove();});
+                             //уничтожаем элемент
+                        }
+                    }
+               });
+       }
+    $(document).ready(function() {
+       	$('[contenteditable="true"]')     //редактируемый элемент
+            .mousedown(function (e)    //обрабатываем событие нажатие мышки
+                  {
+                    e.stopPropagation();
+                    elementid=this.id;
+                    contentold[elementid]=$(this).html();  //текст до редактирования
+                    $(this).bind('keydown', function(e) {    //обработчик нажатия Escape
+                        if(e.keyCode==27){
+                             e.preventDefault();
+                             $(this).html(contentold[elementid]);
+                                       	//возвращаем текст до редактирования
+                             }
+                           });
+                           $(".save").show();//показываем кнопку "сохранить"
+                              })
+              .blur(function (event)      //обрабатываем событие потери фокуса
+                  {
+                      var elementidsave=this.id;             //id элемента потерявшего фокус
+                      var  contentsave = $(this).html();           //текст для сохранения
+                      event.stopImmediatePropagation();
+                      if (elementid===elementidsave)
+                                    // если id не совпадает с id элемента, потерявшего фокус,
+                      {$(".save").hide(); }
+                           // значит фокус  в редактируемом элементе, кнопку не прячем
+                      if (contentsave!=contentold[elementidsave])  //если текст изменился
+                            {
+                                savedata(elementidsave,contentsave);   //отправляем на сервер
+                                console.log(elementidsave);
+                            }
+                    });
+	});
+</script>
+<!--<script>-->
+<!--$(function() {-->
+<!--    $('#reviews-meta a').click(function()-->
+<!--    {-->
+<!--        $('#reviews-meta').html('<form action="{% url 'comment_edit' 1 %}" method="post">{% csrf_token %}<textarea name="com_edit">' +-->
+<!--          $('#com_edit').text() +-->
+<!--          '</textarea><input type="submit" value="Edit"></form>');-->
+<!--    })-->
+<!--})-->
+<!--</script>-->
+<!--<script>-->
+<!--function editComment(comment_id) {-->
+<!--		console.log(comment_id);-->
+<!--		$('#comment_div_edit').html('<form action="{% url 'comment_edit' comment_id %}" method="post">{% csrf_token %}<textarea name="com_edit">' +-->
+<!--		  $('#'+comment_id).text() +-->
+<!--		  '</textarea><input type="submit" value="Edit"></form>');-->
+<!--	};-->
+<!--</script>-->
+
+<script>
+function editComment(comment_id) {
+		console.log(comment_id);
+		$('#comment_div_edit').html('<form action="/comments/'+comment_id+'/edit/" method="post">{% csrf_token %}<textarea id="comment_body" name="com_edit">' +
+		  $('#'+comment_id).text() +
+		  '</textarea><input type="submit" value="Edit"></form>');
+		  console.log($('#comment_body').text());
+		  console.log($('#'+comment_id).text());
+
+		$.ajax({
+			  url: '/comments/' + comment_id + '/edit/',    //url который обрабатывает и сохраняет наш текст
+			  type: 'POST',
+			  data: {
+						  'csrfmiddlewaretoken': getCookie('csrftoken'),
+						  'content': $('#comment_body').text(),
+						  'pk': comment_id
+					 },
+			  success:function (data) {
+				console.log(comment_id);
+			  }
+	});
+};
+
+</script>
+<script type="text/javascript">
+     $(function() {
+      $('.companyInfo').append('<textarea value="save" class="textArea"></textarea>');
+      $('.companyInfo').append('<button class="saveme">save</button>');
+      $(document).on('click', '.saveme', function() {
+        var text = $('.textArea').val();
+        $('.newDiv').append('<p><input type="button" class="edit" value="edit">'+text+'</p>');
+      $(document).on('click', '.edit', function() {
+        var result = $(this).parent().text();
+        var $textarea = $('<textarea class="textArea2"></textarea><button class="save">save</button>');
+        $textarea.val(result)
+        $(this).parent().html($textarea);
+          $(document).on('click', '.save', function() {
+            var textInner = $('.textArea2').val();
+            $(this).parent().parent().html('<p><input type="button" class="edit" value="edit">'+textInner+'</p>');
+          })
+      })
+      })
+    })
 </script>
 {% endblock %}
