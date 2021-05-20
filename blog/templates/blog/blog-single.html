@@ -329,9 +329,9 @@ const csrftoken = getCookie('csrftoken');
 <script>
 function editComment(comment_id) {
 		console.log(comment_id);
-		$('#comment_div_edit'+comment_id).html('<form action="/comments/'+comment_id+'/edit/" method="post">{% csrf_token %}<textarea id="comment_body" name="com_edit">' +
+		$('#comment_div_edit'+comment_id).html('<form class="comment-form" action="/comments/'+comment_id+'/edit/" method="post">{% csrf_token %}<textarea id="comment_body" name="com_edit">' +
 		  $('#'+comment_id).text() +
-		  '</textarea><input type="submit" value="Save"></form>');
+		  '</textarea><input type="submit" value="Save" class="btn btn-success btn-sm"></form>');
 		  console.log($('#comment_body').text());
 		  console.log($('#'+comment_id).text());
 
