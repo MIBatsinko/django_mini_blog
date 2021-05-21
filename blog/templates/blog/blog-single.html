@@ -38,10 +38,10 @@
 						<input type="hidden" value="{{ article.id }}" name="article">
 						{% if user.is_authenticated %}
 						<span class="rating">
-							{% for k, v in star_form.fields.star.choices %}
-								<input id="rating{{ v }}" type="radio" name="star"
-									   value="{{ k }}">
-								<label for="rating{{ v }}">{{ k }}</label>
+							{% for i in rating_stars %}
+								<input id="rating{{ i }}" type="radio" name="star"
+									   value="{{ i }}">
+								<label for="rating{{ i }}">{{ i }}</label>
 							{% endfor %}
 						</span>
 						{% else %}
@@ -331,7 +331,7 @@ const csrftoken = getCookie('csrftoken');
 <!--<script>-->
 <!--function editComment(comment_id) {-->
 <!--		console.log(comment_id);-->
-<!--		$('#comment_div_edit').html('<form action="{% url 'comment_edit' comment_id %}" method="post">{% csrf_token %}<textarea name="com_edit">' +-->
+<!--		$('#comment_div_edit').html('<form action="{% url 'comment_edit' 1 %}" method="post">{% csrf_token %}<textarea name="com_edit">' +-->
 <!--		  $('#'+comment_id).text() +-->
 <!--		  '</textarea><input type="submit" value="Edit"></form>');-->
 <!--	};-->

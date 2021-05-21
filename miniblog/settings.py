@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'django_filters',
     'users',
     'payments',
+    'constance',
+    'constance.backends.database',
 
 ]
 
@@ -208,3 +210,8 @@ STRIPE_PUBLISHABLE_KEY = STRIPE_PUBLISHABLE_KEY
 STRIPE_SECRET_KEY = STRIPE_SECRET_KEY
 STRIPE_ENDPOINT_SECRET = STRIPE_ENDPOINT_SECRET
 STRIPE_PRICE_ID = STRIPE_PRICE_ID
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = {
+    'RATING': (5, "Count of the rating stars"),
+}
