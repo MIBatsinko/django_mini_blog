@@ -1,4 +1,9 @@
+{% load static %}
+
 <div class="blog-entry background-white border-1 border-grey-1 margin-bottom-35px box-shadow border-radius-10 overflow-hidden">
+    {% if el.author.memberaccount.account_type == "Premium" %}
+        <img align="right" src="{% static 'images/premium_tape.png' %}" width="50px" height="50px">
+    {% endif %}
     <div class="row no-gutters">
         <div class="col-lg-9">
             <div class="padding-lr-25px padding-tb-50px">
