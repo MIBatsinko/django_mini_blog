@@ -92,3 +92,15 @@ margin-left: 325px;
 .footer {
 }
 
+.container-center {
+width: 100%;
+margin-left: 325px;
+}
+
+.leftstr, .rightstr {
+float: left; /* Обтекание справа */
+width: 50%; /* Ширина текстового блока */
+}
+.rightstr {
+text-align: right; /* Выравнивание по правому краю */
+}

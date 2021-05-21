@@ -3,6 +3,7 @@
 {% load static %}
 {% block content %}
 
+<div>
 	<div class="banner padding-tb-20px background-overlay" style="background-image: url({% static 'blog/img/index_background.jpg' %});">>
 		<div class="container">
 			<div class="padding-tb-200px z-index-2 position-relative">
@@ -13,4 +14,22 @@
 		</div>
 	</div>
 
+	<div class="margin-tb-30px">
+		<div class="container-center">
+			<div class="row">
+				<div class="col-lg-8 padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10">
+					<h1 align="center">PREMIUM ARTICLES</h1>
+					<table>
+						{% for left, right in articles %}
+							<tr>
+								<td><h4> <i class="fas fa-file-alt margin-right-10px text-main-color"></i> <a href="/{{left.id}}"> {{ left.title }}</a> (by: {{left.author}})</h4></td>
+								<td><h4> {% if right %}<i class="fas fa-file-alt margin-right-10px text-main-color"></i> <a href="/{{right.id}}"> {{ right.title }}</a> (by: {{right.author}}) {% endif %}</h4></td>
+							</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

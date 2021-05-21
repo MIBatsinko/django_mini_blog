@@ -19,12 +19,21 @@ from .models import Rating
 
 class HomePage:
     def home(self):
-        # num_authors = Author.objects.count()  # The 'all()' is implied by default.
-        # Number of visits to this view, as counted in the session variable.
+        # table of premium articles
+        blog = Article.objects.filter(author__memberaccount__account_type="Premium").order_by('-date')
+        left, right = [], []
+        count = 0
+        for article in blog:
+            count += 1
+            left.append(article) if count % 2 != 0 else right.append(article)
+        if len(left) > len(right):
+            right.append("")
+        articles = zip(left, right)
+
         num_visits = self.session.get('num_visits', 0)
         self.session['num_visits'] = num_visits + 1
 
-        return render(self, 'blog/index.html', {'num_visits': num_visits})
+        return render(self, 'blog/index.html', {'num_visits': num_visits, 'articles': articles})
 
 
 class Blog:
