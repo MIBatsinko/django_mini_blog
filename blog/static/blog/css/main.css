@@ -9,6 +9,10 @@ p img {
 }
 */
 
+main {
+min-height: calc(100vh - 70px);
+}
+
 main .features {
     float: left;
     color: #fff;
@@ -84,3 +88,7 @@ margin-top: 0px;
 width: 40%;
 margin-left: 325px;
 }
+
+.footer {
+}
+
