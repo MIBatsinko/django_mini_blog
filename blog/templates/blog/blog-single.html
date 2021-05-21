@@ -3,12 +3,29 @@
 {% block title %} {{ article.title }} {% endblock %}
 {% block content %}
 {% block page_breadcrumbs %}Article {{ article.title }}{% endblock %}
-
+  <style>
+   .leftstr, .rightstr {
+    float: left; /* Обтекание справа */
+    width: 50%; /* Ширина текстового блока */
+   }
+   .rightstr {
+    text-align: right; /* Выравнивание по правому краю */
+   }
+  </style>
 <div class="margin-tb-30px">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
-				<h4 class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10"><i class="fas fa-file-alt margin-right-10px text-main-color"></i> {{ article.title }}</h4>
+				<div class="padding-lr-30px padding-tb-20px background-white box-shadow border-radius-10">
+					<h4 class="leftstr"> <i class="fas fa-file-alt margin-right-10px text-main-color"></i> {{ article.title }}</h4>
+					{% if user.id == article.author.id %}
+						<p class="rightstr">
+							<a href="{% url 'blog_edit' article.id %}" class="btn"><img src="{% static 'images/edit.png' %}" width="20px" height="20px"></a>
+							<button class="btn" id="{{ article.id }}" onclick="deleteArticle(this.id)" type="button"><img src="{% static 'images/delete.png' %}" width="20px" height="20px"></button>
+						</p>
+					{% endif %}
+					<br>
+				</div><br>
 				<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 					<div class="meta">
 						<span class="margin-right-20px text-extra-small">By :  {{ article.author }}</span>
@@ -41,12 +58,6 @@
 					</div>
 					<!-- .entry-content -->
 					<hr>
-					{% if user.id == article.author.id %}
-					<div align="center">
-						<a href="{% url 'blog_edit' article.id %}" class="btn btn-info">Update</a>
-						<button class="btn btn-danger btn-sm" id="{{ article.id }}" onclick="deleteArticle(this.id)" type="button">Delete</button>
-					</div>
-					{% endif %}
 				</div>
 
 				<div class="margin-bottom-30px">
