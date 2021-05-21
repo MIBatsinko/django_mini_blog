@@ -58,7 +58,6 @@ class ArticleDetailView(DetailView):
         context['categories'] = Category.objects.all()
         context['articles'] = Article.objects.order_by("-date")
         context['rating_stars'] = [i for i in range(CONSTANCE_CONFIG.get('RATING')[0], 0, -1)]
-        print(context['rating_stars'])
         try:
             context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object').id)
         except Rating.DoesNotExist:
