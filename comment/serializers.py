@@ -12,6 +12,12 @@ class CommentSerializer(serializers.ModelSerializer):
         # read_only_fields = ['article', 'author']
 
     def to_representation(self, instance):
+        # if avatar does not exist -> using default
+        try:
+            avatar = instance.author.userprofile.avatar.url
+        except ValueError:
+            avatar = '/media/avatar.png'
+
         rep = super(CommentSerializer, self).to_representation(instance)
         rep['author'] = {
             'id': instance.author.id,
@@ -19,7 +25,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'name': instance.author.first_name,
             'email': instance.author.email,
             'date of register': instance.author.date_joined,
-            'avatar': instance.author.userprofile.avatar.url,
+            'avatar': avatar,
         }
         rep['article'] = {
             'id': instance.article.id,

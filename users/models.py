@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default="/profile1.png", null=True, blank=True)  # upload_to='images/',
+    avatar = models.ImageField(default="/avatar.png", null=True, blank=True)  # upload_to='images/',
     date_created = models.DateTimeField(auto_now_add=True)
     total_rating = models.FloatField(default=0)
 

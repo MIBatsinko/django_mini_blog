@@ -11,7 +11,7 @@ from payments.models import MemberAccount
 @receiver(post_save, sender=User)
 def create_account(sender, instance, created, **kwargs):
     if created:
-        userprofile = UserProfile.objects.create(user=instance, avatar='/avatar.png')
+        userprofile = UserProfile.objects.create(user=instance)#, avatar='/avatar.png')
 
         stripe_customer = stripe.Customer.create(
             email=instance.email,
