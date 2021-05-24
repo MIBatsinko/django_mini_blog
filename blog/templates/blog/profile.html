@@ -14,12 +14,16 @@
                     <img class="profile-pic" src="{% if request.user.userprofile.avatar %} {{ request.user.userprofile.avatar.url }} {% else %} {% static 'images/avatar.png' %} {% endif %}" >
                     <br><br><a href="{% url 'profile_settings' %}" class="btn btn-success">Settings</a><br><br>
                     <div align="left" style="margin-left: 20px;">
-                        <p>Username: {{ user.username }} <br>
-                        Name: {{ user.first_name }} <br>
-                        Email-profile: {{ user.email }} <br>
-                        Date of registration: {{ user.date_joined }} <br>
-                        Card: {{ user.memberaccount.card_id }} <br>
+                        <p><b>Username:</b> {{ user.username }} <br>
+                            <b>Name:</b> {{ user.first_name }} <br>
+                            <b>Email-profile:</b> {{ user.email }} <br>
+                            <b>Date of registration:</b> {{ user.date_joined }}
                         </p>
+                        <div id="card_div_edit">
+                            <div><b>Card:</b> {{ user.memberaccount.card_id }}</div>
+                        </div>
+                        {{ card_edit }}
+                        <button class="btn btn-info btn-sm" id="{{ user.memberaccount.card_id }}" onclick="editCard(this.id)" type="button">Edit</button>
                     </div>
                     <br><a href="{% url 'premium' %}" class="btn btn-info">Buy premium account</a><br>
                     </div>
@@ -28,5 +32,54 @@
         </div>
     </div>
 </div>
+
+{% block extra_scripts %}
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+</script>
+
+<script>
+function editCard(card_id) {
+		console.log(card_id);
+		$('#card_div_edit').html('<form class="edit-form" action="/card_edit/" method="post">{% csrf_token %}<textarea id="card_value" name="card_value">' +
+		  card_id +
+		  '</textarea><input type="submit" value="Save" class="btn btn-success btn-sm"></form>');
+		  console.log($('#card_value').text());
+		  console.log($('#card').text());
+
+		$.ajax({
+			  url: '/card_edit/',    //url который обрабатывает и сохраняет наш текст
+			  type: 'POST',
+			  data: {
+						  'csrfmiddlewaretoken': getCookie('csrftoken'),
+						  'content2': $('#card_edit').text(),
+						  'content': $('#card_value').text(),
+						  'content1': $('#card').text(),
+						  'content3': $('#'+card_id).text(),
+					 },
+			  success:function (data) {
+				console.log(card_id);
+			  }
+	});
+};
+
+</script>
+
+{% endblock %}
 
 {% endblock %}

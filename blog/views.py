@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.decorators import method_decorator
 from django.views.generic.base import View, TemplateView
 from django.contrib.auth.models import User
@@ -13,6 +14,8 @@ from rest_framework.reverse import reverse_lazy
 from article.models import Article, Category
 from comment.models import Comment
 from miniblog.settings import CONSTANCE_CONFIG
+from payments.models import MemberAccount
+from users.models import UserProfile
 from .forms import ArticlesForm, RatingForm
 from .models import Rating
 
@@ -129,3 +132,17 @@ class ArticleCreateView(CreateView):
         instance.category = category
         instance.save()
         return redirect(reverse_lazy('blog_index'))
+
+
+class CardEdit:
+    def post(self):
+        print(self.POST.get('card_value'))
+        print(self.POST.get('content'))
+        print(self.POST)
+        print(self.user)
+        memberaccount = MemberAccount.objects.filter(user_id=self.user.id)
+        print(memberaccount[0].card_id)
+        memberaccount.update(card_id=self.POST.get('card_value'))
+        print(self.POST.get('content'))
+        print(memberaccount[0].card_id)
+        return redirect(reverse_lazy('profile'))
