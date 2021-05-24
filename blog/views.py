@@ -136,13 +136,6 @@ class ArticleCreateView(CreateView):
 
 class CardEdit:
     def post(self):
-        print(self.POST.get('card_value'))
-        print(self.POST.get('content'))
-        print(self.POST)
-        print(self.user)
         memberaccount = MemberAccount.objects.filter(user_id=self.user.id)
-        print(memberaccount[0].card_id)
         memberaccount.update(card_id=self.POST.get('card_value'))
-        print(self.POST.get('content'))
-        print(memberaccount[0].card_id)
         return redirect(reverse_lazy('profile'))
