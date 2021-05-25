@@ -13,7 +13,7 @@ class Stripe:
 
     @staticmethod
     def stripe_api():
-        return stripe.api_key
+        return stripe
 
     def get_success_url_domain(self):
         return self.domain_url + 'success?session_id={CHECKOUT_SESSION_ID}'

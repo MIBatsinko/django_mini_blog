@@ -20,9 +20,20 @@
                             <b>Date of registration:</b> {{ user.date_joined }}
                         </p>
                         <div id="card_div_edit">
-                            <div><b>Card:</b> {{ user.memberaccount.card_id }}</div>
+                            <div><b>Card:</b> ****{{ user.memberaccount.card_id }}</div>
                         </div>
-                        <button class="btn btn-warning btn-sm" id="{{ user.memberaccount.card_id }}" onclick="editCard(this.id)" type="button">Change card</button>
+                         <form action="/change_card/" method="POST" class="edit-form">
+                             {% csrf_token %}
+                            <script
+                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_51Il82hKqH6Ek1zayq4p7OoYW8uw1LWnx9QX64pq9KfAW0rsgpyYX3ZajI1b0RtQHguX4Ar1261zDsB5AKAx8k5j6001zE9Jxdx"
+                            data-name="Demo Site"
+                            data-description="Update Card Details"
+                            data-panel-label="Update Card Details"
+                            data-label="Update Card Details">
+                            </script>
+                         </form><br>
+<!--                        <button class="btn btn-warning btn-sm" id="{{ user.memberaccount.card_id }}" onclick="editCard(this.id)" type="button">Change card</button>-->
                     </div>
                     <br><a href="{% url 'premium' %}" class="btn btn-info">Buy premium account</a><br>
                     </div>
@@ -55,14 +66,14 @@ const csrftoken = getCookie('csrftoken');
 <script>
 function editCard(card_id) {
 		console.log(card_id);
-		$('#card_div_edit').html('<form class="edit-form" action="/card_edit/" method="post">{% csrf_token %}<textarea id="card_value" name="card_value">' +
-		  card_id + '</textarea><input type="submit" value="Save" class="btn btn-success btn-sm"></form>');
+		$('#card_div_edit').html('<form class="edit-form" action="/card_edit/" method="post">{% csrf_token %}
+		<textarea id="card_value" name="card_value">' + card_id + '</textarea><input type="submit" value="Save" class="btn btn-success btn-sm"></form>');
 		$.ajax({
 			  url: '/card_edit/',    //url который обрабатывает и сохраняет наш текст
 			  type: 'POST',
 			  data: {
-						  'csrfmiddlewaretoken': getCookie('csrftoken'),
-						  'content': $('#card_value').text(),
+                      'csrfmiddlewaretoken': getCookie('csrftoken'),
+                      'content': $('#card_value').text(),
 					 },
 			  success:function (data) {
 				console.log(card_id);

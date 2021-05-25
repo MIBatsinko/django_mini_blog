@@ -1,3 +1,4 @@
+import stripe
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -15,6 +16,7 @@ from article.models import Article, Category
 from comment.models import Comment
 from miniblog.settings import CONSTANCE_CONFIG
 from payments.models import MemberAccount
+from payments.stripe_service import Stripe
 from users.models import UserProfile
 from .forms import ArticlesForm, RatingForm
 from .models import Rating
@@ -138,4 +140,41 @@ class CardEdit:
     def post(self):
         memberaccount = MemberAccount.objects.filter(user_id=self.user.id)
         memberaccount.update(card_id=self.POST.get('card_value'))
+        return redirect(reverse_lazy('profile'))
+
+
+class CardChange:
+    def post(self):
+        token = Stripe.stripe_api().Token.retrieve(self.POST.get('stripeToken'))
+        cus_id = self.user.memberaccount.customer_id
+
+        # GET CUSTOMER ON FILE
+        customer = Stripe.stripe_api().Customer.retrieve(cus_id)
+
+        # customer.source = token
+        # customer.default_source = customer.source.card.id
+        # customer.save()
+
+        card = None
+        cards_list = Stripe.stripe_api().Customer.list_sources(cus_id, object='card')
+        for cus_card in cards_list:
+            if cus_card.fingerprint == token.get('card').get('fingerprint'):
+                card = customer.modify_source(self.user.memberaccount.customer_id, cus_card.id)
+
+        if not card:
+            # CREATE NEW CARD THAT WAS JUST INPUTTED USING THE TOKEN
+            card = customer.create_source(self.user.memberaccount.customer_id, source=token.get('id'))
+
+        # GET NEW CARD ID
+        new_card_id = card.id
+
+        # SET CUSTOMER'S NEW CARD ID TO TO DEFAULT
+        customer.default_source = new_card_id
+
+        # SAVE NEW CARD
+        customer.save()
+
+        member = MemberAccount.objects.filter(customer_id=self.user.memberaccount.customer_id)
+        member.update(card_id=card.last4)
+
         return redirect(reverse_lazy('profile'))

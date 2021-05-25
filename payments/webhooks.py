@@ -35,7 +35,6 @@ def stripe_webhook(request):
     try:
         member_account = MemberAccount.objects.filter(customer_id=event_object.customer)
         print(member_account)
-        print(event_object)
         print(event_object.customer)
     except MemberAccount.DoesNotExist:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -66,8 +65,15 @@ def stripe_webhook(request):
             active_subscription=False
         )
     elif event.type in ['charge.succeeded', 'charge.updated']:
-        member_account.update(card_id=event_object.get('payment_method'))
+        fingerprint = event_object.get('payment_method_details').get('card').get('fingerprint')
+        last4 = event_object.get('payment_method_details').get('card').get('last4')
+        card_id = event_object.get('payment_method')
+
+        member_account.update(card_id=last4)
         print(event_object.get('payment_method'))
+        print(card_id)
+        print(last4)
+        print(fingerprint)
 
     print(event.type)
     return HttpResponse(status=status.HTTP_200_OK)

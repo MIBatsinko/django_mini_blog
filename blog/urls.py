@@ -15,6 +15,7 @@ urlpatterns = [
     path("add-rating/", views.AddStarRating.as_view(), name='add_rating'),
 
     path("card_edit/", views.CardEdit.post, name='card_edit'),
+    path("change_card/", views.CardChange.post, name='change_card'),
 
     path("rating_user/", RatingUserPageView.as_view(), name='rating_user'),
     path('profile/', UserProfilePageView.as_view(), name='profile'),
