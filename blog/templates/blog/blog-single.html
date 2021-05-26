@@ -21,6 +21,7 @@
 				<div class="padding-30px padding-bottom-30px background-white border-radius-10">
 					<div class="meta">
 						<span class="margin-right-20px text-extra-small">By :  {{ article.author }}</span>
+						<span class="margin-right-20px text-extra-small">Category :  {{ article.category }}</span>
 						<span class="margin-right-20px text-extra-small">Date :  {{ article.date }}</span>
 					</div>
 					<hr>
@@ -63,9 +64,6 @@
 										<div class="margin-left-85px">
 											<p class="d-inline-block text-dark text-medium margin-right-20px">{{ comment.author }} </p>
 											<span class="text-extra-small">Date :  <p class="d-inline-block">{{ comment.date_created }}</p></span>
-
-
-
 											{% if user.id == comment.author.id %}
 												<div id="comment_div_edit{{ comment.id }}">
 													<div id="{{ comment.id }}">{{ comment.body }}</div>

@@ -66,7 +66,6 @@ class ArticleDetailView(DetailView):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(article=kwargs.get('object').id)
         context['star_form'] = RatingForm()
-        context['categories'] = Category.objects.all()
         context['articles'] = Article.objects.order_by("-date")
         context['rating_stars'] = [i for i in range(CONSTANCE_CONFIG.get('RATING')[0], 0, -1)]
         try:
