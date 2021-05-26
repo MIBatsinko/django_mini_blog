@@ -19,6 +19,7 @@
                             <b>Email:</b> {{ user.email }} <br>
                             <b>Date of registration:</b> {{ user.date_joined }}
                         </p>
+                        {% if user.memberaccount.card_id %}
                         <div id="card_div_edit">
                             <div><b>Card:</b> ****{{ user.memberaccount.card_id }}</div>
                         </div>
@@ -35,6 +36,7 @@
                          </form><br>
 <!--                        <button class="btn btn-warning btn-sm" id="{{ user.memberaccount.card_id }}" onclick="editCard(this.id)" type="button">Change card</button>-->
                     </div>
+                        {% endif %}
                     <br><a href="{% url 'premium' %}" class="btn btn-info">Buy premium account</a><br>
                     </div>
                 </div>
