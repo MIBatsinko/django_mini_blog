@@ -65,14 +65,10 @@ class ArticleDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(article=kwargs.get('object').id)
-        context['star_form'] = RatingForm()
         context['articles'] = Article.objects.order_by("-date")
-        context['rating_stars'] = [i for i in range(CONSTANCE_CONFIG.get('RATING')[0], 0, -1)]
         try:
             context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object').id)
-        except Rating.DoesNotExist:
-            context['mark'] = 0
-        except AttributeError:
+        except Exception as e:
             context['mark'] = 0
         return context
 
