@@ -33,7 +33,7 @@ class ArticleWebTests(APITestCase):
         }
         self.add_new_valid_article = self.client.post(self.url, data, format='json', follow=True)
         self.assertEqual(self.add_new_valid_article.status_code, 200)
-        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('blog')
+        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('article')
         self.assertEqual(len(articles), 2)
 
     def test_invalid_create_article(self):
@@ -52,11 +52,11 @@ class ArticleWebTests(APITestCase):
         url = reverse('blog_index')
         response = self.client.get(url, format='json', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.context['blog']
+        data = response.context['article']
         self.assertEqual(len(data), 1)
 
     def test_rendering_responses(self):
-        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('blog')
+        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('article')
 
         url = reverse('blog_view', kwargs={'pk': articles[0].id})
         self.client.get(url, format='json', follow=True)
@@ -67,18 +67,18 @@ class ArticleWebTests(APITestCase):
         self.assertEqual(data, {"id": articles[0].id, "title": articles[0].title})
 
     def test_delete_article(self):
-        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('blog')
+        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('article')
         print("Created: ", articles)
         self.assertEqual(len(articles), 1)
 
         url = reverse('blog_delete', kwargs={'pk': articles[0].id})
         self.client.delete(url, format='json', follow=True)
-        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('blog')
+        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('article')
         print("Deleted: ", articles)
         self.assertEqual(len(articles), 0)
 
     def test_update_article(self):
-        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('blog')
+        articles = self.client.get(reverse('blog_index'), format='json', follow=True).context.get('article')
         update_url = reverse('blog_edit', kwargs={'pk': articles[0].id})
         # GET the form
         response = self.client.get(update_url)
