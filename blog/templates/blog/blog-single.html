@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load get_rank_stars %}
 {% block title %} {{ article.title }} {% endblock %}
 {% block content %}
 {% block page_breadcrumbs %}Article {{ article.title }}{% endblock %}
@@ -31,7 +32,7 @@
 						<input type="hidden" value="{{ article.id }}" name="article">
 						{% if user.is_authenticated %}
 						<span class="rating">
-							{% for i in rating_stars %}
+							{% for i in config.RATING|get_rank_stars %}
 								<input id="rating{{ i }}" type="radio" name="star"
 									   value="{{ i }}">
 								<label for="rating{{ i }}">{{ i }}</label>
