@@ -143,25 +143,25 @@ class CardEdit:
         return redirect(reverse_lazy('profile'))
 
 
-class CardChange:
-    def post(self):
-        token = Stripe.stripe_api().Token.retrieve(self.POST.get('stripeToken'))
-        cus_id = self.user.memberaccount.customer_id
+class CardChange(View):
+    def post(self, request):
+        token = Stripe.stripe_api().Token.retrieve(request.POST.get('stripeToken'))
+        cus_id = request.user.memberaccount.customer_id
         customer = Stripe.stripe_api().Customer.retrieve(cus_id)
 
         card = None
         cards_list = Stripe.stripe_api().Customer.list_sources(cus_id, object='card')
         for cus_card in cards_list:
             if cus_card.fingerprint == token.get('card').get('fingerprint'):
-                card = customer.modify_source(self.user.memberaccount.customer_id, cus_card.id)
+                card = customer.modify_source(request.user.memberaccount.customer_id, cus_card.id)
 
         if not card:
-            card = customer.create_source(self.user.memberaccount.customer_id, source=token.get('id'))
+            card = customer.create_source(request.user.memberaccount.customer_id, source=token.get('id'))
 
         customer.default_source = card.id
         customer.save()
 
-        member = MemberAccount.objects.filter(customer_id=self.user.memberaccount.customer_id)
+        member = MemberAccount.objects.filter(customer_id=request.user.memberaccount.customer_id)
         member.update(card_id=card.last4)
 
         return redirect(reverse_lazy('profile'))
