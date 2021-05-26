@@ -1,12 +1,10 @@
-import stripe
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.decorators import method_decorator
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import View
 from django.contrib.auth.models import User
-from django.views.generic import DetailView, UpdateView, DeleteView, CreateView, ListView
+from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
 from rest_framework import status
 
 from rest_framework.generics import get_object_or_404
@@ -16,8 +14,7 @@ from article.models import Article, Category
 from comment.models import Comment
 from miniblog.settings import CONSTANCE_CONFIG
 from payments.models import MemberAccount
-from payments.stripe_service import Stripe
-from users.models import UserProfile
+from payments.services.stripe_service import Stripe
 from .forms import ArticlesForm, RatingForm
 from .models import Rating
 
@@ -145,23 +142,12 @@ class CardEdit:
 
 class CardChange(View):
     def post(self, request):
-        token = Stripe.stripe_api().Token.retrieve(request.POST.get('stripeToken'))
-        cus_id = request.user.memberaccount.customer_id
-        customer = Stripe.stripe_api().Customer.retrieve(cus_id)
-
-        card = None
-        cards_list = Stripe.stripe_api().Customer.list_sources(cus_id, object='card')
-        for cus_card in cards_list:
-            if cus_card.fingerprint == token.get('card').get('fingerprint'):
-                card = customer.modify_source(request.user.memberaccount.customer_id, cus_card.id)
-
-        if not card:
-            card = customer.create_source(request.user.memberaccount.customer_id, source=token.get('id'))
-
-        customer.default_source = card.id
-        customer.save()
-
-        member = MemberAccount.objects.filter(customer_id=request.user.memberaccount.customer_id)
-        member.update(card_id=card.last4)
+        try:
+            token = Stripe.stripe_api().Token.retrieve(request.POST.get('stripeToken', None))
+            stripe = Stripe(request.user)
+            stripe.create_source(token)
+        except Exception as e:
+            print(e)
+        #     TODO: return error
 
         return redirect(reverse_lazy('profile'))

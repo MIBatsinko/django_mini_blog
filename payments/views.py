@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 
 from payments.models import MemberAccount
-from payments.stripe_service import Stripe
+from payments.services.stripe_service import Stripe
 
 
 class HomePageView(TemplateView):
