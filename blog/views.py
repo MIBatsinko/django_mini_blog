@@ -64,10 +64,10 @@ class ArticleDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(article=kwargs.get('object').id)
+        context['comments'] = Comment.objects.filter(article=kwargs.get('object'))
         context['articles'] = Article.objects.order_by("-date")
         try:
-            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object').id)
+            context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object'))
         except Exception as e:
             context['mark'] = 0
         return context
