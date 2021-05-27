@@ -4,8 +4,8 @@ from allauth.account import views as allauth_views
 
 
 urlpatterns = [
-    path('login/', views.user_login, name='my_account_login'),
-    path('register/', views.register, name='my_account_signup'),
+    path('login/', views.LoginView.as_view(), name='my_account_login'),
+    path('register/', views.SignupView.as_view(), name='my_account_signup'),
     path('logout/', views.LogoutView.as_view(), name='my_account_logout'),
     path('password_reset/', allauth_views.PasswordResetView.as_view(), name='my_account_reset_password'),
     path('password_reset_done/', allauth_views.PasswordResetDoneView.as_view(), name='my_account_password_reset_done'),
