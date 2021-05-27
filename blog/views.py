@@ -12,7 +12,6 @@ from rest_framework.reverse import reverse_lazy
 
 from article.models import Article, Category
 from comment.models import Comment
-from miniblog.settings import CONSTANCE_CONFIG
 from payments.models import MemberAccount
 from payments.services.stripe_service import Stripe
 from .forms import ArticlesForm, RatingForm
@@ -22,20 +21,12 @@ from .models import Rating
 class HomePage:
     def home(self):
         # table of premium articles
-        blog = Article.objects.filter(author__memberaccount__account_type="Premium").order_by('-date')
-        left, right = [], []
-        count = 0
-        for article in blog:
-            count += 1
-            left.append(article) if count % 2 != 0 else right.append(article)
-        if len(left) > len(right):
-            right.append("")
-        articles = zip(left, right)
+        articles_list = Article.objects.filter(author__memberaccount__account_type="Premium").order_by('-date')[:6]
 
         num_visits = self.session.get('num_visits', 0)
         self.session['num_visits'] = num_visits + 1
 
-        return render(self, 'blog/index.html', {'num_visits': num_visits, 'articles': articles})
+        return render(self, 'blog/index.html', {'num_visits': num_visits, 'articles_list': articles_list})
 
 
 class Blog:
