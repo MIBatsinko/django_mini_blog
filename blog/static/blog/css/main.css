@@ -32,11 +32,13 @@ main .features p {max-width: 400px; margin: 20px auto;}
     text-align: left;
 }
 
+/*
 form {
     margin-left: 32%;
     width: 500px;
     margin-top: 50px;
 }
+*/
 
 form.empty {
     margin-left: 0;
@@ -79,10 +81,12 @@ margin-left: 0px;
 margin-top: 50px;
 }
 
+/*
 .comment-form{
 margin-left: 100px;
 margin-top: 0px;
 }
+*/
 
 .edit-form{
 margin-left: 0px;
