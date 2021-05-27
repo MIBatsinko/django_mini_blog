@@ -1,5 +1,10 @@
 body {
-    background: #367649;
+    background: url('/static/blog/img/index_background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+ html, body {
+    height:100%;
 }
 
 /*
@@ -93,10 +98,12 @@ margin-left: 0px;
 margin-top: 0px;
 }
 
+/*
 .auth-page{
 width: 40%;
 margin-left: 325px;
 }
+*/
 
 .footer {
 }
