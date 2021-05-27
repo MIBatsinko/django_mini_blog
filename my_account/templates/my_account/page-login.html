@@ -22,6 +22,7 @@
 
 			<div class="form-output" style="margin-right: 300px; padding: 10px;">
 				<form method="POST" action="{% url 'my_account_login' %}">
+					<p class="margin-left-70px">{{ error }}</p>
 					<div class="form-group label-floating">
 						  {% csrf_token %}
 						  {{ form.as_p }}
