@@ -23,7 +23,14 @@
 				<form method="POST" action=".">
 					<div class="form-group label-floating">
 						  {% csrf_token %}
-						  {{ user_form.as_p }}
+						<div class="form-group label-floating">
+							<input type="hidden" name="csrfmiddlewaretoken" value="HBv2szerBPOcCQT1nSOLEk5aHlPLmDFBDx4AeN07u0aTuuiKE7QKIdfwnPepI8kX">
+							<p><label for="id_username">Username:</label> <input type="text" name="username" maxlength="150" required="" id="id_username"></p>
+							<p><label for="id_first_name">First name:</label> <input type="text" name="first_name" maxlength="150" id="id_first_name"></p>
+							<p><label for="id_email">Email address:</label> <input type="email" name="email" maxlength="254" id="id_email"></p>
+							<p><label for="id_password">Password:</label> <input type="password" name="password" required="" id="id_password"></p>
+							<p><label for="id_password2">Repeat password:</label> <input type="password" name="password2" required="" id="id_password2"></p>
+						</div>
 						  {% if redirect_field_value %}
 						  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 						  {% endif %}
