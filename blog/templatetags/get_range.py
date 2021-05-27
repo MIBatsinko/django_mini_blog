@@ -5,4 +5,4 @@ register = template.Library()
 
 @register.filter
 def get_range(value):
-    return range(value)
+    return range(int(value))

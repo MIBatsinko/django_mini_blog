@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load get_rank_stars %}
+{% load get_range %}
 {% block title %} {{ article.title }} {% endblock %}
 {% block content %}
 {% block page_breadcrumbs %}Article {{ article.title }}{% endblock %}
@@ -37,11 +38,15 @@
 									   value="{{ i }}">
 								<label for="rating{{ i }}">{{ i }}</label>
 							{% endfor %}
-						</span>
+						</span><br>
 						{% else %}
 						<p>Sign in to rate articles</p>
 						{% endif %}
-							<span class="editContent">Average Mark: {{ article.total_rating }}</span>
+							Average Mark:<span class="avg-rating">
+								{% for i in article.total_rating|get_range %}
+									<label></label>
+								{% endfor %}
+							</span>
 						{% if mark.star %}
 							<br><span class="editContent">Your mark: {{ mark.star }}</span>
 						{% endif %}
