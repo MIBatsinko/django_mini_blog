@@ -19,11 +19,8 @@ class HomePageView(TemplateView):
             context['stripe_customer'] = stripe_customer
             return context
 
-        except MemberAccount.DoesNotExist:
-            return context
-        except stripe.error.InvalidRequestError:
-            return context
-        except TypeError:
+        except Exception as e:
+            print(e)
             return context
 
 
