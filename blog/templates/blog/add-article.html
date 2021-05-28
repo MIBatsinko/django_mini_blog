@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
 {% endblock %}
 {% block content %}
-	<div class="container">
+	<div class="container" align="center">
+		<div class="col-md-6">
 		<form id="article" method="post">
 			{% csrf_token %}
 			<div class="margin-tb-45px full-width">
@@ -50,6 +51,7 @@
 			</div>
 			<button type="submit" class="btn btn-lg border-2  ba-1 text-white margin-bottom-80px btn-block border-radius-15 padding-15px box-shadow">{% if form.title.value != None %} Save changes {% else %} Add Article {% endif %}</button>
 		</form>
+		</div>
 
 	</div>
 {% endblock %}
