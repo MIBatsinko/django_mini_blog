@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect
-
-from .forms import UserRegistrationForm
+from my_account.forms import UserRegistrationForm
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm
+from my_account.forms import LoginForm
 from django.http import HttpResponseRedirect
 from django.views.generic.base import View
 from django.contrib.auth import logout

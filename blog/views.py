@@ -14,38 +14,27 @@ from article.models import Article, Category
 from comment.models import Comment
 from payments.models import MemberAccount
 from payments.services.stripe_service import Stripe
-from .forms import ArticlesForm, RatingForm
-from .models import Rating
+from blog.forms import ArticlesForm, RatingForm
+from blog.models import Rating
 
 
-class HomePage:
-    def home(self):
+class HomePageView(View):
+    def get(self, request):
         # table of premium articles
         articles_list = Article.objects.filter(author__memberaccount__account_type="Premium").order_by('-date')[:6]
 
-        num_visits = self.session.get('num_visits', 0)
-        self.session['num_visits'] = num_visits + 1
+        num_visits = request.session.get('num_visits', 0)
+        request.session['num_visits'] = num_visits + 1
 
-        return render(self, 'blog/index.html', {'num_visits': num_visits, 'articles_list': articles_list})
+        return render(request, 'blog/index.html', {'num_visits': num_visits, 'articles_list': articles_list})
 
 
-class Blog:
-    def articles(self):
+class ArticlesListView(View):
+    def get(self, request):
         blog = Article.objects.order_by('-date')
         categories = Category.objects.all()
 
-        return render(self, 'blog/blog-list.html', {"article": blog, 'categories': categories})
-
-
-# class ArticlesView(ListView):
-#     model = Article
-#     template_name = 'blog/blog-list.html'
-#     context_object_name = 'article'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(ArticlesView, self).get_context_data(**kwargs)
-#         context['categories'] = Category.objects.all()
-#         return context
+        return render(request, 'blog/blog-list.html', {"article": blog, 'categories': categories})
 
 
 class ArticleDetailView(DetailView):

@@ -1,21 +1,20 @@
 from django.urls import path
 
-import blog.views as views
+from blog.views import HomePageView, ArticlesListView, CardChange, AddStarRating, ArticleDeleteView, ArticleUpdateView, \
+    ArticleDetailView, ArticleCreateView
 from users.views import RatingUserPageView, UserProfilePageView, UserProfileUpdateView
 
 urlpatterns = [
-    path('', views.HomePage.home, name='index'),
-    # path('blog/', views.ArticlesView.as_view(), name='blog_index'),
-    path('blog/', views.Blog.articles, name='blog_index'),
+    path('', HomePageView.as_view(), name='index'),
+    path('blog/', ArticlesListView.as_view(), name='blog_index'),
 
-    path('add_post/', views.ArticleCreateView.as_view(), name='blog_add'),
-    path('<int:pk>/', views.ArticleDetailView.as_view(), name='blog_view'),
-    path('<int:pk>/update/', views.ArticleUpdateView.as_view(), name='blog_edit'),
-    path('<int:pk>/delete/', views.ArticleDeleteView.as_view(), name='blog_delete'),
-    path("add-rating/", views.AddStarRating.as_view(), name='add_rating'),
+    path('add_post/', ArticleCreateView.as_view(), name='blog_add'),
+    path('<int:pk>/', ArticleDetailView.as_view(), name='blog_view'),
+    path('<int:pk>/update/', ArticleUpdateView.as_view(), name='blog_edit'),
+    path('<int:pk>/delete/', ArticleDeleteView.as_view(), name='blog_delete'),
+    path("add-rating/", AddStarRating.as_view(), name='add_rating'),
 
-    path("card_edit/", views.CardEdit.post, name='card_edit'),
-    path("change_card/", views.CardChange.as_view(), name='change_card'),
+    path("change_card/", CardChange.as_view(), name='change_card'),
 
     path("rating_user/", RatingUserPageView.as_view(), name='rating_user'),
     path('profile/', UserProfilePageView.as_view(), name='profile'),

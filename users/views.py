@@ -8,9 +8,9 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters, status, permissions
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, get_object_or_404, RetrieveAPIView
 
-from .forms import UserProfileForm, UserForm
-from .models import UserProfile
-from .serializers import UserSerializer, UserResponseSerializer, SingleUserSerializer
+from users.forms import UserProfileForm, UserForm
+from users.models import UserProfile
+from users.serializers import UserSerializer, UserResponseSerializer, SingleUserSerializer
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):

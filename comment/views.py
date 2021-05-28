@@ -1,7 +1,6 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.utils.datastructures import MultiValueDictKeyError
-from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
+from django.views.generic import DeleteView, CreateView
 from rest_framework import viewsets, filters
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.reverse import reverse_lazy
@@ -9,9 +8,9 @@ from rest_framework.reverse import reverse_lazy
 from article.models import Article
 from django.contrib.auth.models import User
 
-from .models import Comment
-from .serializers import CommentSerializer
-from .forms import CommentsForm
+from comment.models import Comment
+from comment.serializers import CommentSerializer
+from comment.forms import CommentsForm
 
 
 class CommentViewSet(viewsets.ModelViewSet):

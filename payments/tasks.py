@@ -1,7 +1,5 @@
 from datetime import date
 
-from celery.schedules import crontab
-
 from miniblog import celery_app
 from payments.models import MemberAccount
 

@@ -1,4 +1,4 @@
-from django.core.mail import send_mail, BadHeaderError, EmailMessage
+from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 

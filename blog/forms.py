@@ -1,7 +1,7 @@
 from django.forms import ModelForm, TextInput, Textarea, ModelChoiceField, RadioSelect
 
 from article.models import Article
-from .models import Rating, RatingStar
+from blog.models import Rating, RatingStar
 
 
 class ArticlesForm(ModelForm):

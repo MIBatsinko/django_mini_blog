@@ -1,4 +1,3 @@
-import stripe
 from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,11 +8,11 @@ from payments.models import MemberAccount
 from payments.services.stripe_service import Stripe
 
 
-class HomePageView(TemplateView):
+class PaymentsView(TemplateView):
     template_name = 'payments/premium.html'
 
     def get_context_data(self, **kwargs):
-        context = super(HomePageView, self).get_context_data(**kwargs)
+        context = super(PaymentsView, self).get_context_data(**kwargs)
         try:
             stripe_customer = MemberAccount.objects.get(user=self.request.user)
             context['stripe_customer'] = stripe_customer
@@ -44,7 +43,7 @@ def create_checkout_session(request):
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-class CancelSubscription(HomePageView):
+class CancelSubscription(PaymentsView):
     template_name = 'payments/cancel_sub.html'
 
     def get_context_data(self, **kwargs):

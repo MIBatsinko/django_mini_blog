@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import permissions, status
+from rest_framework import status
 from rest_framework import filters
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from .models import Article, Category
-from .serializers import ArticleSerializer, CategorySerializer, ArticleResponseSerializer
+from article.models import Article, Category
+from article.serializers import ArticleSerializer, CategorySerializer, ArticleResponseSerializer
 
 
 @method_decorator(login_required(login_url='my_account_login'), name='dispatch')

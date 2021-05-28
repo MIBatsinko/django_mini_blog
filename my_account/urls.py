@@ -1,4 +1,4 @@
-from django.urls import path, re_path, include
+from django.urls import path
 import my_account.views as views
 from allauth.account import views as allauth_views
 

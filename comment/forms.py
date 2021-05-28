@@ -1,5 +1,5 @@
-from .models import Comment
-from django.forms import ModelForm, Textarea, TextInput, HiddenInput
+from comment.models import Comment
+from django.forms import ModelForm, Textarea
 
 
 class CommentsForm(ModelForm):

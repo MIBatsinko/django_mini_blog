@@ -1,6 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, DeleteView, DetailView, TemplateView, CreateView
 from rest_framework.generics import get_object_or_404
