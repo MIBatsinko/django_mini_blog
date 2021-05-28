@@ -1,6 +1,5 @@
 body {
-    background: url('/static/blog/img/index_background.jpg') no-repeat center center fixed;
-    background-size: cover;
+    background: #367649;
 }
 
  html, body {
@@ -119,4 +118,9 @@ width: 50%; /* Ширина текстового блока */
 }
 .rightstr {
 text-align: right; /* Выравнивание по правому краю */
+}
+
+.background-img-index {
+    background: url('/static/blog/img/index_background.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
