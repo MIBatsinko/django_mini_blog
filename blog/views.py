@@ -21,20 +21,18 @@ from blog.models import Rating
 class HomePageView(View):
     def get(self, request):
         # table of premium articles
-        articles_list = Article.objects.filter(author__memberaccount__account_type="Premium").order_by('-date')[:6]
+        max_premium_articles = 6
+        articles_list = Article.objects.filter(author__memberaccount__account_type="Premium").order_by('-date')[:max_premium_articles]
 
-        num_visits = request.session.get('num_visits', 0)
-        request.session['num_visits'] = num_visits + 1
-
-        return render(request, 'blog/index.html', {'num_visits': num_visits, 'articles_list': articles_list})
+        return render(request, 'blog/index.html', {'articles_list': articles_list})
 
 
 class ArticlesListView(View):
     def get(self, request):
-        blog = Article.objects.order_by('-date')
+        articles = Article.objects.order_by('-date')
         categories = Category.objects.all()
 
-        return render(request, 'blog/blog-list.html', {"article": blog, 'categories': categories})
+        return render(request, 'blog/blog-list.html', {"articles": articles, 'categories': categories})
 
 
 class ArticleDetailView(DetailView):
@@ -49,6 +47,7 @@ class ArticleDetailView(DetailView):
         try:
             context['mark'] = Rating.objects.get(user=self.request.user.id, article=kwargs.get('object'))
         except Exception as e:
+            print(e)
             context['mark'] = 0
         return context
 
@@ -106,13 +105,6 @@ class ArticleCreateView(CreateView):
         instance.category = category
         instance.save()
         return redirect(reverse_lazy('blog_index'))
-
-
-class CardEdit:
-    def post(self):
-        memberaccount = MemberAccount.objects.filter(user_id=self.user.id)
-        memberaccount.update(card_id=self.POST.get('card_value'))
-        return redirect(reverse_lazy('profile'))
 
 
 class CardChange(View):

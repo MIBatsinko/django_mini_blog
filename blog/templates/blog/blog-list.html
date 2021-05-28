@@ -7,14 +7,14 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
-				{% if article %}
-					{% for el in article %}
+				{% if articles %}
+					{% for article in articles %}
 						{% if request.POST.category_select == 'without' %}
-							{% if el.category is None %}
+							{% if article.category is None %}
 								{% include 'include/show_articles.html' %}
 							{% endif %}
-						{% elif request.POST.category_select == el.category.name and not request.POST.category_select is None %}
-							{% if request.POST.category_select == el.category.name %}
+						{% elif request.POST.category_select == article.category.name and not request.POST.category_select is None %}
+							{% if request.POST.category_select == article.category.name %}
 								{% include 'include/show_articles.html' %}
 							{% endif %}
 						{% elif request.POST.category_select == 'All categories' or request.POST.category_select is None %}

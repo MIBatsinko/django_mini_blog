@@ -1,19 +1,19 @@
 {% load static %}
 
 <div class="blog-entry background-white border-1 border-grey-1 margin-bottom-35px box-shadow border-radius-10 overflow-hidden">
-    {% if el.author.memberaccount.account_type == "Premium" %}
+    {% if article.author.memberaccount.account_type == "Premium" %}
         <img align="right" src="{% static 'images/premium_tape.png' %}" width="50px" height="50px">
     {% endif %}
     <div class="row no-gutters">
         <div class="col-lg-9">
             <div class="padding-lr-25px padding-tb-50px">
-                <a class="d-block h2  margin-bottom-8px" href="{% url 'blog_view' el.id %}"> {{ el.title }} </a>
-                <span class="d-block  margin-bottom-8px">Description: {{ el.description }}</span>
+                <a class="d-block h2  margin-bottom-8px" href="{% url 'blog_view' article.id %}"> {{ article.title }} </a>
+                <span class="d-block  margin-bottom-8px">Description: {{ article.description }}</span>
                 <div class="meta">
-                    <span class="margin-right-20px text-extra-small">By: {{ el.author }}</span>
-                    <span class="margin-right-20px text-extra-small">Date:  {{ el.date }}</span>
-                    <span class="text-extra-small ">Categorie:  {{ el.category }}</span>
-                    <br><br><span class="text-extra-small"><a href="{% url 'blog_view' el.id %}" class="btn btn-warning">View details</a></span>
+                    <span class="margin-right-20px text-extra-small">By: {{ article.author }}</span>
+                    <span class="margin-right-20px text-extra-small">Date:  {{ article.date }}</span>
+                    <span class="text-extra-small ">Categorie:  {{ article.category }}</span>
+                    <br><br><span class="text-extra-small"><a href="{% url 'blog_view' article.id %}" class="btn btn-warning">View details</a></span>
                 </div>
             </div>
         </div>

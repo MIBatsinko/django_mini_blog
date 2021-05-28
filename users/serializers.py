@@ -7,7 +7,6 @@ from comment.serializers import UserCommentSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # userprofile_id = serializers.IntegerField(source='UserProfile.id', read_only=True)
     avatar = serializers.ImageField(source='User.userprofile.avatar', read_only=True)
 
     class Meta:
@@ -17,7 +16,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(UserSerializer, self).to_representation(instance)
-        # rep['userprofile_id'] = instance.userprofile.id
         rep['avatar'] = instance.userprofile.avatar.url
         return rep
 
@@ -32,7 +30,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserResponseSerializer(UserSerializer):
     userprofile = UserProfileSerializer()
-    # comments = CommentSerializer()
 
 
 class LimitedArticlelistSerializer(serializers.ListSerializer):
@@ -65,19 +62,13 @@ class SingleUserSerializer(serializers.ModelSerializer):
         userprofile_data = validated_data.pop('userprofile')
         profile = instance.userprofile
 
-        instance.id = validated_data.get(
-            'id', instance.id)
-        instance.username = validated_data.get(
-            'username', instance.username)
-        instance.first_name = validated_data.get(
-            'first_name', instance.first_name)
-        instance.last_name = validated_data.get(
-            'last_name', instance.last_name)
-        instance.email = validated_data.get(
-            'email', instance.email)
+        instance.id = validated_data.get('id', instance.id)
+        instance.username = validated_data.get('username', instance.username)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
         instance.save()
 
-        profile.avatar = userprofile_data.get(
-            'avatar', profile.avatar)
+        profile.avatar = userprofile_data.get('avatar', profile.avatar)
         profile.save()
         return instance

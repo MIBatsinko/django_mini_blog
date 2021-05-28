@@ -23,23 +23,6 @@ class CommentViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-# class CommentUpdateView(UpdateView):
-#     model = Comment
-#     template_name = 'comment/comment_add.html'
-#     form_class = CommentsForm
-#     success_url = '/blog/'
-
-#
-# class CommentEdit:
-#     def post(self, pk):
-#         print(pk)
-#         print(self.POST)
-#         print(self.POST.get('content'))
-#         comment = Comment.objects.filter(id=pk)
-#         comment.update(body=self.POST.get('content'))
-#         return HttpResponse(self.POST.get('content'))
-
-
 class CommentEdit:
     def post(self, pk):
         comment = Comment.objects.filter(id=pk)
