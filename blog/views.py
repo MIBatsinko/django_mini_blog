@@ -84,7 +84,7 @@ class ArticleDeleteView(DeleteView):
     template_name = 'blog/blog_delete.html'
 
 
-# @method_decorator(login_required(login_url='my_account_login'), name='dispatch')
+@method_decorator(login_required(login_url='my_account_login'), name='dispatch')
 class AddStarRating(View):
     def post(self, request):
         form = RatingForm(request.POST)

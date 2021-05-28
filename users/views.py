@@ -82,5 +82,5 @@ class RatingUserPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(RatingUserPageView, self).get_context_data(**kwargs)
-        context['users'] = User.objects.all()
+        context['users'] = User.objects.order_by("-userprofile__total_rating")
         return context
