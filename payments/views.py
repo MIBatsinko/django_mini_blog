@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
+from rest_framework import status
 
 from payments.models import MemberAccount
 from payments.services.stripe_service import Stripe
@@ -50,7 +51,7 @@ def create_checkout_session(request):
         if session_id:
             return JsonResponse({'session_id': session_id})
         else:
-            return HttpResponse(400)
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CancelSubscription(HomePageView):
