@@ -32,13 +32,6 @@ class CancelledView(TemplateView):
     template_name = 'payments/cancelled.html'
 
 
-# @csrf_exempt
-# def stripe_config(request):
-#     if request.method == 'GET':
-#         stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
-#         return JsonResponse(stripe_config, safe=False)
-#
-
 @csrf_exempt
 @login_required
 def create_checkout_session(request):
