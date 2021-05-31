@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from django.contrib.auth.models import User
-from django.views.generic import DetailView, UpdateView, DeleteView, CreateView
+from django.views.generic import DetailView, UpdateView, DeleteView, CreateView, ListView
 from rest_framework import status
 
 from rest_framework.generics import get_object_or_404
@@ -26,12 +27,36 @@ class HomePageView(View):
         return render(request, 'blog/index.html', {'articles_list': articles_list})
 
 
-class ArticlesListView(View):
-    def get(self, request):
-        articles = Article.objects.order_by('-date')
-        categories = Category.objects.all()
+# class ArticlesListView(View):
+#     def get(self, request):
+#         articles = Article.objects.order_by('-date')
+#         categories = Category.objects.all()
+#
+#         return render(request, 'blog/blog-list.html', {"articles": articles, 'categories': categories})
 
-        return render(request, 'blog/blog-list.html', {"articles": articles, 'categories': categories})
+
+class ArticlesListView(ListView):
+    model = Article
+    template_name = 'blog/blog-list.html'
+    context_object_name = 'articles'
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+
+        articles = Article.objects.order_by('-date')
+        paginator = Paginator(articles, self.paginate_by)
+        page = self.request.GET.get('page')
+        try:
+            articles_list = paginator.page(page)
+        except PageNotAnInteger:
+            articles_list = paginator.page(1)
+        except EmptyPage:
+            articles_list = paginator.page(paginator.num_pages)
+
+        context['articles'] = articles_list
+        return context
 
 
 class ArticleDetailView(DetailView):
