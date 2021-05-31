@@ -12,7 +12,6 @@ from rest_framework.reverse import reverse_lazy
 
 from article.models import Article, Category
 from comment.models import Comment
-from payments.models import MemberAccount
 from payments.services.stripe_service import Stripe
 from blog.forms import ArticlesForm, RatingForm
 from blog.models import Rating

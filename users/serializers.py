@@ -16,7 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(UserSerializer, self).to_representation(instance)
-        rep['avatar'] = instance.userprofile.avatar.url
+        try:
+            rep['avatar'] = instance.userprofile.avatar.url
+        except ValueError:
+            rep['avatar'] = '/media/avatar.png'
         return rep
 
 

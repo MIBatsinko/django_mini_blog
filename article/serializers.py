@@ -20,8 +20,12 @@ class ArticleSerializer(serializers.ModelSerializer):
             'rating': instance.author.userprofile.total_rating,
             'email': instance.author.email,
             'date of register': instance.author.date_joined,
-            'avatar': instance.author.userprofile.avatar.url,
         }
+        try:
+            rep['author']['avatar'] = instance.author.userprofile.avatar.url,
+        except ValueError:
+            rep['author']['avatar'] = "/media/avatar.png",
+
         rep['category'] = {
             'id': instance.category.id,
             'name': instance.category.name,
