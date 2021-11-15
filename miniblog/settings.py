@@ -25,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY
+SECRET_KEY = os.getenv('SECRET_KEY', SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG
+DEBUG = os.getenv('DEBUG', DEBUG)
 
-ALLOWED_HOSTS = ALLOWED_HOSTS
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', ALLOWED_HOSTS)
 
 # Application definition
 
@@ -94,8 +94,8 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', EMAIL_HOST_USER)
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', EMAIL_HOST_PASSWORD)
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -134,7 +134,7 @@ WSGI_APPLICATION = 'miniblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = DATABASES
+DATABASES = os.getenv('DATABASES', DATABASES)
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -209,10 +209,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-STRIPE_PUBLISHABLE_KEY = STRIPE_PUBLISHABLE_KEY
-STRIPE_SECRET_KEY = STRIPE_SECRET_KEY
-STRIPE_ENDPOINT_SECRET = STRIPE_ENDPOINT_SECRET
-STRIPE_PRICE_ID = STRIPE_PRICE_ID
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', STRIPE_PUBLISHABLE_KEY)
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', STRIPE_SECRET_KEY)
+STRIPE_ENDPOINT_SECRET = os.getenv('STRIPE_ENDPOINT_SECRET', STRIPE_ENDPOINT_SECRET)
+STRIPE_PRICE_ID = os.getenv('STRIPE_PRICE_ID', STRIPE_PRICE_ID)
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
