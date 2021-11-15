@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from datetime import timedelta
 from celery.schedules import crontab
+from pathlib import Path
+
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
